@@ -12,6 +12,6 @@ Project for leveraging efficiency in the field of special education.
 
 박재현 (Jaehyeon Park)
 
-채민기 ()
+채민기 (Mingi Chae)
 
 김영민 (Youngmin Kim)
