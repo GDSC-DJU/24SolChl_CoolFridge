@@ -10,7 +10,7 @@ Project for leveraging efficiency in the field of special education.
 
 김성연 ()
 
-박재현 ()
+박재현 (Jaehyeon Park)
 
 채민기 ()
 
