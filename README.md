@@ -8,7 +8,7 @@ Project for leveraging efficiency in the field of special education.
 ---
 > Member of GDSC Daejeon University
 
-김성연 ()
+김성연 (Seongyeon Kim)
 
 박재현 (Jaehyeon Park)
 
