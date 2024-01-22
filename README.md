@@ -1,4 +1,4 @@
-## 24 Solution Challenge - "Will Be"
+## 24 Solution Challenge - "Food"
 
 ### Summary
 ---
