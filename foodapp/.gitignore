@@ -41,3 +41,5 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/.gradle/7.6.3/fileHashes/fileHashes.bin
+/android/.gradle/7.6.3/fileHashes/fileHashes.lock
