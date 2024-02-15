@@ -3,20 +3,20 @@ import 'package:foodapp/MainScreen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 //토글 버튼, 알람 페이지
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
-  // pnameBox, productDateBox, productCountBox를 열기 전에 이미 열려 있는지 확인합니다.
-  if (!Hive.isBoxOpen('pnameBox')) {
-    await Hive.openBox<String>('pnameBox');
-  }
-  if (!Hive.isBoxOpen('productDateBox')) {
-    await Hive.openBox<String>('productDateBox');
-  }
-  if (!Hive.isBoxOpen('productCountBox')) {
-    await Hive.openBox<int>('productCountBox');
-  }
-}
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Hive.initFlutter();
+//   // pnameBox, productDateBox, productCountBox를 열기 전에 이미 열려 있는지 확인합니다.
+//   if (!Hive.isBoxOpen('pnameBox')) {
+//     await Hive.openBox<String>('pnameBox');
+//   }
+//   if (!Hive.isBoxOpen('productDateBox')) {
+//     await Hive.openBox<String>('productDateBox');
+//   }
+//   if (!Hive.isBoxOpen('productCountBox')) {
+//     await Hive.openBox<int>('productCountBox');
+//   }
+// }
 
 class AlarmScreen extends StatelessWidget {
   const AlarmScreen({super.key});

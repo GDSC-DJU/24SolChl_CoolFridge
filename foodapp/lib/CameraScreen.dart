@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodapp/FoodAddScreen.dart';
 
 //카메라 페이지
-void main() {}
+//void main() {}
 
 class CameraPage extends StatelessWidget {
   const CameraPage({super.key});

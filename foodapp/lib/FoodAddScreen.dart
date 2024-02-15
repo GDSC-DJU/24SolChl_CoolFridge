@@ -239,134 +239,132 @@ class _SecondViewState extends State<Postpage> {
 // 위젯 생성 및 출력
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => Navigator.of(context).pop(),
-          color: const Color.fromARGB(255, 53, 175, 212),
-          icon: const Icon(Icons.arrow_back),
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () => Navigator.of(context).pop(),
+            color: const Color.fromARGB(255, 53, 175, 212),
+            icon: const Icon(Icons.arrow_back),
+          ),
+          backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+          title: const Text(
+            "음식등록",
+            style: TextStyle(
+              color: Color.fromARGB(255, 53, 175, 212),
+            ),
+          ),
         ),
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-        title: const Text(
-          "음식등록",
-          style: TextStyle(color: Color.fromARGB(255, 53, 175, 212)),
-        ),
-      ),
-      body: Stack(
-        children: [
-          SizedBox(
-            height: (MediaQuery.of(context).size.height) * 0.82,
-            child: Align(
-              alignment: Alignment.topCenter,
+        body: Stack(
+          children: [
+            Container(
+              height: (MediaQuery.of(context).size.height -
+                      MediaQuery.of(context).viewInsets.bottom) *
+                  0.8,
               child: ListView.builder(
-                itemCount: _widgetList.length, //몇 개 할 것인지
+                itemCount: _widgetList.length,
                 itemBuilder: (context, index) {
-                  //어떤 View를 그릴 것인지
                   return _widgetList[index];
                 },
               ),
             ),
-          ),
-          Container(
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: (MediaQuery.of(context).size.height) * 0.1,
-                color: Colors.white,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          onPressed: () => setState(() => addlist()),
-                          icon: const Icon(Icons.add_circle_outlined),
-                        ),
-                        // TextButton(
-                        //   onPressed: () => {
-                        //     for (int i = 0; i < _Livingkey.length; i++)
-                        //       {
-                        //         print(
-                        //             "widgetkey: ${_Livingkey[i]}, 제품명 : ${pname[_Livingkey[i]]}, \t수량 : ${productCount[pname[_Livingkey[i]]]}, \t유통기한 : ${productDate[pname[_Livingkey[i]]]}")
-                        //       },
-                        //     print("\n")
-                        //   },
-                        //   child: const Text("speak"),
-                        // ),
-                        Center(
-                          child: OutlinedButton(
-                            onPressed: () => Navigator.of(context).pop(),
-                            style: OutlinedButton.styleFrom(
+            Container(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  height: (MediaQuery.of(context).size.height) * 0.1,
+                  color: Colors.white,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            onPressed: () => setState(() => addlist()),
+                            icon: const Icon(Icons.add_circle_outlined),
+                          ),
+                          Center(
+                            child: OutlinedButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              style: OutlinedButton.styleFrom(
+                                minimumSize: const Size(120, 50),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                side: const BorderSide(
+                                  color: Color.fromARGB(255, 53, 175, 212),
+                                  width: 2,
+                                ),
+                              ),
+                              child: const Text(
+                                "취소",
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 53, 175, 212),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          ElevatedButton(
+                            onPressed: () {
+                              Checktext = true;
+                              for (int i = 0; i < _Livingkey.length; i++) {
+                                if (pname[_Livingkey[i]] == "") {
+                                  Checktext = false;
+                                  break;
+                                }
+                              }
+                              print(Checktext);
+                              if (Checktext == false) {
+                                ERRDialog(context);
+                              } else {
+                                saveData();
+                                fetchData();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => //상품명, 수량, 유통기한도 괄호에 적을 예정
+                                            const MainScreen(),
+                                  ),
+                                );
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color.fromARGB(255, 53, 175, 212),
                               minimumSize: const Size(120, 50),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              side: const BorderSide(
-                                color: Color.fromARGB(255, 53, 175, 212),
-                                width: 2,
-                              ),
                             ),
                             child: const Text(
-                              "취소",
+                              "등록하기",
                               style: TextStyle(
-                                color: Color.fromARGB(255, 53, 175, 212),
+                                color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20,
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 10),
-                        ElevatedButton(
-                          onPressed: () {
-                            Checktext = true;
-                            for (int i = 0; i < _Livingkey.length; i++) {
-                              if (pname[_Livingkey[i]] == "") {
-                                Checktext = false;
-                                break;
-                              }
-                            }
-                            print(Checktext);
-                            if (Checktext == false) {
-                              ERRDialog(context);
-                            } else {
-                              saveData();
-                              fetchData();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) => //상품명, 수량, 유통기한도 괄호에 적을 예정
-                                          const MainScreen(),
-                                ),
-                              );
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color.fromARGB(255, 53, 175, 212),
-                            minimumSize: const Size(120, 50),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                          child: const Text(
-                            "등록하기",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -397,170 +395,181 @@ class _SecondViewState extends State<Postpage> {
       productCount[pname[widgetkey]!] = 1;
     }
 
-    return Center(
-      child: Column(
-        children: [
-          Container(height: 1.1, color: Colors.grey),
-          Row(
-            children: [
-              Expanded(
-                child: Row(
-                  children: [
-                    Column(
-                      children: [
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                          onPressed: () => {
-                            Dellist.add(widgetkey),
-                            ChangedDelnum(widgetkey),
-                          },
-                          icon: const Icon(
-                            Icons.remove_circle_outline,
-                            color: Colors.red,
-                            size: 15,
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Center(
+        child: Column(
+          children: [
+            Container(height: 1.1, color: Colors.grey),
+            Row(
+              children: [
+                Expanded(
+                  child: Row(
+                    children: [
+                      Column(
+                        children: [
+                          IconButton(
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            onPressed: () => {
+                              Dellist.add(widgetkey),
+                              ChangedDelnum(widgetkey),
+                            },
+                            icon: const Icon(
+                              Icons.remove_circle_outline,
+                              color: Colors.red,
+                              size: 15,
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        )
-                      ],
-                    ),
-                    Container(
-                      color: const Color.fromARGB(255, 255, 255, 255),
-                      width: (MediaQuery.of(context).size.width) * 0.2,
-                      child: Center(
-                        child: TextField(
-                          controller: controller,
-                          decoration: InputDecoration(
-                              border: const OutlineInputBorder(),
-                              hintText: productname,
-                              labelStyle: const TextStyle(fontSize: 15)),
-                          style: const TextStyle(
-                            fontSize: 15,
+                          const SizedBox(
+                            height: 30,
+                          )
+                        ],
+                      ),
+                      Container(
+                        color: const Color.fromARGB(255, 255, 255, 255),
+                        width: (MediaQuery.of(context).size.width) * 0.2,
+                        child: Center(
+                          child: TextField(
+                            controller: controller,
+                            decoration: InputDecoration(
+                                border: const OutlineInputBorder(),
+                                hintText: productname,
+                                labelStyle: const TextStyle(fontSize: 15)),
+                            style: const TextStyle(
+                              fontSize: 15,
+                            ),
+                            onChanged: (text) {
+                              productname = text;
+                              initname(text, widgetkey);
+                            },
                           ),
-                          onChanged: (text) {
-                            productname = text;
-                            initname(text, widgetkey);
-                          },
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      width: (MediaQuery.of(context).size.width) * 0.02,
-                    ),
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            const Text("유통기한"),
-                            SizedBox(
-                              width: (MediaQuery.of(context).size.width) * 0.3,
-                              height:
-                                  (MediaQuery.of(context).size.height) * 0.03,
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  final selectedDate = await showDatePicker(
-                                    context: context,
-                                    initialDate: date,
-                                    firstDate: DateTime.now(),
-                                    lastDate: DateTime(2100),
-                                  );
-                                  if (selectedDate != null) {
-                                    setState(() {
-                                      date = selectedDate;
-                                    });
-                                  }
-                                  setDate(productname);
-                                  date = DateTime.now();
-                                  rebuilding(widgetkey, controller);
+                      SizedBox(
+                        width: (MediaQuery.of(context).size.width) * 0.02,
+                      ),
+                      Column(
+                        children: [
+                          Row(
+                            children: [
+                              const Text("유통기한"),
+                              SizedBox(
+                                width:
+                                    (MediaQuery.of(context).size.width) * 0.3,
+                                height:
+                                    (MediaQuery.of(context).size.height) * 0.03,
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    final selectedDate = await showDatePicker(
+                                      context: context,
+                                      initialDate: date,
+                                      firstDate: DateTime.now(),
+                                      lastDate: DateTime(2100),
+                                    );
+                                    if (selectedDate != null) {
+                                      setState(() {
+                                        date = selectedDate;
+                                      });
+                                    }
+                                    setDate(productname);
+                                    date = DateTime.now();
+                                    rebuilding(widgetkey, controller);
+                                  },
+                                  child: Text(
+                                    "${productDate[productname]}",
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const Icon(Icons.calendar_today, size: 15),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Text("추천기간"),
+                              SizedBox(
+                                width:
+                                    (MediaQuery.of(context).size.width) * 0.3,
+                                height:
+                                    (MediaQuery.of(context).size.height) * 0.03,
+                                child: ElevatedButton(
+                                  // style: ElevatedButton.styleFrom(
+                                  //   maximumSize: const Size(100, 50)
+                                  // ),
+                                  onPressed: () {},
+                                  child: Text(
+                                    "${productDate[productname]}",
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const Icon(Icons.check_circle_outline, size: 15),
+                            ],
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        width: (MediaQuery.of(context).size.width) * 0.005,
+                      ),
+                      Column(
+                        children: [
+                          IconButton(
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            onPressed: () => {
+                              if (pname[widgetkey] != null)
+                                {
+                                  icount(pname[
+                                      widgetkey]!) // !는 pname[widgeykey]가 null이 아님을 보장한다.
                                 },
-                                child: Text(
-                                  "${productDate[productname]}",
-                                  style: const TextStyle(
-                                    fontSize: 10,
-                                  ),
-                                ),
-                              ),
+                              rebuilding(widgetkey, controller),
+                            },
+                            icon: const Icon(
+                              Icons.keyboard_arrow_up,
+                              color: Colors.red,
+                              size: 15,
                             ),
-                            const Icon(Icons.calendar_today, size: 15),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Text("추천기간"),
-                            SizedBox(
-                              width: (MediaQuery.of(context).size.width) * 0.3,
-                              height:
-                                  (MediaQuery.of(context).size.height) * 0.03,
-                              child: ElevatedButton(
-                                // style: ElevatedButton.styleFrom(
-                                //   maximumSize: const Size(100, 50)
-                                // ),
-                                onPressed: () {},
-                                child: Text(
-                                  "${productDate[productname]}",
-                                  style: const TextStyle(
-                                    fontSize: 10,
-                                  ),
-                                ),
-                              ),
+                          ),
+                          Center(
+                            child:
+                                Text("${productCount[pname[widgetkey]] ?? 1}"),
+                          ),
+                          IconButton(
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            onPressed: () => {
+                              if (pname[widgetkey] != null)
+                                {
+                                  dcount(pname[
+                                      widgetkey]!) // !는 pname[widgeykey]가 null이 아님을 보장한다.
+                                },
+                              rebuilding(widgetkey, controller),
+                            },
+                            icon: const Icon(
+                              Icons.keyboard_arrow_down,
+                              color: Colors.red,
+                              size: 15,
                             ),
-                            const Icon(Icons.check_circle_outline, size: 15),
-                          ],
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      width: (MediaQuery.of(context).size.width) * 0.005,
-                    ),
-                    Column(
-                      children: [
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                          onPressed: () => {
-                            if (pname[widgetkey] != null)
-                              {
-                                icount(pname[
-                                    widgetkey]!) // !는 pname[widgeykey]가 null이 아님을 보장한다.
-                              },
-                            rebuilding(widgetkey, controller),
-                          },
-                          icon: const Icon(
-                            Icons.keyboard_arrow_up,
-                            color: Colors.red,
-                            size: 15,
                           ),
-                        ),
-                        Center(
-                          child: Text("${productCount[pname[widgetkey]] ?? 1}"),
-                        ),
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                          onPressed: () => {
-                            if (pname[widgetkey] != null)
-                              {
-                                dcount(pname[
-                                    widgetkey]!) // !는 pname[widgeykey]가 null이 아님을 보장한다.
-                              },
-                            rebuilding(widgetkey, controller),
-                          },
-                          icon: const Icon(
-                            Icons.keyboard_arrow_down,
-                            color: Colors.red,
-                            size: 15,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
