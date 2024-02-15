@@ -283,7 +283,7 @@ class _SecondViewState extends State<Postpage> {
             children: [
               Container(
                 height: (MediaQuery.of(context).size.height -
-                        MediaQuery.of(context).viewInsets.bottom) *
+                        MediaQuery.of(context).viewInsets.bottom * 1.15) *
                     0.8,
                 child: ListView.builder(
                   itemCount: _widgetList.length,
@@ -307,17 +307,6 @@ class _SecondViewState extends State<Postpage> {
                               onPressed: () => setState(() => addlist()),
                               icon: const Icon(Icons.add_circle_outlined),
                             ),
-                            // TextButton(
-                            //   onPressed: () => {
-                            //     for (int i = 0; i < _Livingkey.length; i++)
-                            //       {
-                            //         print(
-                            //             "widgetkey: ${_Livingkey[i]}, 제품명 : ${pname[_Livingkey[i]]}, \t수량 : ${productCount[pname[_Livingkey[i]]]}, \t유통기한 : ${productDate[pname[_Livingkey[i]]]}")
-                            //       },
-                            //     print("\n")
-                            //   },
-                            //   child: const Text("speak"),
-                            // ),
                             Center(
                               child: OutlinedButton(
                                 onPressed: () {
