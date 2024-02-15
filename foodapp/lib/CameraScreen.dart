@@ -17,6 +17,7 @@ class CameraPage extends StatelessWidget {
             seedColor: const Color.fromRGBO(57, 57, 57, 0)),
         useMaterial3: true,
       ),
+      debugShowCheckedModeBanner: false,
       home: const MyHomePage(),
     );
   }
