@@ -240,150 +240,162 @@ class _SecondViewState extends State<Postpage> {
 // 위젯 생성 및 출력
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.replace(
-              context,
-              oldRoute: ModalRoute.of(context)!,
-              newRoute: MaterialPageRoute(
-                builder: (context) => const CameraPage(),
-              ),
-            );
-          },
-          color: const Color.fromARGB(255, 53, 175, 212),
-          icon: const Icon(Icons.arrow_back),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.replace(
+          context,
+          oldRoute: ModalRoute.of(context)!,
+          newRoute: MaterialPageRoute(
+            builder: (context) => const CameraPage(),
+          ),
+        );
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.replace(
+                context,
+                oldRoute: ModalRoute.of(context)!,
+                newRoute: MaterialPageRoute(
+                  builder: (context) => const CameraPage(),
+                ),
+              );
+            },
+            color: const Color.fromARGB(255, 53, 175, 212),
+            icon: const Icon(Icons.arrow_back),
+          ),
+          backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+          title: const Text(
+            "음식등록",
+            style: TextStyle(color: Color.fromARGB(255, 53, 175, 212)),
+          ),
         ),
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-        title: const Text(
-          "음식등록",
-          style: TextStyle(color: Color.fromARGB(255, 53, 175, 212)),
-        ),
-      ),
-      body: Stack(
-        children: [
-          SizedBox(
-            height: (MediaQuery.of(context).size.height) * 0.82,
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: ListView.builder(
-                itemCount: _widgetList.length, //몇 개 할 것인지
-                itemBuilder: (context, index) {
-                  //어떤 View를 그릴 것인지
-                  return _widgetList[index];
-                },
+        body: Stack(
+          children: [
+            SizedBox(
+              height: (MediaQuery.of(context).size.height) * 0.82,
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: ListView.builder(
+                  itemCount: _widgetList.length, //몇 개 할 것인지
+                  itemBuilder: (context, index) {
+                    //어떤 View를 그릴 것인지
+                    return _widgetList[index];
+                  },
+                ),
               ),
             ),
-          ),
-          Container(
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: (MediaQuery.of(context).size.height) * 0.1,
-                color: Colors.white,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          onPressed: () => setState(() => addlist()),
-                          icon: const Icon(Icons.add_circle_outlined),
-                        ),
-                        // TextButton(
-                        //   onPressed: () => {
-                        //     for (int i = 0; i < _Livingkey.length; i++)
-                        //       {
-                        //         print(
-                        //             "widgetkey: ${_Livingkey[i]}, 제품명 : ${pname[_Livingkey[i]]}, \t수량 : ${productCount[pname[_Livingkey[i]]]}, \t유통기한 : ${productDate[pname[_Livingkey[i]]]}")
-                        //       },
-                        //     print("\n")
-                        //   },
-                        //   child: const Text("speak"),
-                        // ),
-                        Center(
-                          child: OutlinedButton(
-                            onPressed: () {
-                              Navigator.replace(
-                                context,
-                                oldRoute: ModalRoute.of(context)!,
-                                newRoute: MaterialPageRoute(
-                                  builder: (context) => const CameraPage(),
+            Container(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  height: (MediaQuery.of(context).size.height) * 0.1,
+                  color: Colors.white,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            onPressed: () => setState(() => addlist()),
+                            icon: const Icon(Icons.add_circle_outlined),
+                          ),
+                          // TextButton(
+                          //   onPressed: () => {
+                          //     for (int i = 0; i < _Livingkey.length; i++)
+                          //       {
+                          //         print(
+                          //             "widgetkey: ${_Livingkey[i]}, 제품명 : ${pname[_Livingkey[i]]}, \t수량 : ${productCount[pname[_Livingkey[i]]]}, \t유통기한 : ${productDate[pname[_Livingkey[i]]]}")
+                          //       },
+                          //     print("\n")
+                          //   },
+                          //   child: const Text("speak"),
+                          // ),
+                          Center(
+                            child: OutlinedButton(
+                              onPressed: () {
+                                Navigator.replace(
+                                  context,
+                                  oldRoute: ModalRoute.of(context)!,
+                                  newRoute: MaterialPageRoute(
+                                    builder: (context) => const CameraPage(),
+                                  ),
+                                );
+                              },
+                              style: OutlinedButton.styleFrom(
+                                minimumSize: const Size(120, 50),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
                                 ),
-                              );
+                                side: const BorderSide(
+                                  color: Color.fromARGB(255, 53, 175, 212),
+                                  width: 2,
+                                ),
+                              ),
+                              child: const Text(
+                                "취소",
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 53, 175, 212),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          ElevatedButton(
+                            onPressed: () {
+                              Checktext = true;
+                              for (int i = 0; i < _Livingkey.length; i++) {
+                                if (pname[_Livingkey[i]] == "") {
+                                  Checktext = false;
+                                  break;
+                                }
+                              }
+                              print(Checktext);
+                              if (Checktext == false) {
+                                ERRDialog(context);
+                              } else {
+                                saveData();
+                                fetchData();
+                                Navigator.replace(
+                                  context,
+                                  oldRoute: ModalRoute.of(context)!,
+                                  newRoute: MaterialPageRoute(
+                                    builder: (context) =>
+                                        const MainScreen(), //상품명, 수량, 유통기한도 괄호에 적을 예정
+                                  ),
+                                );
+                              }
                             },
-                            style: OutlinedButton.styleFrom(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color.fromARGB(255, 53, 175, 212),
                               minimumSize: const Size(120, 50),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              side: const BorderSide(
-                                color: Color.fromARGB(255, 53, 175, 212),
-                                width: 2,
-                              ),
                             ),
                             child: const Text(
-                              "취소",
+                              "등록하기",
                               style: TextStyle(
-                                color: Color.fromARGB(255, 53, 175, 212),
+                                color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20,
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 10),
-                        ElevatedButton(
-                          onPressed: () {
-                            Checktext = true;
-                            for (int i = 0; i < _Livingkey.length; i++) {
-                              if (pname[_Livingkey[i]] == "") {
-                                Checktext = false;
-                                break;
-                              }
-                            }
-                            print(Checktext);
-                            if (Checktext == false) {
-                              ERRDialog(context);
-                            } else {
-                              saveData();
-                              fetchData();
-                              Navigator.replace(
-                                context,
-                                oldRoute: ModalRoute.of(context)!,
-                                newRoute: MaterialPageRoute(
-                                  builder: (context) =>
-                                      const MainScreen(), //상품명, 수량, 유통기한도 괄호에 적을 예정
-                                ),
-                              );
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color.fromARGB(255, 53, 175, 212),
-                            minimumSize: const Size(120, 50),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                          child: const Text(
-                            "등록하기",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
