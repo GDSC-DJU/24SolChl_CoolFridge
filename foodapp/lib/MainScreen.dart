@@ -8,10 +8,12 @@ import 'package:foodapp/gpt.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:foodapp/notification.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 //MainScreen 코드
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Hive.initFlutter();
   // pnameBox, productDateBox, productCountBox를 열기 전에 이미 열려 있는지 확인합니다.
   if (!Hive.isBoxOpen('pnameBox')) {
@@ -37,6 +39,7 @@ void main() async {
   }
 
   runApp(const MainScreen());
+  FlutterNativeSplash.remove();
 }
 
 class MainScreen extends StatelessWidget {

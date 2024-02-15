@@ -16,8 +16,6 @@ void main() async {
   if (!Hive.isBoxOpen('productCountBox')) {
     await Hive.openBox<int>('productCountBox');
   }
-
-  runApp(const AlarmScreen());
 }
 
 class AlarmScreen extends StatelessWidget {
