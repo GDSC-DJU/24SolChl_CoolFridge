@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodapp/CameraScreen.dart';
 import 'package:foodapp/MainScreen.dart';
 //import 'package:provider/provider.dart';
 import 'package:hive/hive.dart';
@@ -242,7 +243,15 @@ class _SecondViewState extends State<Postpage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            Navigator.replace(
+              context,
+              oldRoute: ModalRoute.of(context)!,
+              newRoute: MaterialPageRoute(
+                builder: (context) => const CameraPage(),
+              ),
+            );
+          },
           color: const Color.fromARGB(255, 53, 175, 212),
           icon: const Icon(Icons.arrow_back),
         ),
@@ -295,7 +304,15 @@ class _SecondViewState extends State<Postpage> {
                         // ),
                         Center(
                           child: OutlinedButton(
-                            onPressed: () => Navigator.of(context).pop(),
+                            onPressed: () {
+                              Navigator.replace(
+                                context,
+                                oldRoute: ModalRoute.of(context)!,
+                                newRoute: MaterialPageRoute(
+                                  builder: (context) => const CameraPage(),
+                                ),
+                              );
+                            },
                             style: OutlinedButton.styleFrom(
                               minimumSize: const Size(120, 50),
                               shape: RoundedRectangleBorder(
@@ -332,12 +349,12 @@ class _SecondViewState extends State<Postpage> {
                             } else {
                               saveData();
                               fetchData();
-                              Navigator.push(
+                              Navigator.replace(
                                 context,
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) => //상품명, 수량, 유통기한도 괄호에 적을 예정
-                                          const MainScreen(),
+                                oldRoute: ModalRoute.of(context)!,
+                                newRoute: MaterialPageRoute(
+                                  builder: (context) =>
+                                      const MainScreen(), //상품명, 수량, 유통기한도 괄호에 적을 예정
                                 ),
                               );
                             }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodapp/FoodAddScreen.dart';
+import 'package:foodapp/MainScreen.dart';
 
 //카메라 페이지
 void main() {}
@@ -57,10 +58,15 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
-              onPressed: () => {
-                    Navigator.of(context).pop(),
-                    // 뒤로가기 기능 Navigator.pop()
-                  },
+              onPressed: () {
+                Navigator.replace(
+                  context,
+                  oldRoute: ModalRoute.of(context)!,
+                  newRoute: MaterialPageRoute(
+                    builder: (context) => const MainScreen(),
+                  ),
+                );
+              },
               color: Colors.white,
               icon: const Icon(Icons.arrow_back)),
           backgroundColor: const Color.fromARGB(255, 83, 83, 83),
@@ -99,12 +105,14 @@ class _MyHomePageState extends State<MyHomePage> {
                           const SizedBox(width: 50),
                           Center(
                             child: TextButton(
-                              onPressed: () => {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => const Postpage(),
-                                    )),
+                              onPressed: () {
+                                Navigator.replace(
+                                  context,
+                                  oldRoute: ModalRoute.of(context)!,
+                                  newRoute: MaterialPageRoute(
+                                    builder: (context) => const Postpage(),
+                                  ),
+                                );
                               },
                               child: const Text("직접입력",
                                   style: TextStyle(
@@ -116,14 +124,16 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       Center(
                         child: ElevatedButton(
-                            onPressed: () => {
-                                  print("take a picture"),
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => const Postpage(),
-                                      )),
-                                },
+                            onPressed: () {
+                              print("take a picture");
+                              Navigator.replace(
+                                context,
+                                oldRoute: ModalRoute.of(context)!,
+                                newRoute: MaterialPageRoute(
+                                  builder: (context) => const Postpage(),
+                                ),
+                              );
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
                               shape: const CircleBorder(),
