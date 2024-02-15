@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -229,9 +231,26 @@ class _MyWidgetState extends State<_MainScreen> {
                         String prompt =
                             "${selectedProducts.join(', ')}으로 만들 수 있는 요리 추천해줘 레시피를 절대 알려주지 말고 음식만 3가지 추천해줘 그리고 음식과 음식 사이에는 \n처럼 한 줄 띄워서 출력해줘";
                         try {
-                          String generatedText =
-                              await GPT3.generateText(prompt);
+                          String generatedText = "";
+                          // 추천메뉴 생성중일 때, 로딩창
+                          if (generatedText == "") {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Center(
+                                    child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Color(0xFF35AED4)),
+                                ));
+                              },
+                            );
+                          }
+                          generatedText = await GPT3.generateText(prompt);
                           setState(() {
+                            //로딩창 제거
+                            if (generatedText != "") {
+                              Navigator.of(context).pop();
+                            }
                             // content 업데이트
                             contentText = generatedText;
                           });
@@ -293,8 +312,27 @@ class _MyWidgetState extends State<_MainScreen> {
                                           String prompt =
                                               '$item 을 만들 수 있는 레시피 알려줘';
                                           try {
-                                            String generatedText =
+                                            String generatedText = "";
+                                            // 추천메뉴 생성중일 때, 로딩창
+                                            if (generatedText == "") {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return Center(
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                    valueColor:
+                                                        AlwaysStoppedAnimation<
+                                                                Color>(
+                                                            Color(0xFF35AED4)),
+                                                  ));
+                                                },
+                                              );
+                                            }
+                                            generatedText =
                                                 await GPT3.generateText(prompt);
+                                            Navigator.of(context)
+                                                .pop(); // 로딩 다이얼로그 닫기
                                             Navigator.of(context)
                                                 .pop(); // 현재 다이얼로그 닫기
                                             showDialog(
