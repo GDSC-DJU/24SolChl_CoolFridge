@@ -369,112 +369,120 @@ class _MyWidgetState extends State<_MainScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: MediaQuery.of(context).size.height * 0.06,
-              horizontal: MediaQuery.of(context).size.width * 0.12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-              20,
+        return GestureDetector(
+          onTap: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          },
+          child: AlertDialog(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: MediaQuery.of(context).size.height * 0.06,
+                horizontal: MediaQuery.of(context).size.width * 0.12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                20,
+              ),
             ),
-          ),
-          title: const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '상품 상세정보',
-                style: TextStyle(
-                  color: Color(
-                    (0xFF35AED4),
+            title: const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '상품 상세정보',
+                  style: TextStyle(
+                    color: Color(
+                      (0xFF35AED4),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          content: Form(
-            // Form 위젯으로 감싸기
-            key: formKey, // _formKey 추가
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('상품명'),
-                TextFormField(
-                  controller: productNameController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return '상품명을 입력하세요.';
-                    }
-                    return null;
-                  },
-                ),
-                const Text('유통기한'),
-                TextFormField(
-                  controller: productDateController,
-                  keyboardType: TextInputType.number, //숫자만 입력 가능
-                ),
-                const Text('수량'),
-                TextFormField(
-                  controller: productCountController,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        side: const BorderSide(
-                          color: Color.fromARGB(255, 61, 237, 247),
-                        ), // 테두리 색 및 너비 지정
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        '취소',
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 61, 237, 247),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                          const Color.fromARGB(255, 61, 237, 247),
-                        ),
-                      ),
-                      onPressed: () {
-                        if (formKey.currentState != null &&
-                            formKey.currentState!.validate()) {
-                          // 완료 버튼을 눌렀을 때 업데이트
-                          String newProductName = productNameController.text;
-                          String newProductDate = productDateController.text;
-                          int newProductCount =
-                              int.parse(productCountController.text);
-
-                          pnameBox.putAt(index, newProductName);
-                          productDateBox.putAt(index, newProductDate);
-                          productCountBox.putAt(index, newProductCount);
-                          tNameBox.putAt(index, newProductName);
-                          tDateBox.putAt(index, newProductDate);
-                          tCountBox.putAt(index, newProductCount);
-
-                          Navigator.pop(context);
-                        }
-                      },
-                      child: const Text(
-                        '완료',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                )
               ],
+            ),
+            content: Form(
+              // Form 위젯으로 감싸기
+              key: formKey, // _formKey 추가
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('상품명'),
+                  TextFormField(
+                    controller: productNameController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return '상품명을 입력하세요.';
+                      }
+                      return null;
+                    },
+                  ),
+                  const Text('유통기한'),
+                  TextFormField(
+                    controller: productDateController,
+                    keyboardType: TextInputType.number, //숫자만 입력 가능
+                  ),
+                  const Text('수량'),
+                  TextFormField(
+                    controller: productCountController,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          side: const BorderSide(
+                            color: Color.fromARGB(255, 61, 237, 247),
+                          ), // 테두리 색 및 너비 지정
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text(
+                          '취소',
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 61, 237, 247),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            const Color.fromARGB(255, 61, 237, 247),
+                          ),
+                        ),
+                        onPressed: () {
+                          if (formKey.currentState != null &&
+                              formKey.currentState!.validate()) {
+                            // 완료 버튼을 눌렀을 때 업데이트
+                            String newProductName = productNameController.text;
+                            String newProductDate = productDateController.text;
+                            int newProductCount =
+                                int.parse(productCountController.text);
+
+                            pnameBox.putAt(index, newProductName);
+                            productDateBox.putAt(index, newProductDate);
+                            productCountBox.putAt(index, newProductCount);
+                            tNameBox.putAt(index, newProductName);
+                            tDateBox.putAt(index, newProductDate);
+                            tCountBox.putAt(index, newProductCount);
+
+                            Navigator.pop(context);
+                          }
+                        },
+                        child: const Text(
+                          '완료',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         );
