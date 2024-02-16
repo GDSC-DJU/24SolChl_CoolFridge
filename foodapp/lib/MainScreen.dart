@@ -167,52 +167,49 @@ class _MyWidgetState extends State<_MainScreen> {
                   Text(
                     '음식 선택',
                     style: TextStyle(
-                      color: Color(0xFF42A5F5),
-                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF35AED4),
                     ),
                   ),
                 ],
               ),
               content: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.4, // 높이 조절
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      SingleChildScrollView(
-                        child: Column(
-                          children: List.generate(pnameBox.length, (index) {
-                            String productName = pnameBox.getAt(index) ?? '';
-                            bool isSelected = switchStates.containsKey(index)
-                                ? switchStates[index]!
-                                : false;
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  productName,
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                  ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    SingleChildScrollView(
+                      child: Column(
+                        children: List.generate(pnameBox.length, (index) {
+                          String productName = pnameBox.getAt(index) ?? '';
+                          bool isSelected = switchStates.containsKey(index)
+                              ? switchStates[index]!
+                              : false;
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                productName,
+                                style: const TextStyle(
+                                  fontSize: 20,
                                 ),
-                                Switch(
-                                  value: isSelected,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      switchStates[index] = value;
-                                    });
-                                  },
-                                  activeColor: Colors.green,
-                                  inactiveThumbColor: Colors.grey,
-                                ),
-                              ],
-                            );
-                          }),
-                        ),
+                              ),
+                              Switch(
+                                value: isSelected,
+                                onChanged: (value) {
+                                  setState(() {
+                                    switchStates[index] = value;
+                                  });
+                                },
+                                activeColor: Colors.green,
+                                inactiveThumbColor: Colors.grey,
+                              ),
+                            ],
+                          );
+                        }),
                       ),
-                      const SizedBox(height: 20), // 여백 추가
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 20), // 여백 추가
+                  ],
                 ),
               ),
               actions: <Widget>[
@@ -344,17 +341,9 @@ class _MyWidgetState extends State<_MainScreen> {
                         );
                       }
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF42A5F5),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
+                    child: const Text(
+                      '선택 완료',
                     ),
-                    child: const Text('선택 완료',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        )),
                   ),
                 ),
               ],
@@ -396,9 +385,8 @@ class _MyWidgetState extends State<_MainScreen> {
                 '상품 상세정보',
                 style: TextStyle(
                   color: Color(
-                    (0xFF42A5F5),
+                    (0xFF35AED4),
                   ),
-                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],
@@ -438,7 +426,7 @@ class _MyWidgetState extends State<_MainScreen> {
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         side: const BorderSide(
-                          color: Color(0xFF42A5F5),
+                          color: Color.fromARGB(255, 61, 237, 247),
                         ), // 테두리 색 및 너비 지정
                       ),
                       onPressed: () {
@@ -447,16 +435,15 @@ class _MyWidgetState extends State<_MainScreen> {
                       child: const Text(
                         '취소',
                         style: TextStyle(
-                          color: Color(0xFF42A5F5),
+                          color: Color.fromARGB(255, 61, 237, 247),
                           fontWeight: FontWeight.bold,
-                          fontSize: 15,
                         ),
                       ),
                     ),
                     ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(
-                          const Color(0xFF42A5F5),
+                          const Color.fromARGB(255, 61, 237, 247),
                         ),
                       ),
                       onPressed: () {
@@ -482,8 +469,6 @@ class _MyWidgetState extends State<_MainScreen> {
                         '완료',
                         style: TextStyle(
                           color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
                         ),
                       ),
                     ),
@@ -558,7 +543,6 @@ class _MyWidgetState extends State<_MainScreen> {
           child: Container(
             width: MediaQuery.of(context).size.width * 0.65,
             height: MediaQuery.of(context).size.height * 0.1,
-            margin: const EdgeInsets.only(bottom: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
@@ -687,9 +671,6 @@ class _MyWidgetState extends State<_MainScreen> {
             ),
           ),
         ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.001,
-        )
       ],
     );
   }
@@ -736,10 +717,14 @@ class _MyWidgetState extends State<_MainScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Image.asset(
-                'assets/images/cool_fridge.jpg',
-                width: MediaQuery.of(context).size.width * 0.15,
-                height: MediaQuery.of(context).size.height * 0.05,
+              IconButton(
+                onPressed: () {
+                  fetchData();
+                  //Navigator.pop(context);
+                },
+                icon: const Icon(
+                  Icons.info_outline,
+                ),
               ),
               const Row(
                 children: [
@@ -747,7 +732,7 @@ class _MyWidgetState extends State<_MainScreen> {
                     '나의 냉장고',
                     style: TextStyle(
                       color: Color(
-                        (0xFF42A5F5),
+                        (0xFF35AED4),
                       ),
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
@@ -768,17 +753,17 @@ class _MyWidgetState extends State<_MainScreen> {
                 icon: const Icon(
                   Icons.notifications,
                 ),
-                color: Colors.blue.shade400,
+                color: Colors.black,
               )
             ],
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.05,
+            height: MediaQuery.of(context).size.height * 0.07,
           ),
           Row(
             children: [
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.015,
+                width: MediaQuery.of(context).size.width * 0.05,
               ),
               GestureDetector(
                 onTap: () {
@@ -789,10 +774,10 @@ class _MyWidgetState extends State<_MainScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.17,
+                        width: MediaQuery.of(context).size.width * 0.2,
                         child: Text(
                           SortingText,
-                          textAlign: TextAlign.start,
+                          textAlign: TextAlign.center,
                         ),
                       ),
                       const Icon(
@@ -805,12 +790,12 @@ class _MyWidgetState extends State<_MainScreen> {
             ],
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.015,
+            height: MediaQuery.of(context).size.height * 0.07,
           ),
           Row(
             children: [
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.15,
+                width: MediaQuery.of(context).size.width * 0.1,
               ),
               GestureDetector(
                 onTap: () {
@@ -831,7 +816,7 @@ class _MyWidgetState extends State<_MainScreen> {
                   );
                 },
                 child: Container(
-                  width: MediaQuery.of(context).size.width * 0.65,
+                  width: MediaQuery.of(context).size.width * 0.7,
                   height: MediaQuery.of(context).size.height * 0.06,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -866,7 +851,7 @@ class _MyWidgetState extends State<_MainScreen> {
             ],
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.03,
+            height: MediaQuery.of(context).size.height * 0.04,
           ),
           //foodlist 넣을 곳
           Expanded(
@@ -893,7 +878,6 @@ class _MyWidgetState extends State<_MainScreen> {
             child: Container(
               width: MediaQuery.of(context).size.width * 0.5,
               height: MediaQuery.of(context).size.height * 0.07,
-              margin: const EdgeInsets.only(bottom: 10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
@@ -904,9 +888,6 @@ class _MyWidgetState extends State<_MainScreen> {
               child: Center(
                 child: Row(
                   children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.03,
-                    ),
                     const Icon(Icons.food_bank),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.05,
@@ -1045,7 +1026,7 @@ Future<bool> RemoveDialog(BuildContext context, int index) async {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     side: const BorderSide(
-                      color: Color(0xFF42A5F5),
+                      color: Color.fromARGB(255, 61, 237, 247),
                     ), // 테두리 색 및 너비 지정
                   ),
                   onPressed: () {
@@ -1055,7 +1036,7 @@ Future<bool> RemoveDialog(BuildContext context, int index) async {
                   child: const Text(
                     '취소',
                     style: TextStyle(
-                      color: Color(0xFF42A5F5),
+                      color: Color.fromARGB(255, 61, 237, 247),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -1063,7 +1044,7 @@ Future<bool> RemoveDialog(BuildContext context, int index) async {
                 ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
-                      const Color(0xFF42A5F5),
+                      const Color.fromARGB(255, 61, 237, 247),
                     ),
                   ),
                   onPressed: () {
