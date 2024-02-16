@@ -580,11 +580,8 @@ class _MyWidgetState extends State<_MainScreen> {
 
     // 마지막 인덱스인지 확인하여
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.05,
-        ),
         GestureDetector(
           onTap: () {
             if (SortingBox.getAt(SortingBox.length - 1) == 0) {
@@ -602,22 +599,29 @@ class _MyWidgetState extends State<_MainScreen> {
             }
           },
           child: Container(
-            width: MediaQuery.of(context).size.width * 0.65,
+            width: MediaQuery.of(context).size.width * 0.85,
             height: MediaQuery.of(context).size.height * 0.1,
             margin: const EdgeInsets.only(bottom: 10),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: Colors.black,
+                color: Colors.white,
                 width: 1,
               ),
             ),
             child: Row(
               children: [
-                SizedBox(width: MediaQuery.of(context).size.height * 0.03),
+                SizedBox(
+                  width: MediaQuery.of(context).size.height * 0.01,
+                ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // "글자 수"가 많은 제품일때, 이 사이즈박스가 없으면, 글씨가 오버되어서 오류나는거 방지용.
+                    SizedBox(
+                      width: MediaQuery.of(context).size.height * 0.15,
+                    ),
                     Text(
                       '${pnameBox.getAt(index)}',
                       style: const TextStyle(
@@ -631,13 +635,14 @@ class _MyWidgetState extends State<_MainScreen> {
                         )),
                   ],
                 ),
+                //제품명이랑 수량 사이간격
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.05,
+                  width: MediaQuery.of(context).size.width * 0.01,
                 ),
                 Row(
                   children: [
                     IconButton(
-                      onPressed: () {
+                      onPressed: () async {
                         // 유통기한 순으로 정렬되어있다면, 등록순으로 바꾸고 decrementCounter하고 다시 유통기한순으로 바꾼다.
                         if (SortingBox.getAt(SortingBox.length - 1) == 0) {
                           for (int i = 0; i < SortingBox.length - 2; i++) {
@@ -647,14 +652,16 @@ class _MyWidgetState extends State<_MainScreen> {
                           if (productCountBox.getAt(index)! > 1) {
                             decrementCounter(index);
                           } else if (productCountBox.getAt(index)! == 1) {
-                            setState(() {
-                              pnameBox.deleteAt(index);
-                              productDateBox.deleteAt(index);
-                              productCountBox.deleteAt(index);
-                              tNameBox.deleteAt(index);
-                              tDateBox.deleteAt(index);
-                              tCountBox.deleteAt(index);
-                            });
+                            if (await RemoveDialog(context, index)) {
+                              setState(() {
+                                pnameBox.deleteAt(index);
+                                productDateBox.deleteAt(index);
+                                productCountBox.deleteAt(index);
+                                tNameBox.deleteAt(index);
+                                tDateBox.deleteAt(index);
+                                tCountBox.deleteAt(index);
+                              });
+                            }
                           }
                           for (int i = 0; i < SortingBox.length - 2; i++) {
                             SortingBox.deleteAt(i);
@@ -664,14 +671,16 @@ class _MyWidgetState extends State<_MainScreen> {
                           if (productCountBox.getAt(index)! > 1) {
                             decrementCounter(index);
                           } else if (productCountBox.getAt(index)! == 1) {
-                            setState(() {
-                              pnameBox.deleteAt(index);
-                              productDateBox.deleteAt(index);
-                              productCountBox.deleteAt(index);
-                              tNameBox.deleteAt(index);
-                              tDateBox.deleteAt(index);
-                              tCountBox.deleteAt(index);
-                            });
+                            if (await RemoveDialog(context, index)) {
+                              setState(() {
+                                pnameBox.deleteAt(index);
+                                productDateBox.deleteAt(index);
+                                productCountBox.deleteAt(index);
+                                tNameBox.deleteAt(index);
+                                tDateBox.deleteAt(index);
+                                tCountBox.deleteAt(index);
+                              });
+                            }
                           }
                         }
 
@@ -705,37 +714,41 @@ class _MyWidgetState extends State<_MainScreen> {
                       },
                       icon: const Icon(Icons.add, size: 20),
                     ),
+                    //수량과 제거버튼 사이간격
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.01,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        IconButton(
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            onPressed: () async {
+                              if (await RemoveDialog(context, index)) {
+                                setState(() {
+                                  pnameBox.deleteAt(index);
+                                  productDateBox.deleteAt(index);
+                                  productCountBox.deleteAt(index);
+                                  tNameBox.deleteAt(index);
+                                  tDateBox.deleteAt(index);
+                                  tCountBox.deleteAt(index);
+                                });
+                              }
+                            },
+                            icon: Icon(
+                              Icons.highlight_remove_outlined,
+                              color: Colors.red,
+                              size: 17,
+                            )),
+                      ],
+                    ),
                   ],
                 ),
               ],
             ),
           ),
         ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.2,
-          height: MediaQuery.of(context).size.height * 0.035,
-          child: OutlinedButton(
-            onPressed: () async {
-              if (await RemoveDialog(context, index)) {
-                setState(() {
-                  pnameBox.deleteAt(index);
-                  productDateBox.deleteAt(index);
-                  productCountBox.deleteAt(index);
-                  tNameBox.deleteAt(index);
-                  tDateBox.deleteAt(index);
-                  tCountBox.deleteAt(index);
-                });
-              }
-            },
-            child: const Text(
-              '제거',
-              style: TextStyle(color: Colors.red, fontSize: 13),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.001,
-        )
       ],
     );
   }
@@ -774,6 +787,8 @@ class _MyWidgetState extends State<_MainScreen> {
     }
 
     return Scaffold(
+      //배경색 추가
+      backgroundColor: Color(0xFFE1E6F8),
       body: Column(
         children: [
           SizedBox(
@@ -880,6 +895,7 @@ class _MyWidgetState extends State<_MainScreen> {
                   width: MediaQuery.of(context).size.width * 0.65,
                   height: MediaQuery.of(context).size.height * 0.06,
                   decoration: BoxDecoration(
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       color: Colors.grey,
@@ -913,7 +929,7 @@ class _MyWidgetState extends State<_MainScreen> {
             ],
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.03,
+            height: MediaQuery.of(context).size.height * 0.01,
           ),
           //foodlist 넣을 곳
           Expanded(
@@ -942,9 +958,10 @@ class _MyWidgetState extends State<_MainScreen> {
               height: MediaQuery.of(context).size.height * 0.07,
               margin: const EdgeInsets.only(bottom: 20),
               decoration: BoxDecoration(
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                  color: Colors.black,
+                  color: Colors.white,
                   width: 1,
                 ),
               ),
@@ -954,7 +971,7 @@ class _MyWidgetState extends State<_MainScreen> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.03,
                     ),
-                    const Icon(Icons.food_bank),
+                    const Icon(Icons.restaurant_menu),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.05,
                     ),
