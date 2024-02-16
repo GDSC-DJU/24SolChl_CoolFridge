@@ -163,7 +163,7 @@ class _ToggleButtonState extends State<ToggleButton> {
         titleTextStyle: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
-          color: Colors.black,
+          color: Color(0xFF42A5F5),
         ),
         leading: IconButton(
           // 뒤로가기 버튼
@@ -180,7 +180,7 @@ class _ToggleButtonState extends State<ToggleButton> {
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Colors.blue),
+        iconTheme: const IconThemeData(color: Color(0xFF2196F3)),
       ),
       body: SingleChildScrollView(
         child: Column(

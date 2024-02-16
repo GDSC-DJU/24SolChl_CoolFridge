@@ -270,13 +270,17 @@ class _SecondViewState extends State<Postpage> {
                   ),
                 );
               },
-              color: const Color.fromARGB(255, 53, 175, 212),
+              color: const Color(0xFF2196F3),
               icon: const Icon(Icons.arrow_back),
             ),
             backgroundColor: const Color.fromARGB(255, 255, 255, 255),
             title: const Text(
               "음식등록",
-              style: TextStyle(color: Color.fromARGB(255, 53, 175, 212)),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF42A5F5),
+              ),
             ),
           ),
           body: Stack(
@@ -324,14 +328,14 @@ class _SecondViewState extends State<Postpage> {
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   side: const BorderSide(
-                                    color: Color.fromARGB(255, 53, 175, 212),
+                                    color: Color(0xFF42A5F5),
                                     width: 2,
                                   ),
                                 ),
                                 child: const Text(
                                   "취소",
                                   style: TextStyle(
-                                    color: Color.fromARGB(255, 53, 175, 212),
+                                    color: Color(0xFF42A5F5),
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
                                   ),
@@ -365,8 +369,7 @@ class _SecondViewState extends State<Postpage> {
                                 }
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    const Color.fromARGB(255, 53, 175, 212),
+                                backgroundColor: const Color(0xFF42A5F5),
                                 minimumSize: const Size(120, 50),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20),
@@ -531,9 +534,9 @@ class _SecondViewState extends State<Postpage> {
                                   //   maximumSize: const Size(100, 50)
                                   // ),
                                   onPressed: () {},
-                                  child: Text(
-                                    "${productDate[productname]}",
-                                    style: const TextStyle(
+                                  child: const Text(
+                                    "추후 개발 예정",
+                                    style: TextStyle(
                                       fontSize: 10,
                                     ),
                                   ),
