@@ -281,7 +281,7 @@ class _SecondViewState extends State<Postpage> {
           ),
           body: Stack(
             children: [
-              Container(
+              SizedBox(
                 height: (MediaQuery.of(context).size.height -
                         MediaQuery.of(context).viewInsets.bottom * 1.15) *
                     0.8,

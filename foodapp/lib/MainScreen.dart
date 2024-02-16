@@ -237,7 +237,7 @@ class _MyWidgetState extends State<_MainScreen> {
                             showDialog(
                               context: context,
                               builder: (context) {
-                                return Center(
+                                return const Center(
                                     child: CircularProgressIndicator(
                                   valueColor: AlwaysStoppedAnimation<Color>(
                                       Color(0xFF35AED4)),
@@ -318,7 +318,7 @@ class _MyWidgetState extends State<_MainScreen> {
                                               showDialog(
                                                 context: context,
                                                 builder: (context) {
-                                                  return Center(
+                                                  return const Center(
                                                       child:
                                                           CircularProgressIndicator(
                                                     valueColor:
