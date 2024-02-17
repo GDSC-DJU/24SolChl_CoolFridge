@@ -193,8 +193,8 @@ class _MyWidgetState extends State<_MainScreen> {
                             children: [
                               Text(
                                 productName,
-                                style: const TextStyle(
-                                  fontSize: 20,
+                                style: TextStyle(
+                                  fontSize: 17,
                                 ),
                               ),
                               Switch(
@@ -469,11 +469,28 @@ class _MyWidgetState extends State<_MainScreen> {
                   TextFormField(
                     controller: productDateController,
                     keyboardType: TextInputType.number, //숫자만 입력 가능
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return '유통기한을 입력하세요.';
+                      }
+
+                      return null;
+                    },
                   ),
                   const Text('수량'),
                   TextFormField(
                     controller: productCountController,
                     keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return '수량을 입력하세요.';
+                      }
+                      int intvalue = int.parse(value);
+                      if (intvalue > 99) {
+                        return '수량은 최대 99개입니다.';
+                      }
+                      return null;
+                    },
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.digitsOnly
                     ],
@@ -563,6 +580,17 @@ class _MyWidgetState extends State<_MainScreen> {
   Widget FoodList(BuildContext context, index, Function(int) removeCallback) {
     int counter = 0;
 
+    double pnamefontsize = 20;
+    if (pnameBox.getAt(index)!.length >= 5) {
+      pnamefontsize = 17;
+      if (pnameBox.getAt(index)!.length >= 10) {
+        pnamefontsize = 13;
+        if (pnameBox.getAt(index)!.length >= 13) {
+          pnamefontsize = 10;
+        }
+      }
+    }
+
     void incrementCounter(int index) {
       setState(() {
         int currentValue = productCountBox.getAt(index) ?? 0;
@@ -625,12 +653,12 @@ class _MyWidgetState extends State<_MainScreen> {
                   children: [
                     // "글자 수"가 많은 제품일때, 이 사이즈박스가 없으면, 글씨가 오버되어서 오류나는거 방지용.
                     SizedBox(
-                      width: MediaQuery.of(context).size.height * 0.15,
+                      width: MediaQuery.of(context).size.height * 0.145,
                     ),
                     Text(
                       '${pnameBox.getAt(index)}',
-                      style: const TextStyle(
-                        fontSize: 20,
+                      style: TextStyle(
+                        fontSize: pnamefontsize,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -641,9 +669,9 @@ class _MyWidgetState extends State<_MainScreen> {
                   ],
                 ),
                 //제품명이랑 수량 사이간격
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.01,
-                ),
+                // SizedBox(
+                //   width: MediaQuery.of(context).size.width * 0.005,
+                // ),
                 Row(
                   children: [
                     IconButton(
@@ -701,7 +729,7 @@ class _MyWidgetState extends State<_MainScreen> {
                       children: [
                         Text(
                           '${productCountBox.getAt(index)}',
-                          style: const TextStyle(fontSize: 20),
+                          style: const TextStyle(fontSize: 19),
                         ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.07,
@@ -729,9 +757,9 @@ class _MyWidgetState extends State<_MainScreen> {
                       icon: const Icon(Icons.add, size: 20),
                     ),
                     //수량과 제거버튼 사이간격
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.01,
-                    ),
+                    // SizedBox(
+                    //   width: MediaQuery.of(context).size.width * 0.005,
+                    // ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
