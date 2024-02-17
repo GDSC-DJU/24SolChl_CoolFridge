@@ -194,7 +194,7 @@ class _MyWidgetState extends State<_MainScreen> {
                             children: [
                               Text(
                                 productName,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 17,
                                 ),
                               ),
