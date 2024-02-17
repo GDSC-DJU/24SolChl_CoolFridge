@@ -205,7 +205,7 @@ class _MyWidgetState extends State<_MainScreen> {
                                     switchStates[index] = value;
                                   });
                                 },
-                                activeColor: Colors.green,
+                                activeColor: Colors.blue,
                                 inactiveThumbColor: Colors.grey,
                               ),
                             ],

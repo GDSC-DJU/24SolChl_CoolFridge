@@ -181,7 +181,9 @@ class _ToggleButtonState extends State<ToggleButton> {
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Color(0xFF2196F3)),
+        iconTheme: const IconThemeData(
+          color: Color(0xFF2196F3),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
