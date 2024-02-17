@@ -156,6 +156,7 @@ class _MyWidgetState extends State<_MainScreen> {
         return StatefulBuilder(
           builder: (BuildContext context, setState) {
             return AlertDialog(
+              backgroundColor: Colors.white,
               contentPadding: EdgeInsets.symmetric(
                 vertical: MediaQuery.of(context).size.height * 0.06,
                 horizontal: MediaQuery.of(context).size.width * 0.12,
@@ -265,6 +266,7 @@ class _MyWidgetState extends State<_MainScreen> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
+                              backgroundColor: Colors.white,
                               title: const Text("알림"),
                               content: const Text("1개 이상의 재료를 선택해주세요."),
                               actions: <Widget>[
@@ -287,6 +289,7 @@ class _MyWidgetState extends State<_MainScreen> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
+                                backgroundColor: Colors.white,
                                 contentPadding: EdgeInsets.symmetric(
                                   vertical:
                                       MediaQuery.of(context).size.height * 0.06,
@@ -340,6 +343,7 @@ class _MyWidgetState extends State<_MainScreen> {
                                               context: context,
                                               builder: (BuildContext context) {
                                                 return AlertDialog(
+                                                  backgroundColor: Colors.white,
                                                   // AlertDialog 내용 설정
                                                   content: Row(
                                                     mainAxisSize:
@@ -426,6 +430,7 @@ class _MyWidgetState extends State<_MainScreen> {
             }
           },
           child: AlertDialog(
+            backgroundColor: Colors.white,
             contentPadding: EdgeInsets.symmetric(
                 vertical: MediaQuery.of(context).size.height * 0.06,
                 horizontal: MediaQuery.of(context).size.width * 0.12),
@@ -736,7 +741,7 @@ class _MyWidgetState extends State<_MainScreen> {
                                 });
                               }
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.highlight_remove_outlined,
                               color: Colors.red,
                               size: 17,
@@ -788,7 +793,7 @@ class _MyWidgetState extends State<_MainScreen> {
 
     return Scaffold(
       //배경색 추가
-      backgroundColor: Color(0xFFE1E6F8),
+      backgroundColor: const Color(0xFFDCE6F8),
       body: Column(
         children: [
           SizedBox(
@@ -798,7 +803,7 @@ class _MyWidgetState extends State<_MainScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Image.asset(
-                'assets/images/cool_fridge.jpg',
+                'assets/images/cool_fridge.png',
                 width: MediaQuery.of(context).size.width * 0.15,
                 height: MediaQuery.of(context).size.height * 0.05,
               ),
@@ -996,6 +1001,7 @@ class _MyWidgetState extends State<_MainScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           contentPadding: EdgeInsets.symmetric(
               vertical: MediaQuery.of(context).size.height * 0.06,
               horizontal: MediaQuery.of(context).size.width * 0.12),
@@ -1011,16 +1017,28 @@ class _MyWidgetState extends State<_MainScreen> {
                 '정렬방식 선택',
                 style: TextStyle(
                   color: Color(
-                    (0xFF35AED4),
+                    (0xFF42A5F5),
                   ),
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(10, 25),
+                  side: const BorderSide(
+                    color: Color(0xFF42A5F5),
+                  ),
+                ),
                 onPressed: () {
                   Navigator.pop(context);
                 },
                 child: const Text(
                   '취소',
+                  style: TextStyle(
+                    color: Color(0xFF42A5F5),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                  ),
                 ),
               )
             ],
@@ -1029,6 +1047,11 @@ class _MyWidgetState extends State<_MainScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    const Color(0xFF42A5F5),
+                  ),
+                ),
                 onPressed: () {
                   setState(() {
                     for (int i = 0; i < SortingBox.length - 2; i++) {
@@ -1040,9 +1063,19 @@ class _MyWidgetState extends State<_MainScreen> {
                 },
                 child: const Text(
                   '등록순',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                  ),
                 ),
               ),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  side: const BorderSide(
+                    color: Color(0xFF42A5F5),
+                  ),
+                ),
                 onPressed: () {
                   setState(() {
                     for (int i = 0; i < SortingBox.length - 2; i++) {
@@ -1054,6 +1087,11 @@ class _MyWidgetState extends State<_MainScreen> {
                 },
                 child: const Text(
                   '유통기한순',
+                  style: TextStyle(
+                    color: Color(0xFF42A5F5),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                  ),
                 ),
               ),
             ],
@@ -1079,6 +1117,7 @@ Future<bool> RemoveDialog(BuildContext context, int index) async {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
+        backgroundColor: Colors.white,
         contentPadding: EdgeInsets.symmetric(
             vertical: MediaQuery.of(context).size.height * 0.06,
             horizontal: MediaQuery.of(context).size.width * 0.12),
