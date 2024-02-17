@@ -49,9 +49,10 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      theme: ThemeData(fontFamily: 'Basicfont'),
       debugShowCheckedModeBanner: false,
-      home: _MainScreen(),
+      home: const _MainScreen(),
     );
   }
 }
@@ -126,7 +127,7 @@ class _MyWidgetState extends State<_MainScreen> {
 
     // seconds: 30은 하루 주기로 바꾸면 됨.
     Timer.periodic(
-      const Duration(seconds: 300),
+      const Duration(seconds: 6000),
       (Timer t) => notificationcount(),
     );
   }
@@ -267,14 +268,32 @@ class _MyWidgetState extends State<_MainScreen> {
                           builder: (BuildContext context) {
                             return AlertDialog(
                               backgroundColor: Colors.white,
-                              title: const Text("알림"),
+                              title: const Text(
+                                "알림",
+                                style: TextStyle(
+                                  color: Color(0xFF42A5F5),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                               content: const Text("1개 이상의 재료를 선택해주세요."),
                               actions: <Widget>[
                                 TextButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                      const Color(0xFF42A5F5),
+                                    ), // 테두리 색 및 너비 지정
+                                  ),
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text("확인"),
+                                  child: const Text(
+                                    "확인",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                    ),
+                                  ),
                                 ),
                               ],
                             );
@@ -304,6 +323,12 @@ class _MyWidgetState extends State<_MainScreen> {
                                   children: [
                                     Text(
                                       '음식을 골라보세요',
+                                      style: TextStyle(
+                                        color: Color(
+                                          (0xFF42A5F5),
+                                        ),
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -570,8 +595,12 @@ class _MyWidgetState extends State<_MainScreen> {
     void incrementCounter(int index) {
       setState(() {
         int currentValue = productCountBox.getAt(index) ?? 0;
-        productCountBox.putAt(index, currentValue + 1);
-        tCountBox.putAt(index, currentValue + 1);
+        if (currentValue == 99) {
+          max99(context);
+        } else {
+          productCountBox.putAt(index, currentValue + 1);
+          tCountBox.putAt(index, currentValue + 1);
+        }
       });
     }
 
@@ -696,10 +725,19 @@ class _MyWidgetState extends State<_MainScreen> {
                         size: 20,
                       ),
                     ),
-                    Text(
-                      '${productCountBox.getAt(index)}',
-                      style: const TextStyle(fontSize: 20),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '${productCountBox.getAt(index)}',
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.07,
+                        ),
+                      ],
                     ),
+
                     IconButton(
                       onPressed: () {
                         // 유통기한 순으로 정렬되어있다면, 등록순으로 바꾸고 incrementCounter하고 다시 유통기한순으로 바꾼다.
@@ -762,6 +800,9 @@ class _MyWidgetState extends State<_MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // 전체 폰트 바꾸기
+    const String Testfont = "Basicfont";
+
     // SelectSorting에서 선택한결과를 메인화면에 반영함
     // 등록순
     if (SortingBox.getAt(SortingBox.length - 1) == 1) {
@@ -855,7 +896,7 @@ class _MyWidgetState extends State<_MainScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.17,
+                        width: MediaQuery.of(context).size.width * 0.18,
                         child: Text(
                           SortingText,
                           textAlign: TextAlign.center,
@@ -1047,9 +1088,9 @@ class _MyWidgetState extends State<_MainScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    const Color(0xFF42A5F5),
+                style: ElevatedButton.styleFrom(
+                  side: const BorderSide(
+                    color: Color(0xFF42A5F5),
                   ),
                 ),
                 onPressed: () {
@@ -1064,7 +1105,7 @@ class _MyWidgetState extends State<_MainScreen> {
                 child: const Text(
                   '등록순',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Color(0xFF42A5F5),
                     fontWeight: FontWeight.bold,
                     fontSize: 15,
                   ),
@@ -1177,6 +1218,8 @@ Future<bool> RemoveDialog(BuildContext context, int index) async {
                     '확인',
                     style: TextStyle(
                       color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
                     ),
                   ),
                 ),
@@ -1188,4 +1231,53 @@ Future<bool> RemoveDialog(BuildContext context, int index) async {
     },
   );
   return checkremove;
+}
+
+void max99(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.white,
+        contentPadding: EdgeInsets.symmetric(
+            vertical: MediaQuery.of(context).size.height * 0.06,
+            horizontal: MediaQuery.of(context).size.width * 0.12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            20,
+          ),
+        ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              '최대 99개 까지입니다.',
+              style: TextStyle(
+                fontSize: 15,
+                color: Color(0xFF000000),
+              ),
+            ),
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                  const Color(0xFF42A5F5),
+                ),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                '확인',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    },
+  );
 }
