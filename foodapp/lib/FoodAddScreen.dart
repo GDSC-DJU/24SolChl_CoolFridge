@@ -609,7 +609,7 @@ class _SecondViewState extends State<Postpage> {
                             icon: const Icon(
                               Icons.keyboard_arrow_up,
                               color: Colors.red,
-                              size: 15,
+                              size: 25,
                             ),
                           ),
                           Center(
@@ -630,7 +630,7 @@ class _SecondViewState extends State<Postpage> {
                             icon: const Icon(
                               Icons.keyboard_arrow_down,
                               color: Colors.red,
-                              size: 15,
+                              size: 25,
                             ),
                           ),
                         ],
