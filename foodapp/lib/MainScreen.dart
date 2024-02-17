@@ -1,14 +1,17 @@
 import 'dart:async';
-
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:foodapp/AlarmScreen.dart';
 import 'package:foodapp/CameraScreen.dart';
+import 'package:foodapp/FoodAddScreen.dart';
 import 'package:foodapp/gpt.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:foodapp/notification.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:foodapp/Receipt.dart';
 
 //MainScreen 코드
 void main() async {
@@ -806,13 +809,54 @@ class _MyWidgetState extends State<_MainScreen> {
                       productDateBox.putAt(i, tDateBox.getAt(i)!);
                     }
                     SortingBox.add(1);
-                    Navigator.pop(context);
                   });
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const CameraPage(),
-                    ),
+
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                // 첫 번째 버튼 동작
+                                Navigator.pop(context);
+                              },
+                              child: const Text('음식 촬영'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                // 두 번째 버튼 동작
+                                Navigator.pop(context); // 다이얼로그를 닫음
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const Receipt(),
+                                  ),
+                                );
+
+                                // 카메라로부터 이미지 촬영 및 처리
+                                //_takePictureWithCamera();
+                              },
+                              child: const Text('영수증 촬영'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                // 세 번째 버튼 동작
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const Postpage(),
+                                  ),
+                                );
+                              },
+                              child: const Text('직접 입력'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   );
                 },
                 child: Container(
@@ -906,6 +950,35 @@ class _MyWidgetState extends State<_MainScreen> {
         ],
       ),
     );
+  }
+
+  // // sendRequest 함수를 호출할 메서드를 추가
+  // void sendRequest() async {
+  //   try {
+  //     final result = await const Receipt().sendRequest();
+  //     // 영수증 처리 결과(result)를 사용하여 필요한 작업 수행
+  //     print(result);
+  //   } catch (e) {
+  //     print('Error: $e');
+  //     // 오류 발생 시 적절히 처리
+  //   }
+  // }
+
+  // _takePictureWithCamera   함수 정의
+  void _takePictureWithCamera() async {
+    // 카메라로부터 이미지 촬영
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+
+    if (pickedFile != null) {
+      // 이미지 촬영 성공 시 처리할 내용 작성
+      // 촬영한 이미지를 사용하여 필요한 작업 수행
+      // 예를 들어, 이미지를 어딘가에 저장하거나 다른 화면으로 전환하는 등의 동작을 수행할 수 있음
+      // pickedFile.path를 사용하여 이미지의 경로를 얻을 수 있음
+    } else {
+      // 이미지 촬영 실패 시 처리할 내용 작성
+      // 사용자에게 적절한 메시지 표시 등의 작업 수행
+    }
   }
 
   void SelectSorting(BuildContext context) {
