@@ -301,7 +301,7 @@ class _SecondViewState extends State<Postpage> {
               Container(
                 child: Align(
                   alignment: Alignment.bottomCenter,
-                  child: Container(
+                  child: SizedBox(
                     height: (MediaQuery.of(context).size.height) * 0.13,
                     //color: Color.fromRGBO(220, 230, 248, 1),
                     child: Column(
@@ -317,7 +317,7 @@ class _SecondViewState extends State<Postpage> {
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(20),
                               border: Border.all(
-                                color: Color.fromARGB(255, 23, 16, 124),
+                                color: const Color.fromARGB(255, 23, 16, 124),
                                 width: 2,
                               ),
                             ),

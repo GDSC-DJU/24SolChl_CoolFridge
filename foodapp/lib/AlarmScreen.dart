@@ -26,7 +26,7 @@ class AlarmScreen extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(fontFamily: 'Basicfont'),
       debugShowCheckedModeBanner: false,
-      home: ToggleButton(),
+      home: const ToggleButton(),
     );
   }
 }
