@@ -209,16 +209,24 @@ class _SecondViewState extends State<Postpage> {
       context: context,
       builder: (context) {
         return Dialog(
-          child: Column(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text("제품명을 다 채워주세요."),
+              SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  width: MediaQuery.of(context).size.width * 0.03),
+              const Text("미입력된 상품이 있습니다.",
+                  style: TextStyle(fontSize: 17, color: Colors.blue)),
+              SizedBox(width: MediaQuery.of(context).size.width * 0.03),
               IconButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                icon: const Icon(Icons.close),
+                icon: const Icon(
+                  Icons.close,
+                  color: Colors.blue,
+                ),
               )
             ],
           ),
@@ -609,7 +617,7 @@ class _SecondViewState extends State<Postpage> {
                             icon: const Icon(
                               Icons.keyboard_arrow_up,
                               color: Colors.red,
-                              size: 15,
+                              size: 25,
                             ),
                           ),
                           Center(
@@ -630,7 +638,7 @@ class _SecondViewState extends State<Postpage> {
                             icon: const Icon(
                               Icons.keyboard_arrow_down,
                               color: Colors.red,
-                              size: 15,
+                              size: 25,
                             ),
                           ),
                         ],

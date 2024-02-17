@@ -127,7 +127,7 @@ class _MyWidgetState extends State<_MainScreen> {
 
     // seconds: 30은 하루 주기로 바꾸면 됨.
     Timer.periodic(
-      const Duration(seconds: 6000),
+      const Duration(seconds: 60),
       (Timer t) => notificationcount(),
     );
   }
@@ -673,6 +673,7 @@ class _MyWidgetState extends State<_MainScreen> {
               ),
             ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.height * 0.01,
