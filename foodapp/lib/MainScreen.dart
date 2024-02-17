@@ -49,7 +49,8 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      theme: ThemeData(fontFamily: 'Basicfont'),
       debugShowCheckedModeBanner: false,
       home: _MainScreen(),
     );
@@ -126,7 +127,7 @@ class _MyWidgetState extends State<_MainScreen> {
 
     // seconds: 30은 하루 주기로 바꾸면 됨.
     Timer.periodic(
-      const Duration(seconds: 300),
+      const Duration(seconds: 6000),
       (Timer t) => notificationcount(),
     );
   }
@@ -565,8 +566,12 @@ class _MyWidgetState extends State<_MainScreen> {
     void incrementCounter(int index) {
       setState(() {
         int currentValue = productCountBox.getAt(index) ?? 0;
-        productCountBox.putAt(index, currentValue + 1);
-        tCountBox.putAt(index, currentValue + 1);
+        if (currentValue == 99) {
+          max99(context);
+        } else {
+          productCountBox.putAt(index, currentValue + 1);
+          tCountBox.putAt(index, currentValue + 1);
+        }
       });
     }
 
@@ -691,10 +696,19 @@ class _MyWidgetState extends State<_MainScreen> {
                         size: 20,
                       ),
                     ),
-                    Text(
-                      '${productCountBox.getAt(index)}',
-                      style: const TextStyle(fontSize: 20),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '${productCountBox.getAt(index)}',
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.07,
+                        ),
+                      ],
                     ),
+
                     IconButton(
                       onPressed: () {
                         // 유통기한 순으로 정렬되어있다면, 등록순으로 바꾸고 incrementCounter하고 다시 유통기한순으로 바꾼다.
@@ -757,6 +771,9 @@ class _MyWidgetState extends State<_MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // 전체 폰트 바꾸기
+    const String Testfont = "Basicfont";
+
     // SelectSorting에서 선택한결과를 메인화면에 반영함
     // 등록순
     if (SortingBox.getAt(SortingBox.length - 1) == 1) {
@@ -788,7 +805,7 @@ class _MyWidgetState extends State<_MainScreen> {
 
     return Scaffold(
       //배경색 추가
-      backgroundColor: Color(0xFFE1E6F8),
+      backgroundColor: Color.fromRGBO(220, 230, 248, 1),
       body: Column(
         children: [
           SizedBox(
@@ -850,7 +867,7 @@ class _MyWidgetState extends State<_MainScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.17,
+                        width: MediaQuery.of(context).size.width * 0.18,
                         child: Text(
                           SortingText,
                           textAlign: TextAlign.center,
@@ -1149,4 +1166,44 @@ Future<bool> RemoveDialog(BuildContext context, int index) async {
     },
   );
   return checkremove;
+}
+
+void max99(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: MediaQuery.of(context).size.height * 0.06,
+            horizontal: MediaQuery.of(context).size.width * 0.12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            20,
+          ),
+        ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              '최대 99개 까지입니다.',
+              style: TextStyle(
+                fontSize: 17,
+                color: Color(
+                  (0xFF35AED4),
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                '확인',
+              ),
+            )
+          ],
+        ),
+      );
+    },
+  );
 }

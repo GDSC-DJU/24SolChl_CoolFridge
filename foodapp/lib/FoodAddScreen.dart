@@ -259,6 +259,8 @@ class _SecondViewState extends State<Postpage> {
           return true;
         },
         child: Scaffold(
+          //배경색 추가
+          //backgroundColor: Color.fromRGBO(220, 230, 248, 1),
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
@@ -273,7 +275,7 @@ class _SecondViewState extends State<Postpage> {
               color: const Color(0xFF2196F3),
               icon: const Icon(Icons.arrow_back),
             ),
-            backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+            //backgroundColor: const Color.fromRGBO(220, 230, 248, 1),
             title: const Text(
               "음식등록",
               style: TextStyle(
@@ -287,8 +289,8 @@ class _SecondViewState extends State<Postpage> {
             children: [
               SizedBox(
                 height: (MediaQuery.of(context).size.height -
-                        MediaQuery.of(context).viewInsets.bottom * 1.15) *
-                    0.8,
+                        MediaQuery.of(context).viewInsets.bottom * 1.3) *
+                    0.75,
                 child: ListView.builder(
                   itemCount: _widgetList.length,
                   itemBuilder: (context, index) {
@@ -300,17 +302,58 @@ class _SecondViewState extends State<Postpage> {
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
-                    height: (MediaQuery.of(context).size.height) * 0.1,
-                    color: Colors.white,
+                    height: (MediaQuery.of(context).size.height) * 0.13,
+                    //color: Color.fromRGBO(220, 230, 248, 1),
                     child: Column(
                       children: [
+                        GestureDetector(
+                          onTap: () {
+                            setState(() => addlist());
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            height: MediaQuery.of(context).size.height * 0.05,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: Color.fromARGB(255, 23, 16, 124),
+                                width: 2,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.add_circle_outline,
+                                  size: 30,
+                                  color: Color.fromARGB(255, 23, 16, 124),
+                                ),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.02,
+                                ),
+                                const Text(
+                                  '상품 추가',
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    color: Color.fromARGB(255, 23, 16, 124),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.01,
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            IconButton(
-                              onPressed: () => setState(() => addlist()),
-                              icon: const Icon(Icons.add_circle_outlined),
-                            ),
+                            // IconButton(
+                            //   onPressed: () => setState(() => addlist()),
+                            //   icon: const Icon(Icons.add_circle_outlined),
+                            // ),
                             Center(
                               child: OutlinedButton(
                                 onPressed: () {

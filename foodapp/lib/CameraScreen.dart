@@ -13,6 +13,7 @@ class CameraPage extends StatelessWidget {
     return MaterialApp(
       title: 'Camera Mode page',
       theme: ThemeData(
+        fontFamily: 'Basicfont',
         colorScheme: ColorScheme.fromSeed(
             seedColor: const Color.fromRGBO(57, 57, 57, 0)),
         useMaterial3: true,
