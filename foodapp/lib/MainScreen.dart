@@ -131,7 +131,7 @@ class _MyWidgetState extends State<_MainScreen> {
 
     // seconds: 30은 하루 주기로 바꾸면 됨.
     Timer.periodic(
-      const Duration(seconds: 86400),
+      const Duration(seconds: 70000),
       (Timer t) => notificationcount(),
     );
   }
@@ -615,11 +615,11 @@ class _MyWidgetState extends State<_MainScreen> {
 
     double pnamefontsize = 20;
     if (pnameBox.getAt(index)!.length >= 5) {
-      pnamefontsize = 17;
+      pnamefontsize = 16;
       if (pnameBox.getAt(index)!.length >= 10) {
-        pnamefontsize = 13;
+        pnamefontsize = 12;
         if (pnameBox.getAt(index)!.length >= 13) {
-          pnamefontsize = 10;
+          pnamefontsize = 9;
         }
       }
     }
@@ -677,7 +677,7 @@ class _MyWidgetState extends State<_MainScreen> {
               ),
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.height * 0.01,
@@ -967,10 +967,21 @@ class _MyWidgetState extends State<_MainScreen> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
+                        title: const Text(
+                          '추가 방식 선택',
+                          style: TextStyle(
+                            color: Colors.blue,
+                          ),
+                        ),
                         content: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                side: const BorderSide(
+                                  color: Color(0xFF42A5F5),
+                                ),
+                              ),
                               onPressed: () {
                                 // 첫 번째 버튼 동작
                                 showToast();
@@ -978,11 +989,18 @@ class _MyWidgetState extends State<_MainScreen> {
                               child: const Text(
                                 '음식 촬영',
                                 style: TextStyle(
-                                  color: Colors.black,
+                                  color: Color(0xFF42A5F5),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
                                 ),
                               ),
                             ),
                             ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                side: const BorderSide(
+                                  color: Color(0xFF42A5F5),
+                                ),
+                              ),
                               onPressed: () {
                                 // 두 번째 버튼 동작
                                 Navigator.pop(context); // 다이얼로그를 닫음
@@ -999,11 +1017,18 @@ class _MyWidgetState extends State<_MainScreen> {
                               child: const Text(
                                 '영수증 촬영',
                                 style: TextStyle(
-                                  color: Colors.black,
+                                  color: Color(0xFF42A5F5),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
                                 ),
                               ),
                             ),
                             ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                side: const BorderSide(
+                                  color: Color(0xFF42A5F5),
+                                ),
+                              ),
                               onPressed: () {
                                 // 세 번째 버튼 동작
                                 Navigator.push(
@@ -1016,7 +1041,9 @@ class _MyWidgetState extends State<_MainScreen> {
                               child: const Text(
                                 '직접 입력',
                                 style: TextStyle(
-                                  color: Colors.black,
+                                  color: Color(0xFF42A5F5),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
                                 ),
                               ),
                             ),
