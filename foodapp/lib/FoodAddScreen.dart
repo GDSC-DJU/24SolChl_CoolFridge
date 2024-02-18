@@ -50,7 +50,8 @@ class _SecondViewState extends State<Postpage> {
           _widgetList.add(postContainer(
             productname: key,
             widgetkey: Numberkey,
-            initialValue: value, // 추가: 초기값 설정
+            pcount: int.parse(value), // 추가: 초기값 설정
+
             controller: textController,
           ));
           Numberkey++;
@@ -187,6 +188,7 @@ class _SecondViewState extends State<Postpage> {
         widgetkey: widgetkey,
         pcount: productCount[pname[widgetkey]]!,
         pdate: productDate[pname[widgetkey]]!,
+        initialValue: productCount[pname[widgetkey]].toString(), // 초기값 설정
         controller: controller,
       ));
     });
@@ -418,7 +420,9 @@ class _SecondViewState extends State<Postpage> {
     if (pcount == 0) {
       productCount[pname[widgetkey]!] = 1;
     }
-
+    if (pcount != 0) {
+      productCount[pname[widgetkey]!] = pcount;
+    }
     return Center(
       child: Column(
         children: [
@@ -556,7 +560,7 @@ class _SecondViewState extends State<Postpage> {
                           ),
                         ),
                         Center(
-                          child: Text("${initialValue ?? 1}"),
+                          child: Text("${pcount ?? 1}"),
                         ),
                         IconButton(
                           padding: EdgeInsets.zero,

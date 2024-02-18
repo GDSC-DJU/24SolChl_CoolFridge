@@ -109,7 +109,7 @@ class Receipt extends StatelessWidget {
 
   Future<Object> sendRequest(BuildContext context) async {
     final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile == null) {
       return [
