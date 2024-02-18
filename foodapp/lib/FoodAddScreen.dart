@@ -5,7 +5,9 @@ import 'package:hive/hive.dart';
 
 // 포스트 페이지 위젯
 class Postpage extends StatefulWidget {
-  const Postpage({super.key});
+  final Map<String, String>? satisfiedTexts;
+
+  const Postpage({super.key, this.satisfiedTexts});
 
   @override
   State<Postpage> createState() => _SecondViewState();
@@ -33,9 +35,28 @@ class _SecondViewState extends State<Postpage> {
   }
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     openBoxes(); // Hive 박스를 열어주는 메서드 호출
+
+    // satisfiedTexts가 null이 아닌 경우에만 실행
+    if (widget.satisfiedTexts != null) {
+      // satisfiedTexts의 각 항목에 대해 postContainer를 생성하여 _widgetList에 추가
+      widget.satisfiedTexts!.forEach((key, value) {
+        TextEditingController textController = TextEditingController(text: key);
+        addTextlist(textController); // 텍스트 컨트롤러 추가
+        _Livingkey.add(Numberkey);
+        setState(() {
+          _widgetList.add(postContainer(
+            productname: key,
+            widgetkey: Numberkey,
+            initialValue: value, // 추가: 초기값 설정
+            controller: textController,
+          ));
+          Numberkey++;
+        });
+      });
+    }
   }
 
 // Hive 박스 열기
@@ -375,6 +396,7 @@ class _SecondViewState extends State<Postpage> {
   Widget postContainer({
     String productname = "",
     int widgetkey = 0,
+    String? initialValue, // 추가: 초기값을 받는 매개변수
     int pcount = 1,
     String pdate = "2024-01-01",
     required TextEditingController controller,
@@ -434,7 +456,7 @@ class _SecondViewState extends State<Postpage> {
                           controller: controller,
                           decoration: InputDecoration(
                               border: const OutlineInputBorder(),
-                              hintText: productname,
+                              hintText: initialValue ?? "", // 변경: 초기값 사용
                               labelStyle: const TextStyle(fontSize: 15)),
                           style: const TextStyle(
                             fontSize: 15,
@@ -534,7 +556,7 @@ class _SecondViewState extends State<Postpage> {
                           ),
                         ),
                         Center(
-                          child: Text("${productCount[pname[widgetkey]] ?? 1}"),
+                          child: Text("${initialValue ?? 1}"),
                         ),
                         IconButton(
                           padding: EdgeInsets.zero,

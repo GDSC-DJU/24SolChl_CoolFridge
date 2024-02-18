@@ -3,29 +3,30 @@ import 'package:foodapp/MainScreen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 //토글 버튼, 알람 페이지
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
-  // pnameBox, productDateBox, productCountBox를 열기 전에 이미 열려 있는지 확인합니다.
-  if (!Hive.isBoxOpen('pnameBox')) {
-    await Hive.openBox<String>('pnameBox');
-  }
-  if (!Hive.isBoxOpen('productDateBox')) {
-    await Hive.openBox<String>('productDateBox');
-  }
-  if (!Hive.isBoxOpen('productCountBox')) {
-    await Hive.openBox<int>('productCountBox');
-  }
-}
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Hive.initFlutter();
+//   // pnameBox, productDateBox, productCountBox를 열기 전에 이미 열려 있는지 확인합니다.
+//   if (!Hive.isBoxOpen('pnameBox')) {
+//     await Hive.openBox<String>('pnameBox');
+//   }
+//   if (!Hive.isBoxOpen('productDateBox')) {
+//     await Hive.openBox<String>('productDateBox');
+//   }
+//   if (!Hive.isBoxOpen('productCountBox')) {
+//     await Hive.openBox<int>('productCountBox');
+//   }
+// }
 
 class AlarmScreen extends StatelessWidget {
   const AlarmScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      theme: ThemeData(fontFamily: 'Basicfont'),
       debugShowCheckedModeBanner: false,
-      home: ToggleButton(),
+      home: const ToggleButton(),
     );
   }
 }
@@ -142,9 +143,9 @@ class _ToggleButtonState extends State<ToggleButton> {
                   ),
                 ),
               if (_selectedtype[2]) // ToggleButton이 음식 추가/제거로 선택 되어 있을 때 실행
-                Text(
-                  " ${pnameBox.getAt(index)} ${productCountBox.getAt(index)}개가 추가 되었어요!",
-                  style: const TextStyle(
+                const Text(
+                  " 추후 구현 예정입니다.",
+                  style: TextStyle(
                     fontSize: 13,
                   ),
                 ),
@@ -163,14 +164,15 @@ class _ToggleButtonState extends State<ToggleButton> {
         titleTextStyle: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
-          color: Colors.black,
+          color: Color(0xFF42A5F5),
         ),
         leading: IconButton(
           // 뒤로가기 버튼
           onPressed: () {
-            Navigator.push(
+            Navigator.replace(
               context,
-              MaterialPageRoute(
+              oldRoute: ModalRoute.of(context)!,
+              newRoute: MaterialPageRoute(
                 builder: (context) => const MainScreen(),
               ),
             );
@@ -179,7 +181,9 @@ class _ToggleButtonState extends State<ToggleButton> {
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Colors.blue),
+        iconTheme: const IconThemeData(
+          color: Color(0xFF2196F3),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -266,7 +270,7 @@ class _ToggleButtonState extends State<ToggleButton> {
                   children: [
                     Expanded(
                       child: ListView.builder(
-                        itemCount: pnameBox.length, // _widgetList의 길이 사용
+                        itemCount: 1, // _widgetList의 길이 사용
                         itemBuilder: (BuildContext context, int index) {
                           return AlarmList(
                               context, index); // _widgetList의 각 항목 반환

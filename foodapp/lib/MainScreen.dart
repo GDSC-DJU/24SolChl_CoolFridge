@@ -1,14 +1,20 @@
-import 'dart:async';
+// ignore_for_file: use_build_context_synchronously
 
+import 'dart:async';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:foodapp/AlarmScreen.dart';
 import 'package:foodapp/CameraScreen.dart';
+import 'package:foodapp/FoodAddScreen.dart';
 import 'package:foodapp/gpt.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:foodapp/notification.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:foodapp/Receipt.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 //MainScreen 코드
 void main() async {
@@ -47,9 +53,10 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      theme: ThemeData(fontFamily: 'Basicfont'),
       debugShowCheckedModeBanner: false,
-      home: _MainScreen(),
+      home: const _MainScreen(),
     );
   }
 }
@@ -124,7 +131,7 @@ class _MyWidgetState extends State<_MainScreen> {
 
     // seconds: 30은 하루 주기로 바꾸면 됨.
     Timer.periodic(
-      const Duration(seconds: 300),
+      const Duration(seconds: 86400),
       (Timer t) => notificationcount(),
     );
   }
@@ -154,6 +161,7 @@ class _MyWidgetState extends State<_MainScreen> {
         return StatefulBuilder(
           builder: (BuildContext context, setState) {
             return AlertDialog(
+              backgroundColor: Colors.white,
               contentPadding: EdgeInsets.symmetric(
                 vertical: MediaQuery.of(context).size.height * 0.06,
                 horizontal: MediaQuery.of(context).size.width * 0.12,
@@ -167,18 +175,19 @@ class _MyWidgetState extends State<_MainScreen> {
                   Text(
                     '음식 선택',
                     style: TextStyle(
-                      color: Color(0xFF35AED4),
+                      color: Color(0xFF42A5F5),
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
               ),
               content: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.4, // 높이 조절
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    SingleChildScrollView(
-                      child: Column(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Column(
                         children: List.generate(pnameBox.length, (index) {
                           String productName = pnameBox.getAt(index) ?? '';
                           bool isSelected = switchStates.containsKey(index)
@@ -190,7 +199,7 @@ class _MyWidgetState extends State<_MainScreen> {
                               Text(
                                 productName,
                                 style: const TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 17,
                                 ),
                               ),
                               Switch(
@@ -200,16 +209,16 @@ class _MyWidgetState extends State<_MainScreen> {
                                     switchStates[index] = value;
                                   });
                                 },
-                                activeColor: Colors.green,
+                                activeColor: Colors.blue,
                                 inactiveThumbColor: Colors.grey,
                               ),
                             ],
                           );
                         }),
                       ),
-                    ),
-                    const SizedBox(height: 20), // 여백 추가
-                  ],
+                      const SizedBox(height: 20), // 여백 추가
+                    ],
+                  ),
                 ),
               ),
               actions: <Widget>[
@@ -229,9 +238,26 @@ class _MyWidgetState extends State<_MainScreen> {
                         String prompt =
                             "${selectedProducts.join(', ')}으로 만들 수 있는 요리 추천해줘 레시피를 절대 알려주지 말고 음식만 3가지 추천해줘 그리고 음식과 음식 사이에는 \n처럼 한 줄 띄워서 출력해줘";
                         try {
-                          String generatedText =
-                              await GPT3.generateText(prompt);
+                          String generatedText = "";
+                          // 추천메뉴 생성중일 때, 로딩창
+                          if (generatedText == "") {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return const Center(
+                                    child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Color(0xFF35AED4)),
+                                ));
+                              },
+                            );
+                          }
+                          generatedText = await GPT3.generateText(prompt);
                           setState(() {
+                            //로딩창 제거
+                            if (generatedText != "") {
+                              Navigator.of(context).pop();
+                            }
                             // content 업데이트
                             contentText = generatedText;
                           });
@@ -245,14 +271,33 @@ class _MyWidgetState extends State<_MainScreen> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: const Text("알림"),
+                              backgroundColor: Colors.white,
+                              title: const Text(
+                                "알림",
+                                style: TextStyle(
+                                  color: Color(0xFF42A5F5),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                               content: const Text("1개 이상의 재료를 선택해주세요."),
                               actions: <Widget>[
                                 TextButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                      const Color(0xFF42A5F5),
+                                    ), // 테두리 색 및 너비 지정
+                                  ),
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text("확인"),
+                                  child: const Text(
+                                    "확인",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                    ),
+                                  ),
                                 ),
                               ],
                             );
@@ -267,6 +312,7 @@ class _MyWidgetState extends State<_MainScreen> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
+                                backgroundColor: Colors.white,
                                 contentPadding: EdgeInsets.symmetric(
                                   vertical:
                                       MediaQuery.of(context).size.height * 0.06,
@@ -281,6 +327,12 @@ class _MyWidgetState extends State<_MainScreen> {
                                   children: [
                                     Text(
                                       '음식을 골라보세요',
+                                      style: TextStyle(
+                                        color: Color(
+                                          (0xFF42A5F5),
+                                        ),
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -293,14 +345,34 @@ class _MyWidgetState extends State<_MainScreen> {
                                           String prompt =
                                               '$item 을 만들 수 있는 레시피 알려줘';
                                           try {
-                                            String generatedText =
+                                            String generatedText = "";
+                                            // 추천메뉴 생성중일 때, 로딩창
+                                            if (generatedText == "") {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return const Center(
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                    valueColor:
+                                                        AlwaysStoppedAnimation<
+                                                                Color>(
+                                                            Color(0xFF35AED4)),
+                                                  ));
+                                                },
+                                              );
+                                            }
+                                            generatedText =
                                                 await GPT3.generateText(prompt);
+                                            Navigator.of(context)
+                                                .pop(); // 로딩 다이얼로그 닫기
                                             Navigator.of(context)
                                                 .pop(); // 현재 다이얼로그 닫기
                                             showDialog(
                                               context: context,
                                               builder: (BuildContext context) {
                                                 return AlertDialog(
+                                                  backgroundColor: Colors.white,
                                                   // AlertDialog 내용 설정
                                                   content: Row(
                                                     mainAxisSize:
@@ -341,8 +413,18 @@ class _MyWidgetState extends State<_MainScreen> {
                         );
                       }
                     },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF42A5F5),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
                     child: const Text(
                       '선택 완료',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -369,112 +451,142 @@ class _MyWidgetState extends State<_MainScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: MediaQuery.of(context).size.height * 0.06,
-              horizontal: MediaQuery.of(context).size.width * 0.12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-              20,
+        return GestureDetector(
+          onTap: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          },
+          child: AlertDialog(
+            backgroundColor: Colors.white,
+            contentPadding: EdgeInsets.symmetric(
+                vertical: MediaQuery.of(context).size.height * 0.06,
+                horizontal: MediaQuery.of(context).size.width * 0.12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                20,
+              ),
             ),
-          ),
-          title: const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '상품 상세정보',
-                style: TextStyle(
-                  color: Color(
-                    (0xFF35AED4),
+            title: const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '상품 상세정보',
+                  style: TextStyle(
+                    color: Color(
+                      (0xFF42A5F5),
+                    ),
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-            ],
-          ),
-          content: Form(
-            // Form 위젯으로 감싸기
-            key: formKey, // _formKey 추가
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('상품명'),
-                TextFormField(
-                  controller: productNameController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return '상품명을 입력하세요.';
-                    }
-                    return null;
-                  },
-                ),
-                const Text('유통기한'),
-                TextFormField(
-                  controller: productDateController,
-                  keyboardType: TextInputType.number, //숫자만 입력 가능
-                ),
-                const Text('수량'),
-                TextFormField(
-                  controller: productCountController,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        side: const BorderSide(
-                          color: Color.fromARGB(255, 61, 237, 247),
-                        ), // 테두리 색 및 너비 지정
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        '취소',
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 61, 237, 247),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                          const Color.fromARGB(255, 61, 237, 247),
-                        ),
-                      ),
-                      onPressed: () {
-                        if (formKey.currentState != null &&
-                            formKey.currentState!.validate()) {
-                          // 완료 버튼을 눌렀을 때 업데이트
-                          String newProductName = productNameController.text;
-                          String newProductDate = productDateController.text;
-                          int newProductCount =
-                              int.parse(productCountController.text);
-
-                          pnameBox.putAt(index, newProductName);
-                          productDateBox.putAt(index, newProductDate);
-                          productCountBox.putAt(index, newProductCount);
-                          tNameBox.putAt(index, newProductName);
-                          tDateBox.putAt(index, newProductDate);
-                          tCountBox.putAt(index, newProductCount);
-
-                          Navigator.pop(context);
-                        }
-                      },
-                      child: const Text(
-                        '완료',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                )
               ],
+            ),
+            content: Form(
+              // Form 위젯으로 감싸기
+              key: formKey, // _formKey 추가
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('상품명'),
+                  TextFormField(
+                    controller: productNameController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return '상품명을 입력하세요.';
+                      }
+                      return null;
+                    },
+                  ),
+                  const Text('유통기한'),
+                  TextFormField(
+                    controller: productDateController,
+                    keyboardType: TextInputType.number, //숫자만 입력 가능
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return '유통기한을 입력하세요.';
+                      }
+
+                      return null;
+                    },
+                  ),
+                  const Text('수량'),
+                  TextFormField(
+                    controller: productCountController,
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return '수량을 입력하세요.';
+                      }
+                      int intvalue = int.parse(value);
+                      if (intvalue > 99) {
+                        return '수량은 최대 99개입니다.';
+                      }
+                      return null;
+                    },
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          side: const BorderSide(
+                            color: Color(0xFF42A5F5),
+                          ), // 테두리 색 및 너비 지정
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text(
+                          '취소',
+                          style: TextStyle(
+                            color: Color(0xFF42A5F5),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            const Color(0xFF42A5F5),
+                          ),
+                        ),
+                        onPressed: () {
+                          if (formKey.currentState != null &&
+                              formKey.currentState!.validate()) {
+                            // 완료 버튼을 눌렀을 때 업데이트
+                            String newProductName = productNameController.text;
+                            String newProductDate = productDateController.text;
+                            int newProductCount =
+                                int.parse(productCountController.text);
+
+                            pnameBox.putAt(index, newProductName);
+                            productDateBox.putAt(index, newProductDate);
+                            productCountBox.putAt(index, newProductCount);
+                            tNameBox.putAt(index, newProductName);
+                            tDateBox.putAt(index, newProductDate);
+                            tCountBox.putAt(index, newProductCount);
+
+                            Navigator.pop(context);
+                          }
+                        },
+                        child: const Text(
+                          '완료',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         );
@@ -501,11 +613,26 @@ class _MyWidgetState extends State<_MainScreen> {
   Widget FoodList(BuildContext context, index, Function(int) removeCallback) {
     int counter = 0;
 
+    double pnamefontsize = 20;
+    if (pnameBox.getAt(index)!.length >= 5) {
+      pnamefontsize = 17;
+      if (pnameBox.getAt(index)!.length >= 10) {
+        pnamefontsize = 13;
+        if (pnameBox.getAt(index)!.length >= 13) {
+          pnamefontsize = 10;
+        }
+      }
+    }
+
     void incrementCounter(int index) {
       setState(() {
         int currentValue = productCountBox.getAt(index) ?? 0;
-        productCountBox.putAt(index, currentValue + 1);
-        tCountBox.putAt(index, currentValue + 1);
+        if (currentValue == 99) {
+          max99(context);
+        } else {
+          productCountBox.putAt(index, currentValue + 1);
+          tCountBox.putAt(index, currentValue + 1);
+        }
       });
     }
 
@@ -519,11 +646,8 @@ class _MyWidgetState extends State<_MainScreen> {
 
     // 마지막 인덱스인지 확인하여
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.05,
-        ),
         GestureDetector(
           onTap: () {
             if (SortingBox.getAt(SortingBox.length - 1) == 0) {
@@ -541,25 +665,34 @@ class _MyWidgetState extends State<_MainScreen> {
             }
           },
           child: Container(
-            width: MediaQuery.of(context).size.width * 0.65,
+            width: MediaQuery.of(context).size.width * 0.85,
             height: MediaQuery.of(context).size.height * 0.1,
+            margin: const EdgeInsets.only(bottom: 10),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: Colors.black,
+                color: Colors.white,
                 width: 1,
               ),
             ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(width: MediaQuery.of(context).size.height * 0.03),
+                SizedBox(
+                  width: MediaQuery.of(context).size.height * 0.01,
+                ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // "글자 수"가 많은 제품일때, 이 사이즈박스가 없으면, 글씨가 오버되어서 오류나는거 방지용.
+                    SizedBox(
+                      width: MediaQuery.of(context).size.height * 0.145,
+                    ),
                     Text(
                       '${pnameBox.getAt(index)}',
-                      style: const TextStyle(
-                        fontSize: 20,
+                      style: TextStyle(
+                        fontSize: pnamefontsize,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -569,13 +702,14 @@ class _MyWidgetState extends State<_MainScreen> {
                         )),
                   ],
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.05,
-                ),
+                //제품명이랑 수량 사이간격
+                // SizedBox(
+                //   width: MediaQuery.of(context).size.width * 0.005,
+                // ),
                 Row(
                   children: [
                     IconButton(
-                      onPressed: () {
+                      onPressed: () async {
                         // 유통기한 순으로 정렬되어있다면, 등록순으로 바꾸고 decrementCounter하고 다시 유통기한순으로 바꾼다.
                         if (SortingBox.getAt(SortingBox.length - 1) == 0) {
                           for (int i = 0; i < SortingBox.length - 2; i++) {
@@ -585,14 +719,16 @@ class _MyWidgetState extends State<_MainScreen> {
                           if (productCountBox.getAt(index)! > 1) {
                             decrementCounter(index);
                           } else if (productCountBox.getAt(index)! == 1) {
-                            setState(() {
-                              pnameBox.deleteAt(index);
-                              productDateBox.deleteAt(index);
-                              productCountBox.deleteAt(index);
-                              tNameBox.deleteAt(index);
-                              tDateBox.deleteAt(index);
-                              tCountBox.deleteAt(index);
-                            });
+                            if (await RemoveDialog(context, index)) {
+                              setState(() {
+                                pnameBox.deleteAt(index);
+                                productDateBox.deleteAt(index);
+                                productCountBox.deleteAt(index);
+                                tNameBox.deleteAt(index);
+                                tDateBox.deleteAt(index);
+                                tCountBox.deleteAt(index);
+                              });
+                            }
                           }
                           for (int i = 0; i < SortingBox.length - 2; i++) {
                             SortingBox.deleteAt(i);
@@ -602,14 +738,16 @@ class _MyWidgetState extends State<_MainScreen> {
                           if (productCountBox.getAt(index)! > 1) {
                             decrementCounter(index);
                           } else if (productCountBox.getAt(index)! == 1) {
-                            setState(() {
-                              pnameBox.deleteAt(index);
-                              productDateBox.deleteAt(index);
-                              productCountBox.deleteAt(index);
-                              tNameBox.deleteAt(index);
-                              tDateBox.deleteAt(index);
-                              tCountBox.deleteAt(index);
-                            });
+                            if (await RemoveDialog(context, index)) {
+                              setState(() {
+                                pnameBox.deleteAt(index);
+                                productDateBox.deleteAt(index);
+                                productCountBox.deleteAt(index);
+                                tNameBox.deleteAt(index);
+                                tDateBox.deleteAt(index);
+                                tCountBox.deleteAt(index);
+                              });
+                            }
                           }
                         }
 
@@ -620,10 +758,19 @@ class _MyWidgetState extends State<_MainScreen> {
                         size: 20,
                       ),
                     ),
-                    Text(
-                      '${productCountBox.getAt(index)}',
-                      style: const TextStyle(fontSize: 20),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '${productCountBox.getAt(index)}',
+                          style: const TextStyle(fontSize: 19),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.07,
+                        ),
+                      ],
                     ),
+
                     IconButton(
                       onPressed: () {
                         // 유통기한 순으로 정렬되어있다면, 등록순으로 바꾸고 incrementCounter하고 다시 유통기한순으로 바꾼다.
@@ -643,31 +790,38 @@ class _MyWidgetState extends State<_MainScreen> {
                       },
                       icon: const Icon(Icons.add, size: 20),
                     ),
+                    //수량과 제거버튼 사이간격
+                    // SizedBox(
+                    //   width: MediaQuery.of(context).size.width * 0.005,
+                    // ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        IconButton(
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            onPressed: () async {
+                              if (await RemoveDialog(context, index)) {
+                                setState(() {
+                                  pnameBox.deleteAt(index);
+                                  productDateBox.deleteAt(index);
+                                  productCountBox.deleteAt(index);
+                                  tNameBox.deleteAt(index);
+                                  tDateBox.deleteAt(index);
+                                  tCountBox.deleteAt(index);
+                                });
+                              }
+                            },
+                            icon: const Icon(
+                              Icons.highlight_remove_outlined,
+                              color: Colors.red,
+                              size: 17,
+                            )),
+                      ],
+                    ),
                   ],
                 ),
               ],
-            ),
-          ),
-        ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.2,
-          height: MediaQuery.of(context).size.height * 0.035,
-          child: OutlinedButton(
-            onPressed: () async {
-              if (await RemoveDialog(context, index)) {
-                setState(() {
-                  pnameBox.deleteAt(index);
-                  productDateBox.deleteAt(index);
-                  productCountBox.deleteAt(index);
-                  tNameBox.deleteAt(index);
-                  tDateBox.deleteAt(index);
-                  tCountBox.deleteAt(index);
-                });
-              }
-            },
-            child: const Text(
-              '제거',
-              style: TextStyle(color: Colors.red, fontSize: 13),
             ),
           ),
         ),
@@ -679,6 +833,9 @@ class _MyWidgetState extends State<_MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // 전체 폰트 바꾸기
+    const String Testfont = "Basicfont";
+
     // SelectSorting에서 선택한결과를 메인화면에 반영함
     // 등록순
     if (SortingBox.getAt(SortingBox.length - 1) == 1) {
@@ -709,6 +866,8 @@ class _MyWidgetState extends State<_MainScreen> {
     }
 
     return Scaffold(
+      //배경색 추가
+      backgroundColor: const Color(0xFFDCE6F8),
       body: Column(
         children: [
           SizedBox(
@@ -717,14 +876,10 @@ class _MyWidgetState extends State<_MainScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(
-                onPressed: () {
-                  fetchData();
-                  //Navigator.pop(context);
-                },
-                icon: const Icon(
-                  Icons.info_outline,
-                ),
+              Image.asset(
+                'assets/images/cool_fridge.png',
+                width: MediaQuery.of(context).size.width * 0.15,
+                height: MediaQuery.of(context).size.height * 0.05,
               ),
               const Row(
                 children: [
@@ -732,7 +887,7 @@ class _MyWidgetState extends State<_MainScreen> {
                     '나의 냉장고',
                     style: TextStyle(
                       color: Color(
-                        (0xFF35AED4),
+                        (0xFF42A5F5),
                       ),
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
@@ -753,17 +908,17 @@ class _MyWidgetState extends State<_MainScreen> {
                 icon: const Icon(
                   Icons.notifications,
                 ),
-                color: Colors.black,
+                color: Colors.blue.shade400,
               )
             ],
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.07,
+            height: MediaQuery.of(context).size.height * 0.05,
           ),
           Row(
             children: [
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.05,
+                width: MediaQuery.of(context).size.width * 0.015,
               ),
               GestureDetector(
                 onTap: () {
@@ -774,7 +929,7 @@ class _MyWidgetState extends State<_MainScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.2,
+                        width: MediaQuery.of(context).size.width * 0.18,
                         child: Text(
                           SortingText,
                           textAlign: TextAlign.center,
@@ -790,12 +945,12 @@ class _MyWidgetState extends State<_MainScreen> {
             ],
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.07,
+            height: MediaQuery.of(context).size.height * 0.015,
           ),
           Row(
             children: [
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.1,
+                width: MediaQuery.of(context).size.width * 0.15,
               ),
               GestureDetector(
                 onTap: () {
@@ -806,19 +961,76 @@ class _MyWidgetState extends State<_MainScreen> {
                       productDateBox.putAt(i, tDateBox.getAt(i)!);
                     }
                     SortingBox.add(1);
-                    Navigator.pop(context);
                   });
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const CameraPage(),
-                    ),
+
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                // 첫 번째 버튼 동작
+                                showToast();
+                              },
+                              child: const Text(
+                                '음식 촬영',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                // 두 번째 버튼 동작
+                                Navigator.pop(context); // 다이얼로그를 닫음
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const Receipt(),
+                                  ),
+                                );
+
+                                // 카메라로부터 이미지 촬영 및 처리
+                                //_takePictureWithCamera();
+                              },
+                              child: const Text(
+                                '영수증 촬영',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                // 세 번째 버튼 동작
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const Postpage(),
+                                  ),
+                                );
+                              },
+                              child: const Text(
+                                '직접 입력',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   );
                 },
                 child: Container(
-                  width: MediaQuery.of(context).size.width * 0.7,
+                  width: MediaQuery.of(context).size.width * 0.65,
                   height: MediaQuery.of(context).size.height * 0.06,
                   decoration: BoxDecoration(
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       color: Colors.grey,
@@ -836,7 +1048,8 @@ class _MyWidgetState extends State<_MainScreen> {
                         color: Colors.grey,
                       ),
                       SizedBox(
-                          width: MediaQuery.of(context).size.height * 0.05),
+                        width: MediaQuery.of(context).size.width * 0.1,
+                      ),
                       const Text(
                         '음식 추가',
                         style: TextStyle(
@@ -851,7 +1064,7 @@ class _MyWidgetState extends State<_MainScreen> {
             ],
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.04,
+            height: MediaQuery.of(context).size.height * 0.01,
           ),
           //foodlist 넣을 곳
           Expanded(
@@ -878,17 +1091,22 @@ class _MyWidgetState extends State<_MainScreen> {
             child: Container(
               width: MediaQuery.of(context).size.width * 0.5,
               height: MediaQuery.of(context).size.height * 0.07,
+              margin: const EdgeInsets.only(bottom: 20),
               decoration: BoxDecoration(
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                  color: Colors.black,
+                  color: Colors.white,
                   width: 1,
                 ),
               ),
               child: Center(
                 child: Row(
                   children: [
-                    const Icon(Icons.food_bank),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.03,
+                    ),
+                    const Icon(Icons.restaurant_menu),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.05,
                     ),
@@ -908,11 +1126,50 @@ class _MyWidgetState extends State<_MainScreen> {
     );
   }
 
+  // // sendRequest 함수를 호출할 메서드를 추가
+  // void sendRequest() async {
+  //   try {
+  //     final result = await const Receipt().sendRequest();
+  //     // 영수증 처리 결과(result)를 사용하여 필요한 작업 수행
+  //     print(result);
+  //   } catch (e) {
+  //     print('Error: $e');
+  //     // 오류 발생 시 적절히 처리
+  //   }
+  // }
+  void showToast() {
+    Fluttertoast.showToast(
+      msg: '아직 개발중입니다...',
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.white,
+      textColor: Colors.black,
+      toastLength: Toast.LENGTH_LONG,
+    );
+  }
+
+  // _takePictureWithCamera   함수 정의
+  void _takePictureWithCamera() async {
+    // 카메라로부터 이미지 촬영
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+
+    if (pickedFile != null) {
+      // 이미지 촬영 성공 시 처리할 내용 작성
+      // 촬영한 이미지를 사용하여 필요한 작업 수행
+      // 예를 들어, 이미지를 어딘가에 저장하거나 다른 화면으로 전환하는 등의 동작을 수행할 수 있음
+      // pickedFile.path를 사용하여 이미지의 경로를 얻을 수 있음
+    } else {
+      // 이미지 촬영 실패 시 처리할 내용 작성
+      // 사용자에게 적절한 메시지 표시 등의 작업 수행
+    }
+  }
+
   void SelectSorting(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           contentPadding: EdgeInsets.symmetric(
               vertical: MediaQuery.of(context).size.height * 0.06,
               horizontal: MediaQuery.of(context).size.width * 0.12),
@@ -928,16 +1185,28 @@ class _MyWidgetState extends State<_MainScreen> {
                 '정렬방식 선택',
                 style: TextStyle(
                   color: Color(
-                    (0xFF35AED4),
+                    (0xFF42A5F5),
                   ),
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(10, 25),
+                  side: const BorderSide(
+                    color: Color(0xFF42A5F5),
+                  ),
+                ),
                 onPressed: () {
                   Navigator.pop(context);
                 },
                 child: const Text(
                   '취소',
+                  style: TextStyle(
+                    color: Color(0xFF42A5F5),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                  ),
                 ),
               )
             ],
@@ -946,6 +1215,11 @@ class _MyWidgetState extends State<_MainScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  side: const BorderSide(
+                    color: Color(0xFF42A5F5),
+                  ),
+                ),
                 onPressed: () {
                   setState(() {
                     for (int i = 0; i < SortingBox.length - 2; i++) {
@@ -957,9 +1231,19 @@ class _MyWidgetState extends State<_MainScreen> {
                 },
                 child: const Text(
                   '등록순',
+                  style: TextStyle(
+                    color: Color(0xFF42A5F5),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                  ),
                 ),
               ),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  side: const BorderSide(
+                    color: Color(0xFF42A5F5),
+                  ),
+                ),
                 onPressed: () {
                   setState(() {
                     for (int i = 0; i < SortingBox.length - 2; i++) {
@@ -971,6 +1255,11 @@ class _MyWidgetState extends State<_MainScreen> {
                 },
                 child: const Text(
                   '유통기한순',
+                  style: TextStyle(
+                    color: Color(0xFF42A5F5),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                  ),
                 ),
               ),
             ],
@@ -996,6 +1285,7 @@ Future<bool> RemoveDialog(BuildContext context, int index) async {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
+        backgroundColor: Colors.white,
         contentPadding: EdgeInsets.symmetric(
             vertical: MediaQuery.of(context).size.height * 0.06,
             horizontal: MediaQuery.of(context).size.width * 0.12),
@@ -1026,7 +1316,7 @@ Future<bool> RemoveDialog(BuildContext context, int index) async {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     side: const BorderSide(
-                      color: Color.fromARGB(255, 61, 237, 247),
+                      color: Color(0xFF42A5F5),
                     ), // 테두리 색 및 너비 지정
                   ),
                   onPressed: () {
@@ -1036,7 +1326,7 @@ Future<bool> RemoveDialog(BuildContext context, int index) async {
                   child: const Text(
                     '취소',
                     style: TextStyle(
-                      color: Color.fromARGB(255, 61, 237, 247),
+                      color: Color(0xFF42A5F5),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -1044,7 +1334,7 @@ Future<bool> RemoveDialog(BuildContext context, int index) async {
                 ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
-                      const Color.fromARGB(255, 61, 237, 247),
+                      const Color(0xFF42A5F5),
                     ),
                   ),
                   onPressed: () {
@@ -1055,6 +1345,8 @@ Future<bool> RemoveDialog(BuildContext context, int index) async {
                     '확인',
                     style: TextStyle(
                       color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
                     ),
                   ),
                 ),
@@ -1066,4 +1358,53 @@ Future<bool> RemoveDialog(BuildContext context, int index) async {
     },
   );
   return checkremove;
+}
+
+void max99(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.white,
+        contentPadding: EdgeInsets.symmetric(
+            vertical: MediaQuery.of(context).size.height * 0.06,
+            horizontal: MediaQuery.of(context).size.width * 0.12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            20,
+          ),
+        ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              '최대 99개 까지입니다.',
+              style: TextStyle(
+                fontSize: 15,
+                color: Color(0xFF000000),
+              ),
+            ),
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                  const Color(0xFF42A5F5),
+                ),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                '확인',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    },
+  );
 }
