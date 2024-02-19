@@ -149,6 +149,59 @@ class _MyWidgetState extends State<_MainScreen> {
     print('SortingBox: ${SortingBox.values}');
   }
 
+  void Management(BuildContext context, int index) async {
+    String productName = pnameBox.getAt(index) ?? '';
+
+    String prompt =
+        "$productName의 재료 관리 방법을 2문장 이내로 알려줘 감자의 관리 방법을 예시로 들면 감자는 시원하고 건조한 장소에 보관해야 하며, 직사광선을 피하고 통풍이 잘 되도록 보관하는 것이 중요합니다. 이런식으로 답해주면 돼";
+    String generatedText = "";
+
+    try {
+      // 로딩 다이얼로그 표시
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("재고 관리 방법"),
+            content: FutureBuilder(
+              future: GPT3.generateText(prompt),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Center(
+                        child: CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Color(0xFF35AED4)),
+                          strokeWidth: 4, // 원의 두께 설정
+                        ),
+                      ),
+                    ],
+                  );
+                } else if (snapshot.hasError) {
+                  return Text("에러 발생: ${snapshot.error}"); // 에러 메시지 표시
+                } else {
+                  return Text(snapshot.data ?? ""); // 재고 관리 방법 표시
+                }
+              },
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("확인"),
+              ),
+            ],
+          );
+        },
+      );
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
+
   void Recipe(BuildContext context) async {
     String contentText = '';
     List<String> selectedProducts = [];
@@ -688,24 +741,49 @@ class _MyWidgetState extends State<_MainScreen> {
                 ),
                 SizedBox(
                   width:
-                      MediaQuery.of(context).size.width * 0.3, // 원하는 폭으로 설정하세요
+                      MediaQuery.of(context).size.width * 0.35, // 원하는 폭으로 설정하세요
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        '${(pnameBox.getAt(index) ?? '').length > 10 ? '${pnameBox.getAt(index)!.substring(0, 10)}...' : pnameBox.getAt(index)}',
-                        style: TextStyle(
-                          fontSize: pnamefontsize,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        overflow: TextOverflow.ellipsis,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Center(
+                              child: Text(
+                                '${(pnameBox.getAt(index) ?? '').length > 10 ? '${pnameBox.getAt(index)!.substring(0, 10)}...' : pnameBox.getAt(index)}',
+                                style: TextStyle(
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * 0.04,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.info_outline),
+                            onPressed: () {
+                              Management(context, index);
+                            },
+                          )
+                        ],
                       ),
-                      Text(
-                        '${productDateBox.getAt(index)}',
-                        style: const TextStyle(
-                          fontSize: 15,
-                        ),
-                        overflow: TextOverflow.ellipsis,
+                      Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                                right:
+                                    MediaQuery.of(context).size.width * 0.03),
+                          ),
+                          Text(
+                            '${productDateBox.getAt(index)}',
+                            style: const TextStyle(
+                              fontSize: 15,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
                       ),
                     ],
                   ),
