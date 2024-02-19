@@ -5,15 +5,14 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:foodapp/AlarmScreen.dart';
-import 'package:foodapp/CameraScreen.dart';
-import 'package:foodapp/FoodAddScreen.dart';
-import 'package:foodapp/gpt.dart';
+import 'package:foodapp/Pages/AlarmScreen.dart';
+import 'package:foodapp/Pages/FoodAddScreen.dart';
+import 'package:foodapp/Pages/gpt.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:foodapp/notification.dart';
+import 'package:foodapp/Pages/notification.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:foodapp/Receipt.dart';
+import 'package:foodapp/Pages/Receipt.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 //MainScreen 코드
@@ -196,10 +195,15 @@ class _MyWidgetState extends State<_MainScreen> {
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                productName,
-                                style: const TextStyle(
-                                  fontSize: 17,
+                              Flexible(
+                                child: Text(
+                                  (productName.length > 10)
+                                      ? '${productName.substring(0, 10)}...'
+                                      : productName,
+                                  style: const TextStyle(
+                                    fontSize: 17,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               Switch(
@@ -616,9 +620,9 @@ class _MyWidgetState extends State<_MainScreen> {
     double pnamefontsize = 20;
     if (pnameBox.getAt(index)!.length >= 5) {
       pnamefontsize = 16;
-      if (pnameBox.getAt(index)!.length >= 10) {
+      if (pnameBox.getAt(index)!.length >= 9) {
         pnamefontsize = 12;
-        if (pnameBox.getAt(index)!.length >= 13) {
+        if (pnameBox.getAt(index)!.length >= 11) {
           pnamefontsize = 9;
         }
       }
@@ -680,28 +684,33 @@ class _MyWidgetState extends State<_MainScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.height * 0.01,
+                  width: MediaQuery.of(context).size.width * 0.01,
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // "글자 수"가 많은 제품일때, 이 사이즈박스가 없으면, 글씨가 오버되어서 오류나는거 방지용.
-                    SizedBox(
-                      width: MediaQuery.of(context).size.height * 0.145,
-                    ),
-                    Text(
-                      '${pnameBox.getAt(index)}',
-                      style: TextStyle(
-                        fontSize: pnamefontsize,
-                        fontWeight: FontWeight.bold,
+                SizedBox(
+                  width:
+                      MediaQuery.of(context).size.width * 0.3, // 원하는 폭으로 설정하세요
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '${(pnameBox.getAt(index) ?? '').length > 10 ? '${pnameBox.getAt(index)!.substring(0, 10)}...' : pnameBox.getAt(index)}',
+                        style: TextStyle(
+                          fontSize: pnamefontsize,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                    Text('${productDateBox.getAt(index)}',
+                      Text(
+                        '${productDateBox.getAt(index)}',
                         style: const TextStyle(
                           fontSize: 15,
-                        )),
-                  ],
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
                 ),
+
                 //제품명이랑 수량 사이간격
                 // SizedBox(
                 //   width: MediaQuery.of(context).size.width * 0.005,
@@ -1031,6 +1040,7 @@ class _MyWidgetState extends State<_MainScreen> {
                               ),
                               onPressed: () {
                                 // 세 번째 버튼 동작
+                                Navigator.pop(context);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
