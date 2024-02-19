@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foodapp/MainScreen.dart';
+import 'package:foodapp/main.dart';
 //import 'package:provider/provider.dart';
 import 'package:hive/hive.dart';
 
@@ -284,12 +284,10 @@ class _SecondViewState extends State<Postpage> {
       },
       child: WillPopScope(
         onWillPop: () async {
-          Navigator.replace(
+          Navigator.pushAndRemoveUntil(
             context,
-            oldRoute: ModalRoute.of(context)!,
-            newRoute: MaterialPageRoute(
-              builder: (context) => const MainScreen(), // 원래는 카메라페이지
-            ),
+            MaterialPageRoute(builder: (context) => const MainScreen()),
+            (route) => false,
           );
           return true;
         },
@@ -549,11 +547,14 @@ class _SecondViewState extends State<Postpage> {
                           child: TextField(
                             controller: controller,
                             decoration: InputDecoration(
-                                border: const OutlineInputBorder(),
-                                hintText: productname,
-                                labelStyle: const TextStyle(fontSize: 15)),
+                              border: const OutlineInputBorder(),
+                              hintText: productname,
+                              labelStyle: const TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
                             style: const TextStyle(
-                              fontSize: 15,
+                              fontSize: 13,
                             ),
                             onChanged: (text) {
                               productname = text;
@@ -594,8 +595,10 @@ class _SecondViewState extends State<Postpage> {
                                   },
                                   child: Text(
                                     "${productDate[productname]}",
-                                    style: const TextStyle(
-                                      fontSize: 10,
+                                    style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.026,
                                     ),
                                   ),
                                 ),

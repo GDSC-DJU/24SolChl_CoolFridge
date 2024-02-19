@@ -3,9 +3,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:foodapp/FoodAddScreen.dart';
+import 'package:foodapp/Pages/FoodAddScreen.dart';
+import 'package:foodapp/main.dart';
 
-//받아온 값을 토대로 품목과 수량이 있는 정보만 배열에 저장후, 배열을 반환
+//받아온 값을 토대로 품목과 수량이 있는 정보i만 배열에 저장후, 배열을 반환
 class ImageProcessor {
   final List<dynamic> fields;
 
@@ -88,6 +89,7 @@ class Receipt extends StatelessWidget {
       home: Scaffold(
         body: FutureBuilder(
           future: sendRequest(context),
+          // FutureBuilder의 builder 메서드에서 처리할 때, Map<String, String> 형태로 변환해줍니다.
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -95,9 +97,12 @@ class Receipt extends StatelessWidget {
               if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else {
+                Map<String, String> dataMap =
+                    snapshot.data as Map<String, String>;
                 return SingleChildScrollView(
-                  child: Text(
-                      '${snapshot.data.entries.map((entry) => '${entry.key}: ${entry.value}').join('\n')}'),
+                  child: Text(dataMap.entries
+                      .map((entry) => '${entry.key}: ${entry.value}')
+                      .join('\n')),
                 );
               }
             }
@@ -107,17 +112,15 @@ class Receipt extends StatelessWidget {
     );
   }
 
-  Future<Object> sendRequest(BuildContext context) async {
+  Future<Map<String, String>> sendRequest(BuildContext context) async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile == null) {
-      return [
-        ['No image selected.']
-      ];
+      Navigator.pop(context);
+      // null을 반환하여 FutureBuilder에서 null을 처리하도록 합니다.
+      throw Exception('No image selected.');
     }
-    // FoodAddScreen으로 이동하면서 이미지를 함께 전달합니다.
-    // FoodAddScreen으로 이동하면서 이미지를 함께 전달합니다.
 
     final bytes = await pickedFile.readAsBytes();
     final base64Image = base64Encode(bytes);
@@ -162,7 +165,7 @@ class Receipt extends StatelessWidget {
           ), // 이동할 페이지 위젯
         ),
       );
-      return satisfiedTexts; // 2차원 배열 반환
+      return satisfiedTexts; // Map<String, String> 반환
     } else {
       throw Exception('Failed to load data');
     }

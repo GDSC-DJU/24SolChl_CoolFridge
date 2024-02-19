@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foodapp/MainScreen.dart';
+import 'package:foodapp/main.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 //토글 버튼, 알람 페이지
 
@@ -109,44 +109,54 @@ class _ToggleButtonState extends State<ToggleButton> {
               if (_selectedtype[0] &&
                   difference.inDays >=
                       0) // ToggleButton이 전체로 선택 되어 있고, 설정한 날짜와 현재 날짜가 +와 0인 경우 출력
-                Text(
-                  " ${pnameBox.getAt(index)} 유통기한 ${productDateBox.getAt(index)}까지 \n ${difference.inDays}일 ${productCountBox.getAt(index)}개 남았어요!",
-                  style: const TextStyle(
-                    fontSize: 13,
+                Expanded(
+                  child: Text(
+                    " ${pnameBox.getAt(index)} 유통기한 ${productDateBox.getAt(index)}까지 \n ${difference.inDays}일 ${productCountBox.getAt(index)}개 남았어요!",
+                    style: const TextStyle(
+                      fontSize: 13,
+                    ),
                   ),
                 ),
               if (_selectedtype[0] &&
                   difference.inDays <
                       0) // ToggleButton이 전체로 선택 되어 있고, 설정한 날짜와 현재 날짜가 -인 경우 출력
-                Text(
-                  " ${pnameBox.getAt(index)} 유통기한이 만료 되었어요.",
-                  style: const TextStyle(
-                    fontSize: 13,
+                Expanded(
+                  child: Text(
+                    " ${pnameBox.getAt(index)} 유통기한이 만료 되었어요.",
+                    style: const TextStyle(
+                      fontSize: 13,
+                    ),
                   ),
                 ),
               if (_selectedtype[1] &&
                   difference.inDays >=
                       0) // ToggleButton이 유통기한으로 선택 되어 있고, 설정한 날짜와 현재 날짜가 +와 0인 경우 출력
-                Text(
-                  " ${pnameBox.getAt(index)} 유통기한이 ${difference.inDays}일 남았어요!",
-                  style: const TextStyle(
-                    fontSize: 13,
+                Expanded(
+                  child: Text(
+                    " ${pnameBox.getAt(index)} 유통기한이 ${difference.inDays}일 남았어요!",
+                    style: const TextStyle(
+                      fontSize: 13,
+                    ),
                   ),
                 ),
               if (_selectedtype[1] &&
                   difference.inDays <
                       0) // ToggleButton이 유통기한으로 선택 되어 있고, 설정한 날짜와 현재 날짜가 -인 경우 출력
-                Text(
-                  " ${pnameBox.getAt(index)} 유통기한이 만료 되었어요.",
-                  style: const TextStyle(
-                    fontSize: 13,
+                Expanded(
+                  child: Text(
+                    " ${pnameBox.getAt(index)} 유통기한이 만료 되었어요.",
+                    style: const TextStyle(
+                      fontSize: 13,
+                    ),
                   ),
                 ),
               if (_selectedtype[2]) // ToggleButton이 음식 추가/제거로 선택 되어 있을 때 실행
-                const Text(
-                  " 추후 구현 예정입니다.",
-                  style: TextStyle(
-                    fontSize: 13,
+                const Expanded(
+                  child: Text(
+                    " 추후 구현 예정입니다.",
+                    style: TextStyle(
+                      fontSize: 13,
+                    ),
                   ),
                 ),
             ],
