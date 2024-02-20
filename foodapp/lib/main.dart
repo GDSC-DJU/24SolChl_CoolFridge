@@ -130,7 +130,7 @@ class _MyWidgetState extends State<_MainScreen> {
 
     // seconds: 30은 하루 주기로 바꾸면 됨.
     Timer.periodic(
-      const Duration(seconds: 10),
+      const Duration(seconds: 60),
       (Timer t) => notificationcount(),
     );
   }
@@ -754,7 +754,7 @@ class _MyWidgetState extends State<_MainScreen> {
                                 '${(pnameBox.getAt(index) ?? '').length > 10 ? '${pnameBox.getAt(index)!.substring(0, 10)}...' : pnameBox.getAt(index)}',
                                 style: TextStyle(
                                   fontSize:
-                                      MediaQuery.of(context).size.width * 0.04,
+                                      MediaQuery.of(context).size.width * 0.03,
                                   fontWeight: FontWeight.bold,
                                 ),
                                 overflow: TextOverflow.ellipsis,
@@ -774,12 +774,13 @@ class _MyWidgetState extends State<_MainScreen> {
                           Padding(
                             padding: EdgeInsets.only(
                                 right:
-                                    MediaQuery.of(context).size.width * 0.03),
+                                    MediaQuery.of(context).size.width * 0.04),
                           ),
                           Text(
                             '${productDateBox.getAt(index)}',
-                            style: const TextStyle(
-                              fontSize: 15,
+                            style: TextStyle(
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.03,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -840,9 +841,9 @@ class _MyWidgetState extends State<_MainScreen> {
 
                         fetchData();
                       },
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.remove,
-                        size: 20,
+                        size: MediaQuery.of(context).size.width * 0.04,
                       ),
                     ),
                     Column(
@@ -850,7 +851,9 @@ class _MyWidgetState extends State<_MainScreen> {
                       children: [
                         Text(
                           '${productCountBox.getAt(index)}',
-                          style: const TextStyle(fontSize: 19),
+                          style: TextStyle(
+                            fontSize: MediaQuery.of(context).size.width * 0.035,
+                          ),
                         ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.07,
@@ -875,7 +878,8 @@ class _MyWidgetState extends State<_MainScreen> {
                           incrementCounter(index);
                         }
                       },
-                      icon: const Icon(Icons.add, size: 20),
+                      icon: Icon(Icons.add,
+                          size: MediaQuery.of(context).size.width * 0.04),
                     ),
                     //수량과 제거버튼 사이간격
                     // SizedBox(
@@ -1163,13 +1167,13 @@ class _MyWidgetState extends State<_MainScreen> {
                         color: Colors.grey,
                       ),
                       SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.1,
+                        width: MediaQuery.of(context).size.width * 0.16,
                       ),
-                      const Text(
+                      Text(
                         '음식 추가',
                         style: TextStyle(
-                          fontSize: 25,
-                          color: Color.fromRGBO(158, 158, 158, 1),
+                          fontSize: MediaQuery.of(context).size.width * 0.04,
+                          color: const Color.fromRGBO(158, 158, 158, 1),
                         ),
                       ),
                     ],
@@ -1221,14 +1225,17 @@ class _MyWidgetState extends State<_MainScreen> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.03,
                     ),
-                    const Icon(Icons.restaurant_menu),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.05,
+                    Icon(
+                      Icons.restaurant_menu,
+                      size: MediaQuery.of(context).size.width * 0.05,
                     ),
-                    const Text(
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.08,
+                    ),
+                    Text(
                       'AI 레시피',
                       style: TextStyle(
-                        fontSize: 30,
+                        fontSize: MediaQuery.of(context).size.width * 0.04,
                       ),
                     ),
                   ],
