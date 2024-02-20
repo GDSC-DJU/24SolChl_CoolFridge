@@ -52,6 +52,7 @@ dependencies:
 
   flutter_native_splash: ^2.3.10
   hive_flutter: ^1.1.0
+  flutter_dotenv: ^5.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -90,7 +91,7 @@ flutter:
   assets:
   - assets/images/cool_fridge.png
   #   - images/a_dot_ham.jpeg
-
+  - .env
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
