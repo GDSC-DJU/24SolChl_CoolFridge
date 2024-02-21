@@ -17,39 +17,39 @@ import 'package:foodapp/Pages/Receipt.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 //MainScreen 코드
-void main() async {
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env"); // 추가
+// void main() async {
+//   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+//   await dotenv.load(fileName: ".env"); // 추가
 
-  //gpt api key load
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  await Hive.initFlutter();
-  // pnameBox, productDateBox, productCountBox를 열기 전에 이미 열려 있는지 확인합니다.
-  if (!Hive.isBoxOpen('pnameBox')) {
-    await Hive.openBox<String>('pnameBox');
-  }
-  if (!Hive.isBoxOpen('productDateBox')) {
-    await Hive.openBox<String>('productDateBox');
-  }
-  if (!Hive.isBoxOpen('productCountBox')) {
-    await Hive.openBox<int>('productCountBox');
-  }
-  if (!Hive.isBoxOpen('tNameBox')) {
-    await Hive.openBox<String>('tNameBox');
-  }
-  if (!Hive.isBoxOpen('tDateBox')) {
-    await Hive.openBox<String>('tDateBox');
-  }
-  if (!Hive.isBoxOpen('tCountBox')) {
-    await Hive.openBox<int>('tCountBox');
-  }
-  if (!Hive.isBoxOpen('SortingBox')) {
-    await Hive.openBox<int>('SortingBox');
-  }
+//   //gpt api key load
+//   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+//   await Hive.initFlutter();
+//   // pnameBox, productDateBox, productCountBox를 열기 전에 이미 열려 있는지 확인합니다.
+//   if (!Hive.isBoxOpen('pnameBox')) {
+//     await Hive.openBox<String>('pnameBox');
+//   }
+//   if (!Hive.isBoxOpen('productDateBox')) {
+//     await Hive.openBox<String>('productDateBox');
+//   }
+//   if (!Hive.isBoxOpen('productCountBox')) {
+//     await Hive.openBox<int>('productCountBox');
+//   }
+//   if (!Hive.isBoxOpen('tNameBox')) {
+//     await Hive.openBox<String>('tNameBox');
+//   }
+//   if (!Hive.isBoxOpen('tDateBox')) {
+//     await Hive.openBox<String>('tDateBox');
+//   }
+//   if (!Hive.isBoxOpen('tCountBox')) {
+//     await Hive.openBox<int>('tCountBox');
+//   }
+//   if (!Hive.isBoxOpen('SortingBox')) {
+//     await Hive.openBox<int>('SortingBox');
+//   }
 
-  runApp(const MainScreen());
-  FlutterNativeSplash.remove();
-}
+//   runApp(const MainScreen());
+
+// }
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
