@@ -134,7 +134,9 @@ class _MyWidgetState extends State<_MainScreen> {
 
     // seconds: 30은 하루 주기로 바꾸면 됨.
     Timer.periodic(
-      const Duration(seconds: 60),
+      const Duration(
+        hours: 24,
+      ),
       (Timer t) => notificationcount(),
     );
   }
