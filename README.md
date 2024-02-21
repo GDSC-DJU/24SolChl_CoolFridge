@@ -18,7 +18,7 @@ With the increase in single-person households these days, more people are cookin
 The CoolFridge app provides features for managing food inventory and recommending recipes based on the ingredients currently available. This allows **efficient inventory management**  and enables users to consume ingredients using recipes recommended by AI. Through these functions, we can **reduce food waste** and take a step towards creating a more sustainable planet
 
 ## 📱 How to run our app service
-You can run the app by executing the **main.dart** file.
+You need to download the file [apk-release.apk](https://drive.google.com/file/d/1CTMpqCbN7maXbLKK2UAATPlpcMu24Rn0/view?pli=1).
 
 
 
