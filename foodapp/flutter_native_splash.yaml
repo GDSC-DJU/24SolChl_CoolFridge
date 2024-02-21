@@ -21,6 +21,7 @@ flutter_native_splash:
   image: assets/images/cool_fridge.png
   android: true
   ios: true
+  
   # The branding property allows you to specify an image used as branding in the splash screen.
   # It must be a png file. It is supported for Android, iOS and the Web.  For Android 12,
   # see the Android 12 section below.
@@ -57,6 +58,7 @@ flutter_native_splash:
     color: "#DCE6F8"
     android: true
     ios: true
+    
     # App icon background color.
     #icon_background_color: "#111111"
 
