@@ -4,7 +4,7 @@ name: Flutter Build
 on:
   push:
     branches:
-      - stage2
+      - main
 
 # 워크플로우의 작업을 정의합니다.
 jobs:
