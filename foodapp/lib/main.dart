@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -17,7 +19,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 //MainScreen 코드
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  // await Future.delayed(const Duration(milliseconds: 500));
   await dotenv.load(fileName: ".env"); // 추가
 
   //gpt api key load
@@ -45,8 +46,10 @@ void main() async {
   if (!Hive.isBoxOpen('SortingBox')) {
     await Hive.openBox<int>('SortingBox');
   }
+  await Future.delayed(const Duration(seconds: 1));
 
   runApp(const MainScreen());
+  FlutterNativeSplash.remove();
 }
 
 class MainScreen extends StatelessWidget {
