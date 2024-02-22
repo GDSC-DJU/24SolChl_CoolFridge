@@ -136,7 +136,7 @@ class Receipt extends StatelessWidget {
     var request = http.Request(
         'POST',
         Uri.parse(
-            'https://bq9qzh30rj.apigw.ntruss.com/custom/v1/28573/bab86fe52714b5d57e4577327c1814e634ddf7e7d00d6dbec7dc6a001b43e80a/general'));
+            'https://b2v3qpqqei.apigw.ntruss.com/custom/v1/28602/2c1c5e74d79d9896cd9a3b9be06605f62ac28a686652415fc81fbc5af23c3e86/general'));
     request.body = json.encode({
       "images": [
         {"format": "png", "name": "medium", "data": base64Image, "url": null}
