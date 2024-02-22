@@ -4,15 +4,14 @@
 
 
 
-
- ## 👨‍👨‍👦‍👦 Member of GDSC Daejeon University
+## 👨‍👨‍👦‍👦 Participants
+> Members of GDSC Daejeon University
 - **김성연 (Seongyeon Kim)**
 - **박재현 (Jaehyeon Park)**
 - **채민기 (Mingi Chae)**
 - **김영민 (Youngmin Kim)**
 
 ## 🖌 Introduction
-
 With the increase in single-person households these days, more people are cooking for themselves. Consequently, there's been a rise in the amount of food waste generated. **Recognizing that poor management of food inventory is a major cause of food waste**, our team developed an app called "CoolFridge". 
 
 The CoolFridge app provides features for managing food inventory and recommending recipes based on the ingredients currently available. This allows **efficient inventory management**  and enables users to consume ingredients using recipes recommended by AI. Through these functions, we can **reduce food waste** and take a step towards creating a more sustainable planet
@@ -70,8 +69,9 @@ We chose the 12th SDG because it aligns with our goal of reducing the increasing
 
 <img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/121305133/3bf181c7-4afe-44b8-9acd-eae8214f4bd3" width="200" height="200" />
 
-Target 12.3: By 2030, halve per capita global food waste at the retail and consumer levels and reduce food losses along production and supply chains, including post-harvest losses. This is considered a means through which **individuals to exercise their influence, encouraging them to become the majority and contribute to society**, aligning with our objectives.
+> Target 12.3: By 2030, halve per capita global food waste at the retail and consumer levels and reduce food losses along production and supply chains, including post-harvest losses.
 
+This is considered a means through which **individuals to exercise their influence, encouraging them to become the majority and contribute to society**, aligning with our objectives.
 
 
 
@@ -83,10 +83,4 @@ Target 12.3: By 2030, halve per capita global food waste at the retail and consu
 
 In the future, we plan to add 'automatic recording of expired products' and 'AI recommended storage methods' features to **address the issues of excessive purchase and improper storage more thoroughly.**
 
-**Our ultimate goal is to significantly reduce food waste.** To accomplish this, we will provide user-friendly UI/UX and practical features, making our application easily accessible for many people. We endeavor to foster a user-friendly structure and convenient features that can solve real problems, with the aim of **encouraging individual actions to become the majority. This collective contribution to reducing environmental pollution is the core value and objective of our project.**
-
-
-
-
-
-
+**Our ultimate goal is to significantly reduce food waste.** To accomplish this, we will provide user-friendly UI/UX and practical features, making our application easily accessible to many people. We endeavor to foster a user-friendly structure and convenient features that can solve real problems, with the aim of **encouraging individual actions to become the majority. This collective contribution to reducing environmental pollution is the core value and objective of our project.**
