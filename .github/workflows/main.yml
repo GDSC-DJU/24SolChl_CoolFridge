@@ -36,13 +36,26 @@ jobs:
         cd foodapp
         flutter build apk --release --target lib/main.dart
     
-    # 생성된 APK 파일을 GitHub Releases에 업로드.
+    # GitHub Release 새로 생성
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+
+    # 생성된 APK 파일을 GitHub Release에 업로드.
     - name: Upload APK to GitHub Release
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_name: app-release.apk
+        asset_path: ./build/app/outputs/flutter-apk/app-release.apk
+        asset_name: CoolFridge.apk
         asset_content_type: application/vnd.android.package-archive
         
