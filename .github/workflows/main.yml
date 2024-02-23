@@ -16,7 +16,7 @@ jobs:
     steps:
     - name: Checkout repository
       # GitHub 저장소를 체크아웃하는 작업.
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       
     # Flutter를 설정하는 작업. subosito/flutter-action 액션을 사용.
     - name: Set up Flutter
