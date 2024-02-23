@@ -41,11 +41,7 @@ jobs:
         name: app
         path: ./foodapp/build/app/outputs/flutter-apk/app-release.apk
 
-    - name: Upload APK
-      uses: actions/upload-artifact@v1
-      with:
-        name: app
-        path: ./foodapp/build/app/outputs/flutter-apk/app-release.apk
+   
 
     # 릴리즈 생성 및 APK 업로드 작업
     - name: Create Release
@@ -54,8 +50,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.COOLFRIDGE }}
       with:
-        tag_name: v1.0.3
-        release_name: Release v1.0.2
+        tag_name: v1.0.4
+        release_name: Release v1.0.4
         draft: false
         prerelease: false
 
