@@ -3,7 +3,7 @@
 ![20240219-001707](https://github.com/GDSC-DJU/24SolChl_Food/assets/121305133/b389fcaf-0880-47c7-b2c9-ed305f750341)
 
 
-
+ 
 ## 👨‍👨‍👦‍👦 Participants
 > Members of GDSC Daejeon University
 - **김성연 (Seongyeon Kim)**
