@@ -26,9 +26,9 @@ jobs:
         
     # GitHub 저장소의 Secrets에서 API 키를 가져와서 파일에 저장하는 작업입니다.
     - name: Get API Key
-      run: |
-        echo ${{ secrets.API_KEY }} > api_key.txt
-        echo ${{ secrets.NAVER_CLOVA_API }} >> api_key.txt
+      run: |  # 빌드 머신에 API 키를 환경 변수로 추가
+        export OPENAI_API_KEY=\"${{ secrets.API_KEY }}\"
+        export NAVER_CLOVA_API_KEY=\"${{ secrets.API_KEY }}\"
       
     # Flutter 앱을 빌드하는 작업. release APK 생성.
     - name: Build Flutter App

@@ -1,10 +1,12 @@
-import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 import 'package:foodapp/Pages/FoodAddScreen.dart';
-import 'package:foodapp/main.dart';
+
+// Naver OCR API key
+final ocrApiKey = Platform.environment['NAVER_API_KEY'];
 
 //받아온 값을 토대로 품목과 수량이 있는 정보i만 배열에 저장후, 배열을 반환
 class ImageProcessor {
@@ -127,9 +129,8 @@ class Receipt extends StatelessWidget {
     var headers = {
       'Content-Type': 'application/json',
     };
-    if (apiKey != null) {
-      headers['X-OCR-SECRET'] = apiKey;
-    }
+    headers['X-OCR-SECRET'] = ocrApiKey as String;
+    
 
     var request = http.Request(
         'POST',

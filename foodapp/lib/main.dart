@@ -1,16 +1,14 @@
 import 'dart:async';
-import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:foodapp/Pages/AlarmScreen.dart';
 import 'package:foodapp/Pages/FoodAddScreen.dart';
 import 'package:foodapp/Pages/gpt.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:foodapp/Pages/notification.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:foodapp/Pages/Receipt.dart';
+import 'package:foodapp/Pages/receipt_ocr.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 //MainScreen 코드
@@ -79,7 +77,6 @@ class _MyWidgetState extends State<_MainScreen> {
   late Box<String> tDateBox;
   late Box<int> tCountBox;
   late Box<int> SortingBox;
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -87,7 +84,6 @@ class _MyWidgetState extends State<_MainScreen> {
     pnameBox = Hive.box<String>('pnameBox');
     productDateBox = Hive.box<String>('productDateBox');
     productCountBox = Hive.box<int>('productCountBox');
-    _formKey = GlobalKey<FormState>();
 
     tNameBox = Hive.box<String>('tNameBox');
     tDateBox = Hive.box<String>('tDateBox');
