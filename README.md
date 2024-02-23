@@ -64,11 +64,9 @@ Material Selection, Food choice, Recipe recommendation
 SDG 12 Ensuring sustainable consumption and production patterns.
 
 <img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/121305133/8181ec44-7a99-40f7-a498-6b2723df9247" width="200" height="200" />
-
-We chose the 12th SDG because it aligns with our goal of reducing the increasing environmental pollution.
-
 <img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/121305133/3bf181c7-4afe-44b8-9acd-eae8214f4bd3" width="200" height="200" />
 
+We chose the 12th SDG because it aligns with our goal of reducing the increasing environmental pollution.
 > Target 12.3: By 2030, halve per capita global food waste at the retail and consumer levels and reduce food losses along production and supply chains, including post-harvest losses.
 **We exert influence on individuals. As a result, many individuals become a majority and can contribute to society**. This aligns with our goals, so we chose it as a means to achieve them.
 
