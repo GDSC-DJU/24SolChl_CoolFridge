@@ -32,7 +32,7 @@ jobs:
     - name: Build Flutter App
       run: |
         cd foodapp
-        flutter build apk --release
+        flutter build apk --release --target lib/main.dart
     
     # 생성된 APK 파일을 GitHub Releases에 업로드.
     - name: Upload APK to GitHub Release
