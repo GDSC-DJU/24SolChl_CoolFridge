@@ -1,11 +1,9 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class GPT3 {
   static Future<String> generateText(String prompt) async {
     String model = "gpt-3.5-turbo";
-    String? apiKey = dotenv.env['GPT_API_KEY'];
 
     var response = await http.post(
       Uri.parse('https://api.openai.com/v1/chat/completions'),

@@ -5,7 +5,6 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:foodapp/Pages/FoodAddScreen.dart';
 import 'package:foodapp/main.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 //받아온 값을 토대로 품목과 수량이 있는 정보i만 배열에 저장후, 배열을 반환
 class ImageProcessor {
@@ -125,7 +124,6 @@ class Receipt extends StatelessWidget {
 
     final bytes = await pickedFile.readAsBytes();
     final base64Image = base64Encode(bytes);
-    String? apiKey = dotenv.env['NAVER_CLOVA_API_KEY'];
     var headers = {
       'Content-Type': 'application/json',
     };
