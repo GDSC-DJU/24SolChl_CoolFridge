@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:foodapp/Pages/FoodAddScreen.dart';
 
 // Naver OCR API key
-final ocrApiKey = Platform.environment['NAVER_API_KEY'];
+final ocrApiKey = Platform.environment['NAVER_CLOVA_API_KEY'];
 
 //받아온 값을 토대로 품목과 수량이 있는 정보i만 배열에 저장후, 배열을 반환
 class ImageProcessor {
