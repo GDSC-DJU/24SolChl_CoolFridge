@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +16,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 //MainScreen 코드
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env"); // 추가
 
   //gpt api key load
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
