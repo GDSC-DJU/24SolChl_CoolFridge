@@ -1,6 +1,9 @@
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 
+// GPT-3 API key
+final gptApiKey = Platform.environment['GOOGLE_API_KEY'];
 class GPT3 {
   static Future<String> generateText(String prompt) async {
     String model = "gpt-3.5-turbo";
@@ -9,7 +12,7 @@ class GPT3 {
       Uri.parse('https://api.openai.com/v1/chat/completions'),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $apiKey',
+        'Authorization': 'Bearer $gptApiKey',
       },
       body: jsonEncode({
         'model': model,
