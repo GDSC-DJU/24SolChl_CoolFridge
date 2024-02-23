@@ -30,7 +30,9 @@ jobs:
       
     # Flutter 앱을 빌드하는 작업. release APK 생성.
     - name: Build Flutter App
-      run: flutter build apk --release
+      run: |
+        cd foodapp
+        flutter build apk --release
     
     # 생성된 APK 파일을 GitHub Releases에 업로드.
     - name: Upload APK to GitHub Release
