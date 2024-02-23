@@ -52,7 +52,7 @@ jobs:
     - name: Upload APK to GitHub Release
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.CoolFridge }}
+        GITHUB_TOKEN: ${{ secrets.COOLFRIDGE }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
         asset_path: ./build/app/outputs/flutter-apk/app-release.apk
