@@ -35,10 +35,11 @@ jobs:
       with:
         java-version: 1.8
 
-    - name: Build debug APK
-      run: |
-        cd android
-        bash ./gradlew assembleDebug --stacktrace
+    - name: Upload APK
+      uses: actions/upload-artifact@v1
+      with:
+        name: app
+        path: ./foodapp/build/app/outputs/flutter-apk/app-release.apk
 
     - name: Upload APK
       uses: actions/upload-artifact@v1
