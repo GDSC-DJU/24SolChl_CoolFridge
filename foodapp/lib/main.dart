@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter_config/flutter_config.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,7 +15,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 //MainScreen 코드
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-
+  await FlutterConfig.loadEnvVariables();
   //gpt api key load
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Hive.initFlutter();
