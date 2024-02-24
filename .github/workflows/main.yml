@@ -53,8 +53,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.COOLFRIDGE }}
       with:
-        tag_name: 1.0.12
-        release_name: 1.0.12
+        tag_name: 1.0.13
+        release_name: 1.0.13
         draft: false
         prerelease: false
 
