@@ -129,8 +129,7 @@ class Receipt extends StatelessWidget {
     var headers = {
       'Content-Type': 'application/json',
     };
-    headers['X-OCR-SECRET'] = ocrApiKey as String;
-    
+    headers['X-OCR-SECRET'] = ocrApiKey ?? '';
 
     var request = http.Request(
         'POST',
