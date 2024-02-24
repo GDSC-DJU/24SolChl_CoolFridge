@@ -22,21 +22,11 @@ jobs:
       run: |
         export OPENAI_API_KEY=\"${{ secrets.API_KEY }}\"
         export NAVER_CLOVA_API_KEY=\"${{ secrets.NAVER_CLOVA_API }}\"
-
-    - name: Verify API Key
+        
+    - name: Print API Key
       run: |
-        if [ -z "${{ secrets.API_KEY }}" ]; then
-          echo "API_KEY is empty"
-          exit 1
-        else
-          echo "API_KEY is set"
-        fi
-        if [ -z "${{ secrets.NAVER_CLOVA_API }}" ]; then
-          echo "NAVER_CLOVA_API is empty"
-          exit 1
-        else
-          echo "NAVER_CLOVA_API is set"
-        fi
+        echo "OPENAI_API_KEY: ${{ secrets.API_KEY }}"
+        echo "NAVER_CLOVA_API_KEY: ${{ secrets.NAVER_CLOVA_API }}"
 
     - name: Build Flutter App
       run: |
@@ -61,8 +51,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.COOLFRIDGE }}
       with:
-        tag_name: v1.0.15
-        release_name: Release v1.0.15
+        tag_name: v1.0.10
+        release_name: Release v1.0.10
         draft: false
         prerelease: false
 
