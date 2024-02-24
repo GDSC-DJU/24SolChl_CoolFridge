@@ -22,8 +22,8 @@ jobs:
       run: |
         export OPENAI_API_KEY=${{ secrets.API_KEY }}
         export NAVER_CLOVA_API_KEY=${{ secrets.NAVER_CLOVA_API }}
-        echo "const String GPT_API = '${{ secrets.API_KEY }}';" >> lib/Pages/gpt.dart
-        echo "const String NAVER_CLOVA_API = '${{ secrets.NAVER_CLOVA_API }}';" >> lib/Pages/receipt_ocr.dart
+        echo "const String GPT_API = '${{ secrets.API_KEY }}';" >> foodapp/lib/Pages/gpt.dart
+        echo "const String NAVER_CLOVA_API = '${{ secrets.NAVER_CLOVA_API }}';" >> foodapp/lib/Pages/receipt_ocr.dart
     - name: Print API Key
       run: |
         echo "OPENAI_API_KEY: ${{ secrets.API_KEY }}"
