@@ -27,8 +27,6 @@ jobs:
     - name: Build Flutter App
       run: |
         cd foodapp
-        echo OPENAI_API_KEY=${{ secrets.API_KEY }} > .env
-        echo NAVER_CLOVA_API_KEY=${{ secrets.NAVER_CLOVA_API }} >> .env
         flutter pub get
         flutter build apk --release --target lib/main.dart
 
