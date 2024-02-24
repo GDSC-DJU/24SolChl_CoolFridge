@@ -49,7 +49,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   hive: ^2.2.3
   dio: ^5.4.0
-
+  flutter_config: ^2.0.2
   flutter_native_splash: ^2.3.10
   hive_flutter: ^1.1.0
 dev_dependencies:
