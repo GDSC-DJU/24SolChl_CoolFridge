@@ -1,54 +1,60 @@
 name: Flutter Build
 
-# 워크플로우를 실행할 이벤트를 지정. 여기서는 main 브랜치에 push 이벤트가 발생할 때 실행.
 on:
   push:
     branches:
       - main
 
-# 워크플로우의 작업을 정의.
 jobs:
   build:
-    # 작업을 실행할 환경을 지정합니다. 여기서는 최신 버전의 Ubuntu를 사용.
     runs-on: ubuntu-latest
     
-    # 작업의 단계를 정의.
     steps:
+    # 기존 Flutter 빌드 작업
     - name: Checkout repository
-      # GitHub 저장소를 체크아웃하는 작업.
       uses: actions/checkout@v3
       
-    # Flutter를 설정하는 작업. subosito/flutter-action 액션을 사용.
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.16.9' # 원하는 버전으로 설정
+        flutter-version: '3.16.9'
         
-    # GitHub 저장소의 Secrets에서 API 키를 가져와서 파일에 저장하는 작업입니다.
     - name: Get API Key
-      run: |  # 빌드 머신에 API 키를 환경 변수로 추가
+      run: |
         export OPENAI_API_KEY=\"${{ secrets.API_KEY }}\"
         export NAVER_CLOVA_API_KEY=\"${{ secrets.NAVER_CLOVA_API }}\"
       
-    # Flutter 앱을 빌드하는 작업. release APK 생성.
     - name: Build Flutter App
       run: |
         cd foodapp
         flutter build apk --release --target lib/main.dart
-    
-    # GitHub Release 새로 생성
+
+    # 새로 추가한 APK 생성 작업
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v1
+      with:
+        name: app
+        path: ./foodapp/build/app/outputs/flutter-apk/app-release.apk
+
+   
+
+    # 릴리즈 생성 및 APK 업로드 작업
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.COOLFRIDGE }}
       with:
-        tag_name: v1.0.3
-        release_name: Release v1.0.2
+        tag_name: v1.0.4
+        release_name: Release v1.0.4
         draft: false
         prerelease: false
 
-    # 생성된 APK 파일을 GitHub Release에 업로드.
     - name: Upload APK to GitHub Release
       uses: actions/upload-release-asset@v1
       env:
@@ -58,4 +64,3 @@ jobs:
         asset_path: ./foodapp/build/app/outputs/flutter-apk/app-release.apk
         asset_name: CoolFridge.apk
         asset_content_type: application/vnd.android.package-archive
-        
