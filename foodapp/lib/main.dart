@@ -15,7 +15,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 //MainScreen 코드
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  await FlutterConfig.loadEnvVariables();
   //gpt api key load
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Hive.initFlutter();
