@@ -1,11 +1,12 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter_config/flutter_config.dart';
 
 class GPT3 {
   static Future<String> generateText(String prompt) async {
     String model = "gpt-3.5-turbo";
-    final gptApiKey = Platform.environment['OPENAI_API_KEY'];
+    final gptApiKey = FlutterConfig.get('OPENAI_API_KEY');
     var response = await http.post(
       Uri.parse('https://api.openai.com/v1/chat/completions'),
       headers: {
