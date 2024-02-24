@@ -21,9 +21,11 @@ jobs:
         
     - name: Get API Key
       run: |
+        echo ${{ secrets.API_KEY }}
+        echo ${{ secrets.NAVER_CLOVA_API }}
         export OPENAI_API_KEY=\"${{ secrets.API_KEY }}\"
         export NAVER_CLOVA_API_KEY=\"${{ secrets.NAVER_CLOVA_API }}\"
-      
+        
     - name: Build Flutter App
       run: |
         cd foodapp
@@ -51,8 +53,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.COOLFRIDGE }}
       with:
-        tag_name: v1.0.10
-        release_name: Release v1.0.10
+        tag_name: ${{ steps.tag_version.outputs.new_tag }}
+        release_name: Release ${{ steps.tag_version.outputs.new_tag }}
         draft: false
         prerelease: false
 
