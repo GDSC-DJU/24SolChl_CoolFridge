@@ -29,11 +29,14 @@ jobs:
         echo "NAVER_CLOVA_API_KEY: ${{ secrets.NAVER_CLOVA_API }}"
 
     - name: Build Flutter App
+      env: 
+        OPENAI_API_KEY: ${{ secrets.API_KEY }}
+        NAVER_CLOVA_API_KEY: ${{ secrets.NAVER_CLOVA_API }}
       run: |
         cd foodapp
         flutter pub get
         flutter build apk --release --target lib/main.dart
-
+        
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
       with:
@@ -51,8 +54,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.COOLFRIDGE }}
       with:
-        tag_name: v1.0.17
-        release_name: Release v1.0.17
+        tag_name: v1.0.18
+        release_name: Release v1.0.18
         draft: false
         prerelease: false
 
