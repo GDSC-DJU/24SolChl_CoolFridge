@@ -8,31 +8,42 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
-    # 기존 Flutter 빌드 작업
     - name: Checkout repository
       uses: actions/checkout@v3
-      
+
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
         flutter-version: '3.16.9'
-        
+
     - name: Get API Key
       run: |
-        echo ${{ secrets.API_KEY }}
-        echo ${{ secrets.NAVER_CLOVA_API }}
         export OPENAI_API_KEY=\"${{ secrets.API_KEY }}\"
         export NAVER_CLOVA_API_KEY=\"${{ secrets.NAVER_CLOVA_API }}\"
-        
+
+    - name: Verify API Key
+      run: |
+        if [ -z "${{ secrets.API_KEY }}" ]; then
+          echo "API_KEY is empty"
+          exit 1
+        else
+          echo "API_KEY is set"
+        fi
+        if [ -z "${{ secrets.NAVER_CLOVA_API }}" ]; then
+          echo "NAVER_CLOVA_API is empty"
+          exit 1
+        else
+          echo "NAVER_CLOVA_API is set"
+        fi
+
     - name: Build Flutter App
       run: |
         cd foodapp
         flutter pub get
         flutter build apk --release --target lib/main.dart
 
-    # 새로 추가한 APK 생성 작업
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
       with:
@@ -44,17 +55,14 @@ jobs:
         name: app
         path: ./foodapp/build/app/outputs/flutter-apk/app-release.apk
 
-   
-
-    # 릴리즈 생성 및 APK 업로드 작업
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.COOLFRIDGE }}
       with:
-        tag_name: 1.0.14
-        release_name: 1.0.14
+        tag_name: v1.0.10
+        release_name: Release v1.0.10
         draft: false
         prerelease: false
 
