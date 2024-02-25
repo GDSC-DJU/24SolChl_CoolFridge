@@ -12,12 +12,16 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-
+    
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
         flutter-version: '3.16.9'
-      
+        
+    - name: Bump version and push tag
+      id: tag_version
+      uses: mathieudutour/github-tag-action@v5.5
+
     - name: Get API Key
       run: |
         export OPENAI_API_KEY=${{ secrets.API_KEY }}
@@ -55,8 +59,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.COOLFRIDGE }}
       with:
-        tag_name: v1.0.19
-        release_name: Release v1.0.19
+        tag_name: ${{ steps.tag_version.outputs.new_tag }}
+        release_name: Release ${{ steps.tag_version.outputs.new_tag }}
         draft: false
         prerelease: false
 
