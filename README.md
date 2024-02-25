@@ -83,7 +83,7 @@ We chose the 12th SDG because it aligns with our goal of reducing the increasing
 
 
 ## 🛠 Project Architecture
-<img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/121305133/f0315fe1-4ec8-46ff-a29b-f7ef9b3f4761" width="882" height="440" />
+<img src="https://github.com/GDSC-DJU/24SolChl_CoolFridge/assets/129382687/2190f23c-9b6b-4e44-b6c5-7536419db91e" width="882" height="440" />
 
 ## 🎯 Future Plans
 **Food waste is generated due to various reasons including excessive purchase, improper storage, misunderstanding of expiration dates, and leftovers**. Our application currently **focuses on solving the 'misunderstanding of expiration dates' issue through the 'inventory management function'.** It also assists with effective inventory management through other features.
