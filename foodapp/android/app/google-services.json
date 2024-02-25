@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "243450137665",
+    "firebase_url": "https://api-key-7955d-default-rtdb.firebaseio.com",
+    "project_id": "api-key-7955d",
+    "storage_bucket": "api-key-7955d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:243450137665:android:880202edb782fb38bbcac0",
+        "android_client_info": {
+          "package_name": "com.api.refridge"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAROf28qmYys0QOyIms9Aodp9BZF1vdv9A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:243450137665:android:3fd86fc8fa1a0816bbcac0",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAROf28qmYys0QOyIms9Aodp9BZF1vdv9A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:243450137665:android:28529d65f5f6b2b3bbcac0",
+        "android_client_info": {
+          "package_name": "com.example.foodapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAROf28qmYys0QOyIms9Aodp9BZF1vdv9A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

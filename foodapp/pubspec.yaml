@@ -37,7 +37,7 @@ dependencies:
   http: ^1.1.0
   html: ^0.15.0
   flutter_screenutil: ^5.8.4
-  firebase_core: ^2.15.1
+  firebase_core: ^2.24.2
   firebase_auth: ^4.9.0
   fluttertoast: ^8.2.2
   image_picker: ^1.0.4
@@ -52,6 +52,7 @@ dependencies:
   flutter_config: ^2.0.2
   flutter_native_splash: ^2.3.10
   hive_flutter: ^1.1.0
+  firebase_database: ^10.4.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

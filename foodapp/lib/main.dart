@@ -11,9 +11,20 @@ import 'package:foodapp/Pages/notification.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:foodapp/Pages/receipt_ocr.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/widgets.dart';
+import 'firebase_options.dart';
+
 
 //MainScreen 코드
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+ 
+
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   //gpt api key load
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -45,7 +56,27 @@ void main() async {
   runApp(const MainScreen());
   FlutterNativeSplash.remove();
 }
+Future<dynamic> fetchChatGptData() async {
+  final ref = FirebaseDatabase.instance.ref();
+  final snapshot = await ref.child('chatgpt').get();
+  if (snapshot.exists) {
+    return snapshot.value;
+  } else {
+    print('No data available.');
+    return null;
+  }
+}
 
+Future<dynamic> fetchNaverOcrData() async {
+  final ref = FirebaseDatabase.instance.ref();
+  final snapshot = await ref.child('naver-clova').get();
+  if (snapshot.exists) {
+    return snapshot.value;
+  } else {
+    print('No data available.');
+    return null;
+  }
+}
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
 
