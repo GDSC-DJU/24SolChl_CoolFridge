@@ -18,10 +18,21 @@ The CoolFridge app provides features for managing food inventory and recommendin
 
 ## 🔧 How to run our app service
 **Since the API key has been kept private, you need to run the APK file to utilize all features of the app**
-  
-You need to download the file [apk-release.apk](https://drive.google.com/file/d/15ny4mjwseVSKyJd8nzc71CldNkpnngqM/view?usp=sharing).
 
-To execute the file, you can "Run" or "Start Debugging" from the **main.dart** file.
+1. APK Download
+You need to download the file [apk-release.apk](https://drive.google.com/file/d/1WT_5IaqNez_gn_XlPj1CmwT8jTPXEmeR/view?usp=drivesdk).
+
+2. File execute
+
+   a. git clone https://github.com/GDSC-DJU/24SolChl_CoolFridge
+   
+   b. cd 24SolChl_CoolFridge\foodapp
+   
+   c. code .
+   
+   d. Run the **flutter pub get** command
+   
+   e. To execute the file, you can "Run" or "Start Debugging" from the **main.dart** file.
 
 ## 📱 APP
 ### Intro Screen, Main Screen
