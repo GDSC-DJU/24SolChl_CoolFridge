@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -7,7 +6,6 @@ import 'package:foodapp/Pages/FoodAddScreen.dart';
 import 'package:foodapp/main.dart';
 
 // Naver OCR API key
-
 
 //받아온 값을 토대로 품목과 수량이 있는 정보i만 배열에 저장후, 배열을 반환
 class ImageProcessor {
@@ -77,7 +75,6 @@ class ImageProcessor {
       }
     }
 
-    print(resultMap);
     return resultMap;
   }
 }
@@ -118,7 +115,7 @@ class Receipt extends StatelessWidget {
   Future<Map<String, String>> sendRequest(BuildContext context) async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-final NaverApiKey = await fetchNaverOcrData();
+    final NaverApiKey = await fetchNaverOcrData();
     if (pickedFile == null) {
       Navigator.pop(context);
       // null을 반환하여 FutureBuilder에서 null을 처리하도록 합니다.

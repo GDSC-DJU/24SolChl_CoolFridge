@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:foodapp/main.dart';
-//import 'package:provider/provider.dart';
 import 'package:hive/hive.dart';
 
 // 포스트 페이지 위젯
@@ -120,22 +119,6 @@ class _SecondViewState extends State<Postpage> {
         }
       }
     }
-  }
-
-  void fetchData() {
-    var pnameBox = Hive.box<String>('pnameBox');
-    var productDateBox = Hive.box<String>('productDateBox');
-    var productCountBox = Hive.box<int>('productCountBox');
-    var tNameBox = Hive.box<String>('tNameBox');
-    var tDateBox = Hive.box<String>('tDateBox');
-    var tCountBox = Hive.box<int>('tCountBox');
-
-    print('pnameBox: ${pnameBox.values}');
-    print('productDateBox: ${productDateBox.values}');
-    print('productCountBox: ${productCountBox.values}');
-    print('tNameBox: ${tNameBox.values}');
-    print('tDateBox: ${tDateBox.values}');
-    print('tCountBox: ${tCountBox.values}');
   }
 
 // 텍스트 컨트롤러 추가
@@ -383,10 +366,6 @@ class _SecondViewState extends State<Postpage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            // IconButton(
-                            //   onPressed: () => setState(() => addlist()),
-                            //   icon: const Icon(Icons.add_circle_outlined),
-                            // ),
                             Center(
                               child: OutlinedButton(
                                 onPressed: () {
@@ -429,12 +408,12 @@ class _SecondViewState extends State<Postpage> {
                                     break;
                                   }
                                 }
-                                print(Checktext);
+
                                 if (Checktext == false) {
                                   ERRDialog(context);
                                 } else {
                                   saveData();
-                                  fetchData();
+
                                   Navigator.replace(
                                     context,
                                     oldRoute: ModalRoute.of(context)!,
@@ -615,9 +594,6 @@ class _SecondViewState extends State<Postpage> {
                                 height:
                                     (MediaQuery.of(context).size.height) * 0.03,
                                 child: ElevatedButton(
-                                  // style: ElevatedButton.styleFrom(
-                                  //   maximumSize: const Size(100, 50)
-                                  // ),
                                   onPressed: () {},
                                   child: const Text(
                                     "추후 개발 예정",

@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'package:flutter_config/flutter_config.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:foodapp/Pages/AlarmScreen.dart';
@@ -16,14 +14,12 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/widgets.dart';
 import 'firebase_options.dart';
 
-
 //MainScreen 코드
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
- 
 
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   //gpt api key load
@@ -56,6 +52,7 @@ void main() async {
   runApp(const MainScreen());
   FlutterNativeSplash.remove();
 }
+
 Future<dynamic> fetchChatGptData() async {
   final ref = FirebaseDatabase.instance.ref();
   final snapshot = await ref.child('chatgpt').get();
@@ -77,6 +74,7 @@ Future<dynamic> fetchNaverOcrData() async {
     return null;
   }
 }
+
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
 
@@ -163,20 +161,6 @@ class _MyWidgetState extends State<_MainScreen> {
       ),
       (Timer t) => notificationcount(),
     );
-  }
-
-  void fetchData() {
-    var pnameBox = Hive.box<String>('pnameBox');
-    var productDateBox = Hive.box<String>('productDateBox');
-    var productCountBox = Hive.box<int>('productCountBox');
-
-    print('pnameBox: ${pnameBox.values}');
-    print('productDateBox: ${productDateBox.values}');
-    print('productCountBox: ${productCountBox.values}');
-    print('tNameBox: ${tNameBox.values}');
-    print('tDateBox: ${tDateBox.values}');
-    print('tCountBox: ${tCountBox.values}');
-    print('SortingBox: ${SortingBox.values}');
   }
 
   void Management(BuildContext context, int index) async {
@@ -693,13 +677,10 @@ class _MyWidgetState extends State<_MainScreen> {
     removedIndices.add(index);
   }
 
-  final int _counter = 0;
   var SortingText = "등록순";
 
 //FoodList
   Widget FoodList(BuildContext context, index, Function(int) removeCallback) {
-    int counter = 0;
-
     double pnamefontsize = 20;
     if (pnameBox.getAt(index)!.length >= 5) {
       pnamefontsize = 16;
@@ -819,11 +800,6 @@ class _MyWidgetState extends State<_MainScreen> {
                     ],
                   ),
                 ),
-
-                //제품명이랑 수량 사이간격
-                // SizedBox(
-                //   width: MediaQuery.of(context).size.width * 0.005,
-                // ),
                 Row(
                   children: [
                     IconButton(
@@ -868,8 +844,6 @@ class _MyWidgetState extends State<_MainScreen> {
                             }
                           }
                         }
-
-                        fetchData();
                       },
                       icon: Icon(
                         Icons.remove,
@@ -890,7 +864,6 @@ class _MyWidgetState extends State<_MainScreen> {
                         ),
                       ],
                     ),
-
                     IconButton(
                       onPressed: () {
                         // 유통기한 순으로 정렬되어있다면, 등록순으로 바꾸고 incrementCounter하고 다시 유통기한순으로 바꾼다.
@@ -911,10 +884,6 @@ class _MyWidgetState extends State<_MainScreen> {
                       icon: Icon(Icons.add,
                           size: MediaQuery.of(context).size.width * 0.04),
                     ),
-                    //수량과 제거버튼 사이간격
-                    // SizedBox(
-                    //   width: MediaQuery.of(context).size.width * 0.005,
-                    // ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -949,8 +918,6 @@ class _MyWidgetState extends State<_MainScreen> {
       ],
     );
   }
-
-  //late String name; ${name}
 
   @override
   Widget build(BuildContext context) {
@@ -1131,9 +1098,6 @@ class _MyWidgetState extends State<_MainScreen> {
                                     builder: (context) => const Receipt(),
                                   ),
                                 );
-
-                                // 카메라로부터 이미지 촬영 및 처리
-                                //_takePictureWithCamera();
                               },
                               child: const Text(
                                 '영수증 촬영',
@@ -1232,7 +1196,6 @@ class _MyWidgetState extends State<_MainScreen> {
             height: MediaQuery.of(context).size.height * 0.04,
           ),
 
-          //뭐 먹을까? 코드
           GestureDetector(
             onTap: () {
               Recipe(context);
@@ -1278,17 +1241,6 @@ class _MyWidgetState extends State<_MainScreen> {
     );
   }
 
-  // // sendRequest 함수를 호출할 메서드를 추가
-  // void sendRequest() async {
-  //   try {
-  //     final result = await const Receipt().sendRequest();
-  //     // 영수증 처리 결과(result)를 사용하여 필요한 작업 수행
-  //     print(result);
-  //   } catch (e) {
-  //     print('Error: $e');
-  //     // 오류 발생 시 적절히 처리
-  //   }
-  // }
   void showToast() {
     Fluttertoast.showToast(
       msg: '아직 개발중입니다...',
@@ -1297,23 +1249,6 @@ class _MyWidgetState extends State<_MainScreen> {
       textColor: Colors.black,
       toastLength: Toast.LENGTH_LONG,
     );
-  }
-
-  // _takePictureWithCamera   함수 정의
-  void _takePictureWithCamera() async {
-    // 카메라로부터 이미지 촬영
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.camera);
-
-    if (pickedFile != null) {
-      // 이미지 촬영 성공 시 처리할 내용 작성
-      // 촬영한 이미지를 사용하여 필요한 작업 수행
-      // 예를 들어, 이미지를 어딘가에 저장하거나 다른 화면으로 전환하는 등의 동작을 수행할 수 있음
-      // pickedFile.path를 사용하여 이미지의 경로를 얻을 수 있음
-    } else {
-      // 이미지 촬영 실패 시 처리할 내용 작성
-      // 사용자에게 적절한 메시지 표시 등의 작업 수행
-    }
   }
 
   void SelectSorting(BuildContext context) {
@@ -1421,14 +1356,6 @@ class _MyWidgetState extends State<_MainScreen> {
     );
   }
 }
-
-// void showToast() {
-//   Fluttertoast.showToast(
-//     msg: '0개 이상만 가능합니다',
-//     gravity: ToastGravity.BOTTOM,
-//     toastLength: Toast.LENGTH_SHORT,
-//   );
-// }
 
 Future<bool> RemoveDialog(BuildContext context, int index) async {
   bool checkremove = false;

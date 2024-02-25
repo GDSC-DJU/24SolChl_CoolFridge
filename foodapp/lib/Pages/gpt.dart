@@ -1,12 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'dart:io';
 import 'package:foodapp/main.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/widgets.dart';
-
-
 
 class GPT3 {
   static Future<String> generateText(String prompt) async {
