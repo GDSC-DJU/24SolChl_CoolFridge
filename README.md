@@ -8,7 +8,7 @@
 > Members of GDSC Daejeon University
 - **김성연 (Seongyeon Kim)**
 - **박재현 (Jaehyeon Park)**
-- **채민기 (Mingi Chae)**
+- **채민기 (Minki Chae)**
 - **김영민 (Youngmin Kim)**
 
 ## 🖌 Introduction
