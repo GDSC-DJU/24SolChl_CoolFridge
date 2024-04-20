@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodapp/main.dart';
 import 'package:hive/hive.dart';
+import 'package:foodapp/Pages/gpt.dart';
 
 // 포스트 페이지 위젯
 class Postpage extends StatefulWidget {
@@ -128,6 +129,7 @@ class _SecondViewState extends State<Postpage> {
 
 // 리스트 추가
   void addlist() {
+    date = DateTime.now();
     TextEditingController textController = TextEditingController();
     _controller.add(textController);
     _Livingkey.add(Numberkey);
@@ -227,6 +229,68 @@ class _SecondViewState extends State<Postpage> {
                   height: MediaQuery.of(context).size.height * 0.1,
                   width: MediaQuery.of(context).size.width * 0.03),
               const Text("미입력된 상품이 있습니다.",
+                  style: TextStyle(fontSize: 17, color: Colors.blue)),
+              SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(
+                  Icons.close,
+                  color: Colors.blue,
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void RecommendERRDialog(context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  width: MediaQuery.of(context).size.width * 0.03),
+              const Text("상품명이 입력되지 않아 \n추천할 수 없습니다.",
+                  style: TextStyle(fontSize: 17, color: Colors.blue)),
+              SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(
+                  Icons.close,
+                  color: Colors.blue,
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void DelayERRDialog(context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  width: MediaQuery.of(context).size.width * 0.03),
+              const Text("서버에 지연이 발생했습니다.\n다시 시도해주세요",
                   style: TextStyle(fontSize: 17, color: Colors.blue)),
               SizedBox(width: MediaQuery.of(context).size.width * 0.03),
               IconButton(
@@ -454,6 +518,48 @@ class _SecondViewState extends State<Postpage> {
     );
   }
 
+  void RecommendDay(String productname, int widgetkey,
+      TextEditingController controller) async {
+    String prompt =
+        "$productname의 평균적인 유통기한을 단순히 숫자로 알려줘. 5일이면 5라고 답하고, 10일이면 10이라고 단순히 숫자만 답해줘";
+    String answer = "";
+    // 로딩창 생성
+    if (answer == "") {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(
+              child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF35AED4)),
+          ));
+        },
+      );
+    }
+    answer = await GPT3.generateText(prompt);
+    print(answer);
+    setState(() {
+      // 로딩창 제거
+      if (answer != "") {
+        Navigator.of(context).pop();
+      }
+    });
+
+    if (answer.replaceAll(RegExp('\\D'), "") != "") {
+      int Day = int.parse(answer.replaceAll(RegExp('\\D'), ""));
+      date = DateTime.now();
+      final AIrecommend = Day;
+      if (AIrecommend != null) {
+        setState(() {
+          date = date.add(Duration(days: AIrecommend));
+        });
+      }
+      setDate(productname);
+      rebuilding(widgetkey, controller);
+    } else {
+      DelayERRDialog(context);
+    }
+  }
+
 // 제품 정보를 담은 위젯 생성
   Widget postContainer({
     String productname = "",
@@ -590,20 +696,29 @@ class _SecondViewState extends State<Postpage> {
                               const Text("추천기간"),
                               SizedBox(
                                 width:
-                                    (MediaQuery.of(context).size.width) * 0.3,
+                                    (MediaQuery.of(context).size.width) * 0.30,
                                 height:
                                     (MediaQuery.of(context).size.height) * 0.03,
                                 child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    print("productname = $productname");
+                                    if (productname == "") {
+                                      RecommendERRDialog(context);
+                                    } else {
+                                      RecommendDay(
+                                          productname, widgetkey, controller);
+                                    }
+                                  },
                                   child: const Text(
-                                    "추후 개발 예정",
+                                    "AI 추천",
                                     style: TextStyle(
                                       fontSize: 10,
                                     ),
                                   ),
                                 ),
                               ),
-                              const Icon(Icons.check_circle_outline, size: 15),
+                              const Icon(Icons.chrome_reader_mode_outlined,
+                                  size: 15),
                             ],
                           )
                         ],
