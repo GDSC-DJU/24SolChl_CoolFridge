@@ -53,6 +53,7 @@ dependencies:
   flutter_native_splash: ^2.3.10
   hive_flutter: ^1.1.0
   firebase_database: ^10.4.0
+  home_widget: ^0.2.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
