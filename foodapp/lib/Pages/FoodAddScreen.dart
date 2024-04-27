@@ -188,14 +188,17 @@ class _SecondViewState extends State<Postpage> {
 
 // 제품명 초기화
   void initname(String name, int widgetkey) {
+    int init_count = productCount[pname[widgetkey]]!;
+    print("$init_count개");
+    String init_date = productDate[pname[widgetkey]]!;
+
     pname[widgetkey] = name;
-    if (!productCount.containsKey(name)) {
-      productCount[name] = 1;
-    }
-    if (!productDate.containsKey(name)) {
-      productDate[name] =
-          "${date.year.toString()}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
-    }
+
+    setState(() {
+      productCount[name] = init_count;
+      productDate[name] = init_date;
+    });
+
     print("$widgetkey번의 제품명이 $name으로 바뀌었습니다.");
   }
 
