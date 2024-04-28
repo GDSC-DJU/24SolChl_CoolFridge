@@ -26,6 +26,7 @@ class _SecondViewState extends State<Postpage> {
   Map<int, String> pname = {}; // key: 위젯키, value: 제품명
   Map<String, String> productDate = {}; // key: 제품명, value: 수량
   Map<String, int> productCount = {}; // key: 제품명, value: 수량
+  Map<String, int> productCount2 = {}; // key: 제품명, value: 수량
   bool Checktext = true; // 등록하기 버튼누를 때 비어있는지 확인하는 변수
 
 // 다른 파일에서 _widgetList의 길이에 접근할 수 있는 메서드
@@ -50,6 +51,7 @@ class _SecondViewState extends State<Postpage> {
             productname: key,
             widgetkey: Numberkey,
             pcount: int.parse(value), // 추가: 초기값 설정
+            pcount2: int.parse(value), // 추가: 초기값 설정
 
             controller: textController,
           ));
@@ -76,8 +78,14 @@ class _SecondViewState extends State<Postpage> {
     if (!Hive.isBoxOpen('productCountBox')) {
       await Hive.openBox<int>('productCountBox');
     }
+    if (!Hive.isBoxOpen('productCountBox2')) {
+      await Hive.openBox<int>('productCountBox2');
+    }
     if (!Hive.isBoxOpen('CountBox')) {
       await Hive.openBox<int>('CountBox');
+    }
+    if (!Hive.isBoxOpen('CountBox2')) {
+      await Hive.openBox<int>('CountBox2');
     }
     if (!Hive.isBoxOpen('tNameBox')) {
       await Hive.openBox<String>('tNameBox');
@@ -88,6 +96,9 @@ class _SecondViewState extends State<Postpage> {
     if (!Hive.isBoxOpen('tCountBox')) {
       await Hive.openBox<int>('tCountBox');
     }
+    if (!Hive.isBoxOpen('tCountBox2')) {
+      await Hive.openBox<int>('tCountBox2');
+    }
   }
 
 // pname, productDate, productCount 저장
@@ -95,9 +106,11 @@ class _SecondViewState extends State<Postpage> {
     var pnameBox = Hive.box<String>('pnameBox');
     var productDateBox = Hive.box<String>('productDateBox');
     var productCountBox = Hive.box<int>('productCountBox');
+    var productCountBox2 = Hive.box<int>('productCountBox2');
     var tNameBox = Hive.box<String>('tNameBox');
     var tDateBox = Hive.box<String>('tDateBox');
     var tCountBox = Hive.box<int>('tCountBox');
+    var tCountBox2 = Hive.box<int>('tCountBox2');
 
     int lastIndex = pnameBox.length;
     int startIndex = lastIndex + 1;
@@ -109,13 +122,18 @@ class _SecondViewState extends State<Postpage> {
       if (productName != null) {
         String? productDateValue = productDate[productName];
         int? productCountValue = productCount[productName];
-        if (productDateValue != null && productCountValue != null) {
+        int? productCountValue2 = productCount2[productName];
+        if (productDateValue != null &&
+            productCountValue != null &&
+            productCountValue2 != null) {
           pnameBox.add(productName);
           productDateBox.add(productDateValue);
           productCountBox.add(productCountValue);
+          productCountBox2.add(productCountValue2);
           tNameBox.add(productName);
           tDateBox.add(productDateValue);
           tCountBox.add(productCountValue);
+          tCountBox2.add(productCountValue2);
         }
       }
     }
@@ -176,6 +194,7 @@ class _SecondViewState extends State<Postpage> {
         productname: pname[widgetkey] ?? "",
         widgetkey: widgetkey,
         pcount: productCount[pname[widgetkey]]!,
+        pcount2: productCount2[pname[widgetkey]]!,
         pdate: productDate[pname[widgetkey]]!,
         controller: controller,
       ));
@@ -189,6 +208,9 @@ class _SecondViewState extends State<Postpage> {
     pname[widgetkey] = name;
     if (!productCount.containsKey(name)) {
       productCount[name] = 1;
+    }
+    if (!productCount2.containsKey(name)) {
+      productCount2[name] = 1;
     }
     if (!productDate.containsKey(name)) {
       productDate[name] =
@@ -210,7 +232,9 @@ class _SecondViewState extends State<Postpage> {
   void icount(String name) {
     setState(() {
       productCount[name] = (productCount[name] ?? 0) + 1;
+      productCount2[name] = (productCount2[name] ?? 0) + 1;
       print("$name 는 ${productCount[name]} 개");
+      print("$name 는 ${productCount2[name]} 개");
     });
   }
 
@@ -248,10 +272,14 @@ class _SecondViewState extends State<Postpage> {
 // 제품 수량 감소
   void dcount(String name) {
     setState(() {
-      if (productCount[name] != null && productCount[name]! > 1) {
+      if (productCount[name] != null &&
+          productCount[name] != null &&
+          productCount2[name]! > 1) {
         productCount[name] = (productCount[name] ?? 0) - 1;
+        productCount2[name] = (productCount2[name] ?? 0) - 1;
       }
       print("$name 는 ${productCount[name]} 개");
+      print("$name 는 ${productCount2[name]} 개");
     });
   }
 
@@ -459,11 +487,15 @@ class _SecondViewState extends State<Postpage> {
     String productname = "",
     int widgetkey = 0,
     int pcount = 1,
+    int pcount2 = 1,
     String pdate = "2024-01-01",
     required TextEditingController controller,
   }) {
     if (!productCount.containsKey(productname)) {
       productCount[productname] = 1;
+    }
+    if (!productCount2.containsKey(productname)) {
+      productCount2[productname] = 1;
     }
     pname[widgetkey] = productname;
 
@@ -481,6 +513,12 @@ class _SecondViewState extends State<Postpage> {
     }
     if (pcount != 0) {
       productCount[pname[widgetkey]!] = pcount;
+    }
+    if (pcount2 == 0) {
+      productCount2[pname[widgetkey]!] = 1;
+    }
+    if (pcount2 != 0) {
+      productCount2[pname[widgetkey]!] = pcount2;
     }
 
     return GestureDetector(
@@ -631,8 +669,8 @@ class _SecondViewState extends State<Postpage> {
                             ),
                           ),
                           Center(
-                            child:
-                                Text("${productCount[pname[widgetkey]] ?? 1}"),
+                            child: Text(
+                                "${productCount[pname[widgetkey]] ?? 1} : ${productCount2[pname[widgetkey]] ?? 1}"),
                           ),
                           IconButton(
                             padding: EdgeInsets.zero,

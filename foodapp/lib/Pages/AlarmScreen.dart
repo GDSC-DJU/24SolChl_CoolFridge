@@ -39,6 +39,10 @@ class _ToggleButtonState extends State<ToggleButton> {
   late Box<String> pnameBox;
   late Box<String> productDateBox;
   late Box<int> productCountBox;
+  late Box<int> productCountBox2;
+
+  List<int> list = [];
+  bool initailized = false;
 
   @override
   void initState() {
@@ -46,6 +50,19 @@ class _ToggleButtonState extends State<ToggleButton> {
     pnameBox = Hive.box<String>('pnameBox');
     productDateBox = Hive.box<String>('productDateBox');
     productCountBox = Hive.box<int>('productCountBox');
+    productCountBox2 = Hive.box<int>('productCountBox2');
+
+    list.clear();
+    // 상자의 수량을 가져와서 list에 업데이트
+    if (!initailized) {
+      for (int i = 0; i < productCountBox.length; i++) {
+        list.add(productCountBox2.getAt(i)!); // int 값으로 변환하여 추가
+      }
+      initailized = true;
+    }
+    for (int i = 0; i < productCountBox.length; i++) {
+      list.add(productCountBox.getAt(i)!);
+    }
   }
 
   Widget AlarmList(BuildContext context, index) {
@@ -135,10 +152,10 @@ class _ToggleButtonState extends State<ToggleButton> {
                   ),
                 ),
               if (_selectedtype[2]) // ToggleButton이 음식 추가/제거로 선택 되어 있을 때 실행
-                const Expanded(
+                Expanded(
                   child: Text(
-                    " 추후 구현 예정입니다.",
-                    style: TextStyle(
+                    " ${pnameBox.getAt(index)}의 수량이 ${productCountBox2.getAt(index)}로 변경 되었어요!",
+                    style: const TextStyle(
                       fontSize: 13,
                     ),
                   ),
@@ -264,10 +281,27 @@ class _ToggleButtonState extends State<ToggleButton> {
                   children: [
                     Expanded(
                       child: ListView.builder(
-                        itemCount: 1, // _widgetList의 길이 사용
+                        itemCount: list.length, // _widgetList의 길이 사용
                         itemBuilder: (BuildContext context, int index) {
-                          return AlarmList(
-                              context, index); // _widgetList의 각 항목 반환
+                          return Container(
+                            width: MediaQuery.of(context).size.width * 0.77,
+                            height: MediaQuery.of(context).size.height * 0.06,
+                            margin: const EdgeInsets.only(bottom: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: Colors.blue.shade400,
+                                width: 1,
+                              ),
+                            ),
+                            child: Text(
+                              "${list[index]}",
+                              style: const TextStyle(
+                                fontSize: 13,
+                              ),
+                            ),
+                          );
+                          // return AlarmList(context, index);
                         },
                       ),
                     ),
