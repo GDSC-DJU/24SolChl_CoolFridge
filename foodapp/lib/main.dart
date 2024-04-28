@@ -129,7 +129,7 @@ class _MyWidgetState extends State<_MainScreen> {
       foodAchiveMent(); // Execute this only after the build is complete
     });
     // 유통기한이 지난 음식의 수량 확인
-    HomeWidget.registerBackgroundCallback(setAndSaveWidgetData);
+
     SortingBox.put(0, 1);
 
     for (int i = 0; i < pnameBox.length; i++) {
