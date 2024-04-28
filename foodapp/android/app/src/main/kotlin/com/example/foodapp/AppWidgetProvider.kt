@@ -3,10 +3,7 @@ package com.example.foodapp
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.SharedPreferences
-import android.net.Uri
 import android.widget.RemoteViews
-import es.antonborri.home_widget.HomeWidgetBackgroundIntent
-import es.antonborri.home_widget.HomeWidgetLaunchIntent
 import es.antonborri.home_widget.HomeWidgetProvider
 
 class AppWidgetProvider : HomeWidgetProvider() {
@@ -14,15 +11,18 @@ class AppWidgetProvider : HomeWidgetProvider() {
         appWidgetIds.forEach { appWidgetId ->
             val views = RemoteViews(context.packageName, R.layout.widget_layout)
             
-            // 카운터 값 읽기
-            val counter = widgetData.getInt("_counter", 0)
-            views.setTextViewText(R.id.counter_text, "Counter: $counter")
-            
-            // 이미지 리소스 ID 직접 사용
-            val imageResId = when (counter) {
-                in 0..10 -> R.drawable.cool_fridge
-                in 11..20 -> R.drawable.sad
-                else -> R.drawable.cool_fridge
+            // SharedPreferences에서 "achievementText" 값을 String으로 불러오기
+            val achievementText = widgetData.getString("achievementText", "데이터가 없습니다.")
+            // 텍스트 뷰에 성취도 텍스트 설정
+            views.setTextViewText(R.id.achievement_text_view, achievementText)
+
+            // SharedPreferences에서 "imagePath" 값을 String으로 불러오고 이미지 리소스 ID 매핑
+            val imagePath = widgetData.getString("imagePath", "assets/images/cool_fridge.png") ?: "assets/images/cool_fridge.png"
+            val imageResId = when (imagePath) {
+                "assets/images/sad.png" -> R.drawable.sad
+                "assets/images/soso.png" -> R.drawable.soso
+                "assets/images/cool_fridge.png" -> R.drawable.cool_fridge
+                else -> R.drawable.cool_fridge // 기본 이미지 설정
             }
             views.setImageViewResource(R.id.image_view, imageResId)
 
