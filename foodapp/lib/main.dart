@@ -1,4 +1,5 @@
 import 'dart:async';
+// import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:foodapp/Pages/AlarmScreen.dart';
@@ -100,6 +101,7 @@ class _MyWidgetState extends State<_MainScreen> {
   late Box<String> productDateBox;
   late Box<int> productCountBox;
   late Map<int, bool> switchStates = {};
+  Map<int, int> map1 = {};
 
   //정렬순으로 하는 hive 변수 선언
   late Box<String> tNameBox;
@@ -700,7 +702,9 @@ class _MyWidgetState extends State<_MainScreen> {
         } else {
           productCountBox.putAt(index, currentValue + 1);
           tCountBox.putAt(index, currentValue + 1);
+          map1[index] = currentValue + 1;
         }
+        print("$map1");
       });
     }
 

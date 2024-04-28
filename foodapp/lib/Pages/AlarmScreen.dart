@@ -63,6 +63,22 @@ class _ToggleButtonState extends State<ToggleButton> {
     for (int i = 0; i < productCountBox.length; i++) {
       list.add(productCountBox.getAt(i)!);
     }
+    openBoxes();
+  }
+
+  void openBoxes() async {
+    if (!Hive.isBoxOpen('pnameBox')) {
+      await Hive.openBox<String>('pnameBox');
+    }
+    if (!Hive.isBoxOpen('productDateBox')) {
+      await Hive.openBox<String>('productDateBox');
+    }
+    if (!Hive.isBoxOpen('productCountBox')) {
+      await Hive.openBox<int>('productCountBox');
+    }
+    if (!Hive.isBoxOpen('productCountBox2')) {
+      await Hive.openBox<int>('productCountBox2');
+    }
   }
 
   Widget AlarmList(BuildContext context, index) {
@@ -154,7 +170,7 @@ class _ToggleButtonState extends State<ToggleButton> {
               if (_selectedtype[2]) // ToggleButton이 음식 추가/제거로 선택 되어 있을 때 실행
                 Expanded(
                   child: Text(
-                    " ${pnameBox.getAt(index)}의 수량이 ${productCountBox2.getAt(index)}로 변경 되었어요!",
+                    " ${pnameBox.getAt(index)}의 수량이 ${productCountBox2.getAt(index)}에서 ${productCountBox.getAt(index)}로 변경 되었어요!",
                     style: const TextStyle(
                       fontSize: 13,
                     ),
@@ -281,27 +297,27 @@ class _ToggleButtonState extends State<ToggleButton> {
                   children: [
                     Expanded(
                       child: ListView.builder(
-                        itemCount: list.length, // _widgetList의 길이 사용
+                        itemCount: pnameBox.length, // _widgetList의 길이 사용
                         itemBuilder: (BuildContext context, int index) {
-                          return Container(
-                            width: MediaQuery.of(context).size.width * 0.77,
-                            height: MediaQuery.of(context).size.height * 0.06,
-                            margin: const EdgeInsets.only(bottom: 10),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: Colors.blue.shade400,
-                                width: 1,
-                              ),
-                            ),
-                            child: Text(
-                              "${list[index]}",
-                              style: const TextStyle(
-                                fontSize: 13,
-                              ),
-                            ),
-                          );
-                          // return AlarmList(context, index);
+                          // return Container(
+                          //   width: MediaQuery.of(context).size.width * 0.77,
+                          //   height: MediaQuery.of(context).size.height * 0.06,
+                          //   margin: const EdgeInsets.only(bottom: 10),
+                          //   decoration: BoxDecoration(
+                          //     borderRadius: BorderRadius.circular(10),
+                          //     border: Border.all(
+                          //       color: Colors.blue.shade400,
+                          //       width: 1,
+                          //     ),
+                          //   ),
+                          //   child: Text(
+                          //     "${list[index]}",
+                          //     style: const TextStyle(
+                          //       fontSize: 13,
+                          //     ),
+                          //   ),
+                          // );
+                          return AlarmList(context, index);
                         },
                       ),
                     ),
