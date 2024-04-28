@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:home_widget/home_widget.dart';
+import 'main.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,19 +58,42 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void loadData() async {
     await HomeWidget.getWidgetData<int>('_counter', defaultValue: 0)
-        .then((int? value) => _counter = value ?? 0);
-    setState(() {});
+        .then((int? value) {
+      _counter = value ?? 0;
+      setState(() {});
+    });
   }
 
   Future<void> updateAppWidget() async {
+    String imagePath = getImageForCounter();
     await HomeWidget.saveWidgetData<int>('_counter', _counter);
+    await HomeWidget.saveWidgetData<String>('_imagePath', imagePath);
     await HomeWidget.updateWidget(
         name: 'AppWidgetProvider', iOSName: 'AppWidgetProvider');
   }
 
   void _incrementCounter() {
-    setState(() => _counter++);
-    updateAppWidget();
+    setState(() {
+      _counter++;
+      updateAppWidget(); // 위젯 업데이트 호출
+    });
+  }
+
+  void _decrementCounter() {
+    setState(() {
+      _counter--;
+      updateAppWidget(); // 위젯 업데이트 호출
+    });
+  }
+
+  String getImageForCounter() {
+    if (_counter >= 0 && _counter <= 10) {
+      return 'assets/images/cool_fridge.png'; // Image for range 0-10
+    } else if (_counter > 10 && _counter <= 20) {
+      return 'assets/images/sad.png'; // Image for range 11-20
+    } else {
+      return 'assets/images/cool_fridge.png';
+    }
   }
 
   @override
@@ -88,6 +112,14 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            ElevatedButton(
+              onPressed: _decrementCounter,
+              child: Image.asset(
+                getImageForCounter(),
+                width: MediaQuery.of(context).size.width * 0.1,
+                height: MediaQuery.of(context).size.height * 0.1, // 이미지의 높이
+              ),
             ),
           ],
         ),

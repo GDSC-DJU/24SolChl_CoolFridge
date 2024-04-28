@@ -1,4 +1,5 @@
 package com.example.foodapp
+
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.SharedPreferences
@@ -10,22 +11,22 @@ import es.antonborri.home_widget.HomeWidgetProvider
 
 class AppWidgetProvider : HomeWidgetProvider() {
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray, widgetData: SharedPreferences) {
-        appWidgetIds.forEach { widgetId ->
-            val views = RemoteViews(context.packageName, R.layout.widget_layout).apply {
-                val pendingIntent = HomeWidgetLaunchIntent.getActivity(context,
-                    MainActivity::class.java)
-                setOnClickPendingIntent(R.id.widget_root, pendingIntent)
-                val counter = widgetData.getInt("_counter", 0)
-                var counterText = "Your counter value is: $counter"
-                if (counter == 0) {
-                    counterText = "You have not pressed the counter button"
-                }
-                setTextViewText(R.id.tv_counter, counterText)
-                val backgroundIntent = HomeWidgetBackgroundIntent.getBroadcast(context,
-                    Uri.parse("myAppWidget://updatecounter"))
-                setOnClickPendingIntent(R.id.bt_update, backgroundIntent)
+        appWidgetIds.forEach { appWidgetId ->
+            val views = RemoteViews(context.packageName, R.layout.widget_layout)
+            
+            // 카운터 값 읽기
+            val counter = widgetData.getInt("_counter", 0)
+            views.setTextViewText(R.id.counter_text, "Counter: $counter")
+            
+            // 이미지 리소스 ID 직접 사용
+            val imageResId = when (counter) {
+                in 0..10 -> R.drawable.cool_fridge
+                in 11..20 -> R.drawable.sad
+                else -> R.drawable.cool_fridge
             }
-            appWidgetManager.updateAppWidget(widgetId, views)
+            views.setImageViewResource(R.id.image_view, imageResId)
+
+            appWidgetManager.updateAppWidget(appWidgetId, views)
         }
     }
 }
