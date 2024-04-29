@@ -12,7 +12,7 @@ class AppWidgetProvider : HomeWidgetProvider() {
             val views = RemoteViews(context.packageName, R.layout.widget_layout)
             
             // SharedPreferences에서 "achievementText" 값을 String으로 불러오기
-            val achievementText = widgetData.getString("achievementText", "데이터가 없습니다.")
+            val achievementText = widgetData.getString("achievementText", "")
             // 텍스트 뷰에 성취도 텍스트 설정
             views.setTextViewText(R.id.achievement_text_view, achievementText)
 
