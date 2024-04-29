@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:foodapp/main.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-Map<int, List<int>> fdsa = {};
-
 class AlarmScreen extends StatelessWidget {
   const AlarmScreen({super.key});
 

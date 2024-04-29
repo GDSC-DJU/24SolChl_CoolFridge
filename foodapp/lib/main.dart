@@ -1,5 +1,4 @@
 import 'dart:async';
-// import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -1114,26 +1113,6 @@ class _MyWidgetState extends State<_MainScreen> {
                             size: 17,
                           ),
                         ),
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(),
-                            onPressed: () async {
-                              if (await RemoveDialog(context, index)) {
-                                setState(() {
-                                  pnameBox.deleteAt(index);
-                                  productDateBox.deleteAt(index);
-                                  productCountBox.deleteAt(index);
-                                  productCountBox2.deleteAt(index);
-                                  tNameBox.deleteAt(index);
-                                  tDateBox.deleteAt(index);
-                                  tCountBox.deleteAt(index);
-                                });
-                              }
-                            },
-                            icon: const Icon(
-                              Icons.highlight_remove_outlined,
-                              color: Colors.red,
-                              size: 17,
-                            )),
                       ],
                     ),
                   ],
