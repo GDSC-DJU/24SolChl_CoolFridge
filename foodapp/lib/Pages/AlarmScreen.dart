@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:foodapp/main.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+Map<int, List<int>> fdsa = {};
+
 class AlarmScreen extends StatelessWidget {
   const AlarmScreen({super.key});
 
@@ -39,6 +41,10 @@ class _ToggleButtonState extends State<ToggleButton> {
   late Box<String> pnameBox;
   late Box<String> productDateBox;
   late Box<int> productCountBox;
+  late Box<int> productCountBox2;
+
+  // List<int> list = [];
+  bool initailized = false;
 
   @override
   void initState() {
@@ -46,6 +52,24 @@ class _ToggleButtonState extends State<ToggleButton> {
     pnameBox = Hive.box<String>('pnameBox');
     productDateBox = Hive.box<String>('productDateBox');
     productCountBox = Hive.box<int>('productCountBox');
+    productCountBox2 = Hive.box<int>('productCountBox2');
+
+    openBoxes();
+  }
+
+  void openBoxes() async {
+    if (!Hive.isBoxOpen('pnameBox')) {
+      await Hive.openBox<String>('pnameBox');
+    }
+    if (!Hive.isBoxOpen('productDateBox')) {
+      await Hive.openBox<String>('productDateBox');
+    }
+    if (!Hive.isBoxOpen('productCountBox')) {
+      await Hive.openBox<int>('productCountBox');
+    }
+    if (!Hive.isBoxOpen('productCountBox2')) {
+      await Hive.openBox<int>('productCountBox2');
+    }
   }
 
   Widget AlarmList(BuildContext context, index) {
@@ -135,10 +159,10 @@ class _ToggleButtonState extends State<ToggleButton> {
                   ),
                 ),
               if (_selectedtype[2]) // ToggleButton이 음식 추가/제거로 선택 되어 있을 때 실행
-                const Expanded(
+                Expanded(
                   child: Text(
-                    " 추후 구현 예정입니다.",
-                    style: TextStyle(
+                    " ${pnameBox.getAt(index)}의 수량이 ${productCountBox2.getAt(index)}에서 ${productCountBox.getAt(index)}로 변경 되었어요!",
+                    style: const TextStyle(
                       fontSize: 13,
                     ),
                   ),
@@ -264,10 +288,14 @@ class _ToggleButtonState extends State<ToggleButton> {
                   children: [
                     Expanded(
                       child: ListView.builder(
-                        itemCount: 1, // _widgetList의 길이 사용
+                        itemCount: pnameBox.length, // _widgetList의 길이 사용
                         itemBuilder: (BuildContext context, int index) {
-                          return AlarmList(
-                              context, index); // _widgetList의 각 항목 반환
+                          if (productCountBox.getAt(index) !=
+                              productCountBox2.getAt(index)) {
+                            return AlarmList(context, index);
+                            return null;
+                          }
+                          return null;
                         },
                       ),
                     ),
