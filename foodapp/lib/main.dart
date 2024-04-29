@@ -13,7 +13,7 @@ import 'package:foodapp/Pages/receipt_ocr.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:workmanager/workmanager.dart';
+
 import 'firebase_options.dart';
 import 'package:home_widget/home_widget.dart';
 
@@ -59,9 +59,7 @@ void main() async {
     await Hive.openBox<String>('WasteFood');
   }
   await Future.delayed(const Duration(seconds: 1));
-  Workmanager().initialize(callbackDispatcher, // 아래에서 정의할 함수
-      isInDebugMode: true // 개발 중에는 디버그 모드를 활성화
-      );
+
   runApp(const MainScreen());
 
   FlutterNativeSplash.remove();
@@ -168,19 +166,6 @@ class _MyWidgetState extends State<_MainScreen> {
       }
     }
 
-    void scheduleDailyTask() {
-      Workmanager().registerPeriodicTask(
-          "uniqueName", // 고유 이름
-          "dailyTask", // 작업 이름
-          frequency: const Duration(hours: 24), // 24시간마다 반복
-          initialDelay: Duration(
-              hours: DateTime.now().hour,
-              minutes: DateTime.now().minute), // 다음 자정까지의 시간 계산
-          constraints: Constraints(
-            networkType: NetworkType.connected, // 네트워크 연결 필요
-          ));
-    }
-
     // seconds: 30은 하루 주기로 바꾸면 됨.
     Timer.periodic(
       const Duration(
@@ -249,14 +234,6 @@ class _MyWidgetState extends State<_MainScreen> {
 
     // 데이터 저장 및 위젯 업데이트 요청
     saveDataForHomeWidget(imagePath, achievementText);
-  }
-
-  void callbackDispatcher() {
-    Workmanager().executeTask((task, inputData) {
-      // 여기에 배경에서 실행할 작업을 구현
-      checkAndUpdateWasteFood();
-      return Future.value(true);
-    });
   }
 
   void checkAndUpdateWasteFood() {
@@ -477,7 +454,7 @@ class _MyWidgetState extends State<_MainScreen> {
                               actions: <Widget>[
                                 TextButton(
                                   style: ButtonStyle(
-                                    backgroundColor: WidgetStateProperty.all(
+                                    backgroundColor: MaterialStateProperty.all(
                                       const Color(0xFF42A5F5),
                                     ), // 테두리 색 및 너비 지정
                                   ),
@@ -745,7 +722,7 @@ class _MyWidgetState extends State<_MainScreen> {
                       ),
                       ElevatedButton(
                         style: ButtonStyle(
-                          backgroundColor: WidgetStateProperty.all(
+                          backgroundColor: MaterialStateProperty.all(
                             const Color(0xFF42A5F5),
                           ),
                         ),
@@ -880,7 +857,7 @@ class _MyWidgetState extends State<_MainScreen> {
                 ),
                 ElevatedButton(
                   style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(
+                    backgroundColor: MaterialStateProperty.all(
                       const Color(0xFF42A5F5),
                     ),
                   ),
@@ -1242,22 +1219,16 @@ class _MyWidgetState extends State<_MainScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               foodAchiveMent(),
-              Row(
+              const Row(
                 children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      checkAndUpdateWasteFood();
-                      foodAchiveMent();
-                    },
-                    child: const Text(
-                      '나의 냉장고',
-                      style: TextStyle(
-                        color: Color(
-                          (0xFF42A5F5),
-                        ),
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
+                  Text(
+                    '나의 냉장고',
+                    style: TextStyle(
+                      color: Color(
+                        (0xFF42A5F5),
                       ),
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
@@ -1662,7 +1633,7 @@ void max99(BuildContext context) {
             ),
             ElevatedButton(
               style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all(
+                backgroundColor: MaterialStateProperty.all(
                   const Color(0xFF42A5F5),
                 ),
               ),
