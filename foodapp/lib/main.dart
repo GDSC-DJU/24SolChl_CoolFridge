@@ -1,11 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:foodapp/Pages/AlarmScreen.dart';
 import 'package:foodapp/Pages/FoodAddScreen.dart';
+import 'package:foodapp/Pages/camera_api.dart';
 import 'package:foodapp/Pages/gpt.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:foodapp/Pages/notification.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -13,6 +16,7 @@ import 'package:foodapp/Pages/receipt_ocr.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'firebase_options.dart';
 import 'package:home_widget/home_widget.dart';
@@ -90,6 +94,28 @@ Future<dynamic> fetchNaverOcrData() async {
   }
 }
 
+Future<dynamic> fetchCameraOcrData() async {
+  final ref = FirebaseDatabase.instance.ref();
+  final snapshot = await ref.child('camera').get();
+  if (snapshot.exists) {
+    return snapshot.value;
+  } else {
+    print('No data available.');
+    return null;
+  }
+}
+
+Future<dynamic> fetchGpt2Data() async {
+  final ref = FirebaseDatabase.instance.ref();
+  final snapshot = await ref.child('chatgpt_jjap').get();
+  if (snapshot.exists) {
+    return snapshot.value;
+  } else {
+    print('No data available.');
+    return null;
+  }
+}
+
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
 
@@ -125,7 +151,10 @@ class _MyWidgetState extends State<_MainScreen> {
   late Box<String> tDateBox;
   late Box<int> tCountBox;
   late Box<int> SortingBox;
-
+  File? _imageFile;
+  Map<String, dynamic>? _apiResponse;
+  List<String> _foodNames = [];
+  List<String> _translatedFoodNames = []; // 'final' 키워드 제거
   @override
   void initState() {
     super.initState();
@@ -179,6 +208,124 @@ class _MyWidgetState extends State<_MainScreen> {
       ),
       (Timer t) => notificationcount(),
     );
+  }
+
+  Future<void> _pickAndUploadImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      _imageFile = File(pickedFile.path);
+      await _uploadImageForSegmentation();
+    }
+  }
+
+  Future<void> _uploadImageForSegmentation() async {
+    final cameraApiKey = await fetchCameraOcrData();
+    var headers = {
+      'Authorization': 'Bearer $cameraApiKey',
+      'Content-Type': 'multipart/form-data'
+    };
+    var request = http.MultipartRequest('POST',
+        Uri.parse('https://api.logmeal.com/v2/image/segmentation/complete'));
+    request.files
+        .add(await http.MultipartFile.fromPath('image', _imageFile!.path));
+    request.headers.addAll(headers);
+
+    var response = await request.send();
+    if (response.statusCode == 200) {
+      var responseData = await response.stream.bytesToString();
+      var json = jsonDecode(responseData);
+      var imageId = json['imageId'];
+      _getIngredients(imageId.toString());
+    } else {
+      print('Error with segmentation request: ${response.statusCode}');
+      var errorData = await response.stream.bytesToString();
+      print('Error details: $errorData');
+    }
+  }
+
+  Future<void> _getIngredients(String imageId) async {
+    final cameraApiKey = await fetchCameraOcrData();
+    var headers = {
+      'Authorization': 'Bearer $cameraApiKey',
+      'Content-Type': 'application/json'
+    };
+    var response = await http.post(
+      Uri.parse('https://api.logmeal.com/v2/recipe/ingredients'),
+      headers: headers,
+      body: jsonEncode({'imageId': imageId}),
+    );
+
+    if (response.statusCode == 200) {
+      var responseBody = jsonDecode(response.body);
+      List<String> foodNames = List<String>.from(responseBody['foodName']);
+      print('Food Names: $foodNames');
+
+      setState(() {
+        _foodNames = foodNames; // 음식 이름을 상태에 저장
+      });
+
+      // 음식 이름을 번역하는 함수를 호출합니다.
+      await translateFoodNames();
+    } else {
+      print('Error with ingredients request: ${response.statusCode}');
+      print('Error details: ${response.body}');
+    }
+  }
+
+  Future<void> translateFoodNames() async {
+    final gpt2ApiKey = await fetchGpt2Data();
+    var headers = {
+      'Authorization': 'Bearer $gpt2ApiKey',
+      'Content-Type': 'application/json'
+    };
+
+    String foodList =
+        "다음의 음식명을 한글로 번역해줘: ${_foodNames.join(', ')} 최종적으로 겹치는 음식명은 제외하고, 하나의 음식에 음식명이 여러개 있을 경우 더 큰 범위의 음식으로 번역해주고, 음식을 표현하거나 개수가 들어가지 않게 음식명만 적어줘";
+    var response = await http.post(
+      Uri.parse('https://api.openai.com/v1/chat/completions'),
+      headers: headers,
+      body: jsonEncode({
+        'model': 'gpt-3.5-turbo',
+        'messages': [
+          {'role': 'user', 'content': foodList}
+        ],
+        'max_tokens': 60 * _foodNames.length
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      var responseBody = utf8.decode(response.bodyBytes);
+      print("API Response: $responseBody");
+      var decodedJson = jsonDecode(responseBody);
+
+      String contents = decodedJson['choices'][0]['message']
+          ['content']; // API 응답 구조에 맞춰 정확히 경로 수정
+
+      // 콤마로 구분된 텍스트를 리스트로 변환
+      List<String> foodItems =
+          contents.split(',').map((item) => item.trim()).toList();
+      print(foodItems);
+      TextProcessor processor = TextProcessor(foodItems);
+      Map<String, String> processedTexts = await processor.processText();
+
+      setState(() {
+        _translatedFoodNames = processedTexts.keys.toList(); // 상태 업데이트
+        print('Processed Texts: $_translatedFoodNames');
+      });
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Postpage(
+            satisfiedTexts: processedTexts, // Map<String, String> 전달
+          ),
+        ),
+      );
+    } else {
+      print('Failed to translate foods: ${response.statusCode}');
+      print('Error details: ${response.body}');
+    }
   }
 
   void initHiveBoxes() {
@@ -1186,11 +1333,6 @@ class _MyWidgetState extends State<_MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // 전체 폰트 바꾸기
-    const String Testfont = "Basicfont";
-
-    // SelectSorting에서 선택한결과를 메인화면에 반영함
-    // 등록순
     if (SortingBox.getAt(SortingBox.length - 1) == 1) {
       SortingText = "등록순";
       for (int i = 0; i < pnameBox.length; i++) {
@@ -1333,7 +1475,8 @@ class _MyWidgetState extends State<_MainScreen> {
                               ),
                               onPressed: () {
                                 // 첫 번째 버튼 동작
-                                showToast();
+                                Navigator.pop(context);
+                                _pickAndUploadImage();
                               },
                               child: const Text(
                                 '음식 촬영',
