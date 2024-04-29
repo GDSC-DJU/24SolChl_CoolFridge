@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:foodapp/main.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+Map<int, List<int>> fdsa = {};
+
 class AlarmScreen extends StatelessWidget {
   const AlarmScreen({super.key});
 
@@ -41,7 +43,7 @@ class _ToggleButtonState extends State<ToggleButton> {
   late Box<int> productCountBox;
   late Box<int> productCountBox2;
 
-  List<int> list = [];
+  // List<int> list = [];
   bool initailized = false;
 
   @override
@@ -52,17 +54,17 @@ class _ToggleButtonState extends State<ToggleButton> {
     productCountBox = Hive.box<int>('productCountBox');
     productCountBox2 = Hive.box<int>('productCountBox2');
 
-    list.clear();
-    // 상자의 수량을 가져와서 list에 업데이트
-    if (!initailized) {
-      for (int i = 0; i < productCountBox.length; i++) {
-        list.add(productCountBox2.getAt(i)!); // int 값으로 변환하여 추가
-      }
-      initailized = true;
-    }
-    for (int i = 0; i < productCountBox.length; i++) {
-      list.add(productCountBox.getAt(i)!);
-    }
+    // list.clear();
+    // // 상자의 수량을 가져와서 list에 업데이트
+    // if (!initailized) {
+    //   for (int i = 0; i < productCountBox.length; i++) {
+    //     list.add(productCountBox2.getAt(i)!); // int 값으로 변환하여 추가
+    //   }
+    //   initailized = true;
+    // }
+    // for (int i = 0; i < productCountBox.length; i++) {
+    //   list.add(productCountBox.getAt(i)!);
+    // }
     openBoxes();
   }
 
@@ -317,7 +319,12 @@ class _ToggleButtonState extends State<ToggleButton> {
                           //     ),
                           //   ),
                           // );
-                          return AlarmList(context, index);
+                          if (productCountBox.getAt(index) !=
+                              productCountBox2.getAt(index)) {
+                            return AlarmList(context, index);
+                            return null;
+                          }
+                          return null;
                         },
                       ),
                     ),

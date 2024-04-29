@@ -36,6 +36,9 @@ void main() async {
   if (!Hive.isBoxOpen('productCountBox')) {
     await Hive.openBox<int>('productCountBox');
   }
+  if (!Hive.isBoxOpen('productCountBox2')) {
+    await Hive.openBox<int>('productCountBox2');
+  }
   if (!Hive.isBoxOpen('tNameBox')) {
     await Hive.openBox<String>('tNameBox');
   }
@@ -100,6 +103,7 @@ class _MyWidgetState extends State<_MainScreen> {
   late Box<String> pnameBox;
   late Box<String> productDateBox;
   late Box<int> productCountBox;
+  late Box<int> productCountBox2;
   late Map<int, bool> switchStates = {};
   Map<int, int> map1 = {};
 
@@ -115,6 +119,7 @@ class _MyWidgetState extends State<_MainScreen> {
     pnameBox = Hive.box<String>('pnameBox');
     productDateBox = Hive.box<String>('productDateBox');
     productCountBox = Hive.box<int>('productCountBox');
+    productCountBox2 = Hive.box<int>('productCountBox2');
 
     tNameBox = Hive.box<String>('tNameBox');
     tDateBox = Hive.box<String>('tDateBox');
@@ -674,6 +679,7 @@ class _MyWidgetState extends State<_MainScreen> {
       pnameBox.deleteAt(index);
       productDateBox.deleteAt(index);
       productCountBox.deleteAt(index);
+      productCountBox2.deleteAt(index);
     });
     // 삭제된 상품 다음 상품들의 인덱스를 조정하기 위해 removedIndices 리스트 업데이트
     removedIndices.add(index);
@@ -822,6 +828,7 @@ class _MyWidgetState extends State<_MainScreen> {
                                 pnameBox.deleteAt(index);
                                 productDateBox.deleteAt(index);
                                 productCountBox.deleteAt(index);
+                                productCountBox2.deleteAt(index);
                                 tNameBox.deleteAt(index);
                                 tDateBox.deleteAt(index);
                                 tCountBox.deleteAt(index);
@@ -841,6 +848,7 @@ class _MyWidgetState extends State<_MainScreen> {
                                 pnameBox.deleteAt(index);
                                 productDateBox.deleteAt(index);
                                 productCountBox.deleteAt(index);
+                                productCountBox2.deleteAt(index);
                                 tNameBox.deleteAt(index);
                                 tDateBox.deleteAt(index);
                                 tCountBox.deleteAt(index);
@@ -900,6 +908,7 @@ class _MyWidgetState extends State<_MainScreen> {
                                   pnameBox.deleteAt(index);
                                   productDateBox.deleteAt(index);
                                   productCountBox.deleteAt(index);
+                                  productCountBox2.deleteAt(index);
                                   tNameBox.deleteAt(index);
                                   tDateBox.deleteAt(index);
                                   tCountBox.deleteAt(index);
