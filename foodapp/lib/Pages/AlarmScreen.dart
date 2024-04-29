@@ -54,17 +54,6 @@ class _ToggleButtonState extends State<ToggleButton> {
     productCountBox = Hive.box<int>('productCountBox');
     productCountBox2 = Hive.box<int>('productCountBox2');
 
-    // list.clear();
-    // // 상자의 수량을 가져와서 list에 업데이트
-    // if (!initailized) {
-    //   for (int i = 0; i < productCountBox.length; i++) {
-    //     list.add(productCountBox2.getAt(i)!); // int 값으로 변환하여 추가
-    //   }
-    //   initailized = true;
-    // }
-    // for (int i = 0; i < productCountBox.length; i++) {
-    //   list.add(productCountBox.getAt(i)!);
-    // }
     openBoxes();
   }
 
@@ -301,24 +290,6 @@ class _ToggleButtonState extends State<ToggleButton> {
                       child: ListView.builder(
                         itemCount: pnameBox.length, // _widgetList의 길이 사용
                         itemBuilder: (BuildContext context, int index) {
-                          // return Container(
-                          //   width: MediaQuery.of(context).size.width * 0.77,
-                          //   height: MediaQuery.of(context).size.height * 0.06,
-                          //   margin: const EdgeInsets.only(bottom: 10),
-                          //   decoration: BoxDecoration(
-                          //     borderRadius: BorderRadius.circular(10),
-                          //     border: Border.all(
-                          //       color: Colors.blue.shade400,
-                          //       width: 1,
-                          //     ),
-                          //   ),
-                          //   child: Text(
-                          //     "${list[index]}",
-                          //     style: const TextStyle(
-                          //       fontSize: 13,
-                          //     ),
-                          //   ),
-                          // );
                           if (productCountBox.getAt(index) !=
                               productCountBox2.getAt(index)) {
                             return AlarmList(context, index);
