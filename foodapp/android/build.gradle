@@ -1,3 +1,15 @@
+buildscript {
+    ext.kotlin_version = '1.5.20' // 여기에 최신 버전의 Kotlin을 지정하세요
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.3.0' // 여기에 최신 버전의 Android Gradle 플러그인을 지정하세요
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
 allprojects {
     repositories {
         google()
@@ -8,8 +20,6 @@ allprojects {
 rootProject.buildDir = '../build'
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
     project.evaluationDependsOn(':app')
 }
 

@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:foodapp/Pages/AlarmScreen.dart';
 import 'package:foodapp/Pages/FoodAddScreen.dart';
 import 'package:foodapp/Pages/gpt.dart';
+
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:foodapp/Pages/notification.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -11,8 +13,9 @@ import 'package:foodapp/Pages/receipt_ocr.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/widgets.dart';
+
 import 'firebase_options.dart';
+import 'package:home_widget/home_widget.dart';
 
 //MainScreen 코드
 void main() async {
@@ -22,6 +25,7 @@ void main() async {
   );
 
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+
   //gpt api key load
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Hive.initFlutter();
@@ -47,9 +51,17 @@ void main() async {
   if (!Hive.isBoxOpen('SortingBox')) {
     await Hive.openBox<int>('SortingBox');
   }
+  if (!Hive.isBoxOpen('EatFoodBox')) {
+    //먹은 음식에 대한 내부 저장소 hive 박스 열기
+    await Hive.openBox<String>('EatFoodBox');
+  }
+  if (!Hive.isBoxOpen('WasteFood')) {
+    await Hive.openBox<String>('WasteFood');
+  }
   await Future.delayed(const Duration(seconds: 1));
 
   runApp(const MainScreen());
+
   FlutterNativeSplash.remove();
 }
 
@@ -100,7 +112,8 @@ class _MyWidgetState extends State<_MainScreen> {
   late Box<String> productDateBox;
   late Box<int> productCountBox;
   late Map<int, bool> switchStates = {};
-
+  late Box<String> EatFood;
+  late Box<String> wasteFood;
   //정렬순으로 하는 hive 변수 선언
   late Box<String> tNameBox;
   late Box<String> tDateBox;
@@ -110,14 +123,13 @@ class _MyWidgetState extends State<_MainScreen> {
   @override
   void initState() {
     super.initState();
-    pnameBox = Hive.box<String>('pnameBox');
-    productDateBox = Hive.box<String>('productDateBox');
-    productCountBox = Hive.box<int>('productCountBox');
-
-    tNameBox = Hive.box<String>('tNameBox');
-    tDateBox = Hive.box<String>('tDateBox');
-    tCountBox = Hive.box<int>('tCountBox');
-    SortingBox = Hive.box<int>('SortingBox');
+    initHiveBoxes();
+    updateHomeWidget();
+    checkAndUpdateWasteFood();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      foodAchiveMent(); // Execute this only after the build is complete
+    });
+    // 유통기한이 지난 음식의 수량 확인
 
     SortingBox.put(0, 1);
 
@@ -161,6 +173,94 @@ class _MyWidgetState extends State<_MainScreen> {
       ),
       (Timer t) => notificationcount(),
     );
+  }
+
+  void initHiveBoxes() {
+    pnameBox = Hive.box<String>('pnameBox');
+    productDateBox = Hive.box<String>('productDateBox');
+    productCountBox = Hive.box<int>('productCountBox');
+    EatFood = Hive.box<String>('EatFoodBox');
+    wasteFood = Hive.box<String>('WasteFood');
+    tNameBox = Hive.box<String>('tNameBox');
+    tDateBox = Hive.box<String>('tDateBox');
+    tCountBox = Hive.box<int>('tCountBox');
+    SortingBox = Hive.box<int>('SortingBox');
+  }
+
+  void saveDataForHomeWidget(String imagePath, String achievementText) async {
+    await HomeWidget.saveWidgetData<String>('imagePath', imagePath);
+    await HomeWidget.saveWidgetData<String>('achievementText', achievementText);
+    updateHomeWidget(); // 위젯 업데이트 요청
+  }
+
+  void updateHomeWidget() {
+    HomeWidget.updateWidget(
+      name: 'AppWidgetProvider',
+      androidName: 'AppWidgetProvider',
+    );
+  }
+
+  Future<void> setAndSaveWidgetData() async {
+    int newLength = wasteFood.length;
+    int itemcount = EatFood.length;
+    int integerValue = 0;
+    String imagePath;
+    String achievementText;
+
+    // 아이템 총합이 0인지 확인하고 0이면 기본값 설정
+    if (itemcount + newLength == 0) {
+      // 데이터가 없을 때의 이미지
+      imagePath = 'assets/images/cool_fridge.png';
+      achievementText = '';
+    } else {
+      double result = itemcount / (itemcount + newLength) * 100;
+      integerValue = result.toInt();
+
+      if (integerValue <= 33) {
+        imagePath = 'assets/images/sad.png';
+        achievementText = '$integerValue% 아쉬워요!';
+      } else if (integerValue > 33 && integerValue <= 66) {
+        imagePath = 'assets/images/soso.png';
+        achievementText = '$integerValue% 괜찮아요!';
+      } else {
+        imagePath = 'assets/images/cool_fridge.png';
+        achievementText = '$integerValue% 훌륭해요!';
+      }
+    }
+
+    // 현재 위젯 데이터 로드
+    await HomeWidget.getWidgetData<String>('imagePath');
+    await HomeWidget.getWidgetData<String>('achievementText');
+
+    // 데이터 저장 및 위젯 업데이트 요청
+    saveDataForHomeWidget(imagePath, achievementText);
+  }
+
+  void checkAndUpdateWasteFood() {
+    DateTime today = DateTime.now().toUtc(); // UTC 시간 기준으로 가져와 시간대의 영향을 제거
+    DateTime todayDateOnly =
+        DateTime(today.year, today.month, today.day); // 날짜만 포함하는 새 DateTime 객체
+
+    for (int i = 0; i < productDateBox.length; i++) {
+      String expiryDateString = productDateBox.getAt(i) ?? '';
+      DateTime expiryDate = DateTime.parse(expiryDateString);
+      DateTime expiryDateOnly = DateTime(
+          expiryDate.year, expiryDate.month, expiryDate.day); // 유통기한 날짜만 포함
+
+      if (expiryDateOnly.isBefore(todayDateOnly)) {
+        String productName = pnameBox.getAt(i) ?? '';
+        if (!wasteFood.values.contains(productName)) {
+          wasteFood.add(productName);
+        }
+      }
+    }
+
+    int newLength = wasteFood.length; // 추가 후 길이 저장
+    if (newLength > 0) {
+      // 새로운 유통기한 지난 항목이 있으면 출력
+      print('유통기한 지난 음식: $newLength');
+    }
+    setAndSaveWidgetData();
   }
 
   void Management(BuildContext context, int index) async {
@@ -691,6 +791,7 @@ class _MyWidgetState extends State<_MainScreen> {
         }
       }
     }
+    void printEatFoodCount() async {}
 
     void incrementCounter(int index) {
       setState(() {
@@ -702,6 +803,91 @@ class _MyWidgetState extends State<_MainScreen> {
           tCountBox.putAt(index, currentValue + 1);
         }
       });
+    }
+
+    Future<bool> RemoveDialog(BuildContext context, int index) async {
+      bool checkremove = false;
+
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            contentPadding: EdgeInsets.symmetric(
+                vertical: MediaQuery.of(context).size.height * 0.06,
+                horizontal: MediaQuery.of(context).size.width * 0.12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                20,
+              ),
+            ),
+            title: const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '정말로 삭제하시겠습니까?',
+                  style: TextStyle(
+                    fontSize: 17,
+                    color: Color.fromARGB(255, 231, 90, 79),
+                  ),
+                ),
+              ],
+            ),
+            content: //이름, 유통기한, 수량이 뜨게 한다
+                Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    side: const BorderSide(
+                      color: Color(0xFF42A5F5),
+                    ), // 테두리 색 및 너비 지정
+                  ),
+                  onPressed: () {
+                    checkremove = true;
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    '유통기한이 지났어요',
+                    style: TextStyle(
+                      color: Color(0xFF42A5F5),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      const Color(0xFF42A5F5),
+                    ),
+                  ),
+                  onPressed: () async {
+                    var pname =
+                        pnameBox.getAt(index); // 삭제하기 전에 데이터를 변수에 저장합니다.
+                    await EatFood.add(pname!); // 데이터를 EatFood 박스에 저장합니다.
+                    setAndSaveWidgetData(); // 위젯 업데이트 요청
+                    int itemCount = EatFood.length; // 박스에 저장된 아이템의 수를 가져옵니다.
+
+                    print('먹은거: $itemCount');
+                    checkremove = true;
+
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    '다 먹었어요',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          );
+        },
+      );
+      return checkremove;
     }
 
     void decrementCounter(int index) {
@@ -888,25 +1074,34 @@ class _MyWidgetState extends State<_MainScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         IconButton(
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(),
-                            onPressed: () async {
-                              if (await RemoveDialog(context, index)) {
-                                setState(() {
-                                  pnameBox.deleteAt(index);
-                                  productDateBox.deleteAt(index);
-                                  productCountBox.deleteAt(index);
-                                  tNameBox.deleteAt(index);
-                                  tDateBox.deleteAt(index);
-                                  tCountBox.deleteAt(index);
-                                });
-                              }
-                            },
-                            icon: const Icon(
-                              Icons.highlight_remove_outlined,
-                              color: Colors.red,
-                              size: 17,
-                            )),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                          onPressed: () async {
+                            // 대화상자를 통해 사용자에게 삭제를 확인받습니다.
+                            if (await RemoveDialog(context, index)) {
+                              // 데이터를 먼저 다른 박스에 저장합니다.
+
+                              // 상태 업데이트를 동기적으로 처리합니다.
+                              setState(() {
+                                // 기존 박스에서 해당 데이터를 삭제합니다.
+                                pnameBox.deleteAt(index);
+                                productDateBox.deleteAt(index);
+                                productCountBox.deleteAt(index);
+                                tNameBox.deleteAt(index);
+                                tDateBox.deleteAt(index);
+                                tCountBox.deleteAt(index);
+                              });
+
+                              // 저장된 데이터의 개수를 콘솔에 출력합니다.
+                              printEatFoodCount();
+                            }
+                          },
+                          icon: const Icon(
+                            Icons.highlight_remove_outlined,
+                            color: Colors.red,
+                            size: 17,
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -917,6 +1112,65 @@ class _MyWidgetState extends State<_MainScreen> {
         ),
       ],
     );
+  }
+
+  Widget foodAchiveMent() {
+    int newLength = wasteFood.length;
+    int itemcount = EatFood.length;
+
+    // 데이터가 있는 경우만 계산을 수행합니다.
+    if (itemcount != 0 || newLength != 0) {
+      double result = itemcount / (itemcount + newLength) * 100;
+      int integerValue = result.toInt();
+
+      if (integerValue <= 33) {
+        return Column(
+          children: [
+            Image.asset(
+              'assets/images/sad.png',
+              width: MediaQuery.of(context).size.width * 0.15,
+              height: MediaQuery.of(context).size.height * 0.05,
+            ),
+            Text(
+              '$integerValue%',
+            ),
+          ],
+        );
+      } else if (integerValue > 33 && integerValue <= 66) {
+        return Column(
+          children: [
+            Image.asset(
+              'assets/images/soso.png',
+              width: MediaQuery.of(context).size.width * 0.15,
+              height: MediaQuery.of(context).size.height * 0.05,
+            ),
+            Text(
+              '$integerValue%',
+            ),
+          ],
+        );
+      } else {
+        return Column(
+          children: [
+            Image.asset(
+              'assets/images/cool_fridge.png',
+              width: MediaQuery.of(context).size.width * 0.15,
+              height: MediaQuery.of(context).size.height * 0.05,
+            ),
+            Text(
+              '$integerValue%',
+            ),
+          ],
+        );
+      }
+    } else {
+      // 데이터가 없는 경우에 반환할 위젯
+      return Image.asset(
+        'assets/images/cool_fridge.png',
+        width: MediaQuery.of(context).size.width * 0.15,
+        height: MediaQuery.of(context).size.height * 0.05,
+      );
+    }
   }
 
   @override
@@ -962,13 +1216,9 @@ class _MyWidgetState extends State<_MainScreen> {
             height: MediaQuery.of(context).size.height * 0.05,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Image.asset(
-                'assets/images/cool_fridge.png',
-                width: MediaQuery.of(context).size.width * 0.15,
-                height: MediaQuery.of(context).size.height * 0.05,
-              ),
+              foodAchiveMent(),
               const Row(
                 children: [
                   Text(
@@ -1355,88 +1605,6 @@ class _MyWidgetState extends State<_MainScreen> {
       },
     );
   }
-}
-
-Future<bool> RemoveDialog(BuildContext context, int index) async {
-  bool checkremove = false;
-
-  await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        backgroundColor: Colors.white,
-        contentPadding: EdgeInsets.symmetric(
-            vertical: MediaQuery.of(context).size.height * 0.06,
-            horizontal: MediaQuery.of(context).size.width * 0.12),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(
-            20,
-          ),
-        ),
-        title: const Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              '정말로 삭제하시겠습니까?',
-              style: TextStyle(
-                fontSize: 17,
-                color: Color.fromARGB(255, 231, 90, 79),
-              ),
-            ),
-          ],
-        ),
-        content: //이름, 유통기한, 수량이 뜨게 한다
-            Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    side: const BorderSide(
-                      color: Color(0xFF42A5F5),
-                    ), // 테두리 색 및 너비 지정
-                  ),
-                  onPressed: () {
-                    checkremove = false;
-                    Navigator.pop(context);
-                  },
-                  child: const Text(
-                    '취소',
-                    style: TextStyle(
-                      color: Color(0xFF42A5F5),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                      const Color(0xFF42A5F5),
-                    ),
-                  ),
-                  onPressed: () {
-                    checkremove = true;
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text(
-                    '확인',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
-      );
-    },
-  );
-  return checkremove;
 }
 
 void max99(BuildContext context) {

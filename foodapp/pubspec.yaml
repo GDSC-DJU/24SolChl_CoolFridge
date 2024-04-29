@@ -53,6 +53,8 @@ dependencies:
   flutter_native_splash: ^2.3.10
   hive_flutter: ^1.1.0
   firebase_database: ^10.4.0
+  home_widget: ^0.2.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -89,7 +91,9 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+  - assets/images/
   - assets/images/cool_fridge.png
+  
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
