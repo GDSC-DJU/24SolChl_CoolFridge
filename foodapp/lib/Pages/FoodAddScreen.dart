@@ -209,15 +209,15 @@ class _SecondViewState extends State<Postpage> {
 
 // 제품명 초기화
   void initname(String name, int widgetkey) {
-    int init_count = productCount[pname[widgetkey]]!;
-    print("$init_count개");
-    String init_date = productDate[pname[widgetkey]]!;
+    int initCount = productCount[pname[widgetkey]]!;
+    print("$initCount개");
+    String initDate = productDate[pname[widgetkey]]!;
 
     pname[widgetkey] = name;
 
     setState(() {
-      productCount[name] = init_count;
-      productDate[name] = init_date;
+      productCount[name] = initCount;
+      productDate[name] = initDate;
     });
 
     if (!productCount.containsKey(name)) {
@@ -588,11 +588,9 @@ class _SecondViewState extends State<Postpage> {
       int Day = int.parse(answer.replaceAll(RegExp('\\D'), ""));
       date = DateTime.now();
       final AIrecommend = Day;
-      if (AIrecommend != null) {
-        setState(() {
-          date = date.add(Duration(days: AIrecommend));
-        });
-      }
+      setState(() {
+        date = date.add(Duration(days: AIrecommend));
+      });
       setDate(productname);
       rebuilding(widgetkey, controller);
     } else {
@@ -796,8 +794,8 @@ class _SecondViewState extends State<Postpage> {
                             ),
                           ),
                           Center(
-                            child: Text(
-                                "${productCount[pname[widgetkey]] ?? 1} : ${productCount2[pname[widgetkey]] ?? 1}"),
+                            child:
+                                Text("${productCount[pname[widgetkey]] ?? 1}"),
                           ),
                           IconButton(
                             padding: EdgeInsets.zero,
