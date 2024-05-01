@@ -37,18 +37,18 @@ You need to download the file [apk-release.apk](https://drive.google.com/file/d/
 ## 📱 APP
 
 ### Intro Screen, Main Screen, Achievement percent widget
-<img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/121305133/e612bd98-c407-47cb-baee-ca85a82cbe43" width="300" height="600" />
-<img src="https://github.com/GDSC-DJU/24SolChl_CoolFridge/assets/123969184/9cd44113-9761-4768-90cf-68cf1d103e49" width="300" height="600" />
-<img src="https://github.com/GDSC-DJU/24SolChl_CoolFridge/assets/123969184/f9fd35eb-dbeb-4490-849d-00506d367c7c" width="300" height="600" />
+<img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/121305133/e612bd98-c407-47cb-baee-ca85a82cbe43" width="200" height="400" />
+<img src="https://github.com/GDSC-DJU/24SolChl_CoolFridge/assets/123969184/9cd44113-9761-4768-90cf-68cf1d103e49" width="200" height="400" />
+<img src="https://github.com/GDSC-DJU/24SolChl_CoolFridge/assets/123969184/f9fd35eb-dbeb-4490-849d-00506d367c7c" width="200" height="400" />
 
 
 
 ### Food registration method
 Receipt registration, Register Food Photo registration, AI expiration date recommendation, Direct registration
 
-<img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/121305133/3ba38c2f-e852-4e32-9af3-03bd6e04aa2f" width="300" height="600" />
-<img src="https://github.com/GDSC-DJU/24SolChl_CoolFridge/assets/123969184/cfd3b2d7-a0ce-4472-8588-359aacff3471" width="300" height="600"/>
-<img src="https://github.com/GDSC-DJU/24SolChl_CoolFridge/assets/123969184/0d6b8aee-c3d5-45b9-92a4-352b0812cc12" width="300" height="600"/>
+<img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/121305133/3ba38c2f-e852-4e32-9af3-03bd6e04aa2f" width="200" height="400" />
+<img src="https://github.com/GDSC-DJU/24SolChl_CoolFridge/assets/123969184/cfd3b2d7-a0ce-4472-8588-359aacff3471" width="200" height="400"/>
+<img src="https://github.com/GDSC-DJU/24SolChl_CoolFridge/assets/123969184/0d6b8aee-c3d5-45b9-92a4-352b0812cc12" width="200" height="400"/>
 
 
 
