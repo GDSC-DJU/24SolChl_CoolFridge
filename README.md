@@ -89,7 +89,7 @@ We chose the 12th SDG because it aligns with our goal of reducing the increasing
 
 
 ## 🛠 Project Architecture
-<img src="https://github.com/GDSC-DJU/24SolChl_CoolFridge/assets/123969184/09aadd16-4761-44e3-8a66-f842d3edfb0c" width="882" height="440" />
+<img src="https://github.com/GDSC-DJU/24SolChl_CoolFridge/assets/123969184/5f01d748-d270-455d-b0e1-e2a6442ee824" width="882" height="440" />
 
 ## 🎯 Future Plans
 
