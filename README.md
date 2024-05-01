@@ -14,7 +14,7 @@
 ## 🖌 Introduction
 With the increase in single-person households these days, more people are cooking for themselves. Consequently, there's been a rise in the amount of food waste generated. **Recognizing that poor management of food inventory is a major cause of food waste**, our team developed an app called "CoolFridge". 
 
-The CoolFridge app provides features for managing food inventory and recommending recipes based on the ingredients currently available. This allows **efficient inventory management**  and enables users to consume ingredients using recipes recommended by AI. Through these functions, we can **reduce food waste** and take a step towards creating a more sustainable planet
+The CoolFridge app offers a widget feature that allows users to check their **achievement levels** for food inventory management, a **receipt and food recognition** feature for easy registration, a **recording page** for monitoring the condition of food, and an **AI recipe** feature for efficiently processing ingredients. This allows **efficient inventory management**  and enables users to consume ingredients using recipes recommended by AI. Through these functions, we can **reduce food waste** and take a step towards creating a more sustainable planet
 
 ## 🔧 How to run our app service
 **Since the API key has been kept private, you need to run the APK file to utilize all features of the app**
@@ -35,21 +35,25 @@ You need to download the file [apk-release.apk](https://drive.google.com/file/d/
    e. To execute the file, you can "Run" or "Start Debugging" from the **main.dart** file.
 
 ## 📱 APP
-### Intro Screen, Main Screen
+
+### Intro Screen, Main Screen, Achievement percent widget
 <img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/121305133/e612bd98-c407-47cb-baee-ca85a82cbe43" width="300" height="600" />
-<img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/121305133/bd40171f-ef56-4fff-ab16-33f87ec5c0a6" width="300" height="600" />
+<img src="https://github.com/GDSC-DJU/24SolChl_CoolFridge/assets/123969184/9cd44113-9761-4768-90cf-68cf1d103e49" width="300" height="600" />
+<img src="https://github.com/GDSC-DJU/24SolChl_CoolFridge/assets/123969184/f9fd35eb-dbeb-4490-849d-00506d367c7c" width="300" height="600" />
 
 
 
 ### Food registration method
-Receipt registration, Direct registration, Register Food Photo registration
+Receipt registration, Register Food Photo registration, AI expiration date recommendation, Direct registration
 
 <img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/121305133/3ba38c2f-e852-4e32-9af3-03bd6e04aa2f" width="300" height="600" />
-<img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/121305133/430ad2fb-a074-41dc-ae65-c2168630845a" width="300" height="600" />
+<img src="https://github.com/GDSC-DJU/24SolChl_CoolFridge/assets/123969184/cfd3b2d7-a0ce-4472-8588-359aacff3471" width="300" height="600"/>
+<img src="https://github.com/GDSC-DJU/24SolChl_CoolFridge/assets/123969184/0d6b8aee-c3d5-45b9-92a4-352b0812cc12" width="300" height="600"/>
+
 
 
 ### Product management
-Edit Information, Choose Sorting Method, Delete Functionality, Food storage methods, Achievement percent widget
+Edit Information, Choose Sorting Method, Delete Functionality, Food storage methods
 
 <img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/121305133/ebfe224b-1373-4403-8c2c-c54f55eedb38" width="200" height="400" />
 <img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/121305133/e3ad18a0-68a6-466e-b127-6a4adf0cfe59" width="200" height="400" />
@@ -61,6 +65,8 @@ Notifications on Mobile, Notification Page, Food Record
 
 <img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/123969184/a20cfbcb-e71a-442e-9d44-2631e1dd5098" width="300" height="600" />
 <img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/121305133/4c5dec56-5698-4e9d-b27a-1e73b6b85857" width="300" height="600" />
+<img src="https://github.com/GDSC-DJU/24SolChl_CoolFridge/assets/123969184/8c6cdeb9-cd7e-4613-b5cd-62fdd0d13cb1" width="300" height="600" />
+
 
 ### Recipe function
 Material Selection, Food choice, Recipe recommendation
@@ -83,11 +89,12 @@ We chose the 12th SDG because it aligns with our goal of reducing the increasing
 
 
 ## 🛠 Project Architecture
-<img src="https://github.com/GDSC-DJU/24SolChl_CoolFridge/assets/129382687/2190f23c-9b6b-4e44-b6c5-7536419db91e" width="882" height="440" />
+<img src="https://github.com/GDSC-DJU/24SolChl_CoolFridge/assets/123969184/09aadd16-4761-44e3-8a66-f842d3edfb0c" width="882" height="440" />
 
 ## 🎯 Future Plans
-**Food waste is generated due to various reasons including excessive purchase, improper storage, misunderstanding of expiration dates, and leftovers**. Our application currently **focuses on solving the 'misunderstanding of expiration dates' issue through the 'inventory management function'.** It also assists with effective inventory management through other features.
 
-In the future, we plan to add 'automatic recording of expired products' and 'AI recommended storage methods' features to **address the issues of excessive purchase and improper storage more thoroughly.**
+**Food waste occurs for various reasons, including excessive food preparation, improper food storage, and purchasing more food than necessary.** Our app currently focuses on solving the food waste problem through its '**inventory management feature**.' In addition to this, we support effective inventory management through other functionalities.
+
+In the future, we aim to focus on resolving issues related to **excessive food preparation** and **purchasing more food than necessary**.
 
 **Our ultimate goal is to significantly reduce food waste.** To accomplish this, we will provide user-friendly UI/UX and practical features, making our application easily accessible to many people. We endeavor to foster a user-friendly structure and convenient features that can solve real problems, with the aim of **encouraging individual actions to become the majority. This collective contribution to reducing environmental pollution is the core value and objective of our project.**
