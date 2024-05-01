@@ -9,7 +9,7 @@
       "cwd": "foodapp",
       "request": "launch",
       "type": "dart",
-      "program": "lib/MainScreen.dart"
+      "program": "lib/main.dart"
     },
     {
       "name": "foodapp (profile mode)",

@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:foodapp/main.dart';
 import 'package:hive/hive.dart';
+import 'package:foodapp/Pages/gpt.dart';
 
 // 포스트 페이지 위젯
 class Postpage extends StatefulWidget {
@@ -26,6 +29,7 @@ class _SecondViewState extends State<Postpage> {
   Map<int, String> pname = {}; // key: 위젯키, value: 제품명
   Map<String, String> productDate = {}; // key: 제품명, value: 수량
   Map<String, int> productCount = {}; // key: 제품명, value: 수량
+  Map<String, int> productCount2 = {}; // key: 제품명, value: 수량
   bool Checktext = true; // 등록하기 버튼누를 때 비어있는지 확인하는 변수
 
 // 다른 파일에서 _widgetList의 길이에 접근할 수 있는 메서드
@@ -50,6 +54,7 @@ class _SecondViewState extends State<Postpage> {
             productname: key,
             widgetkey: Numberkey,
             pcount: int.parse(value), // 추가: 초기값 설정
+            pcount2: int.parse(value), // 추가: 초기값 설정
 
             controller: textController,
           ));
@@ -76,8 +81,14 @@ class _SecondViewState extends State<Postpage> {
     if (!Hive.isBoxOpen('productCountBox')) {
       await Hive.openBox<int>('productCountBox');
     }
+    if (!Hive.isBoxOpen('productCountBox2')) {
+      await Hive.openBox<int>('productCountBox2');
+    }
     if (!Hive.isBoxOpen('CountBox')) {
       await Hive.openBox<int>('CountBox');
+    }
+    if (!Hive.isBoxOpen('CountBox2')) {
+      await Hive.openBox<int>('CountBox2');
     }
     if (!Hive.isBoxOpen('tNameBox')) {
       await Hive.openBox<String>('tNameBox');
@@ -88,6 +99,9 @@ class _SecondViewState extends State<Postpage> {
     if (!Hive.isBoxOpen('tCountBox')) {
       await Hive.openBox<int>('tCountBox');
     }
+    if (!Hive.isBoxOpen('tCountBox2')) {
+      await Hive.openBox<int>('tCountBox2');
+    }
   }
 
 // pname, productDate, productCount 저장
@@ -95,9 +109,11 @@ class _SecondViewState extends State<Postpage> {
     var pnameBox = Hive.box<String>('pnameBox');
     var productDateBox = Hive.box<String>('productDateBox');
     var productCountBox = Hive.box<int>('productCountBox');
+    var productCountBox2 = Hive.box<int>('productCountBox2');
     var tNameBox = Hive.box<String>('tNameBox');
     var tDateBox = Hive.box<String>('tDateBox');
     var tCountBox = Hive.box<int>('tCountBox');
+    var tCountBox2 = Hive.box<int>('tCountBox2');
 
     int lastIndex = pnameBox.length;
     int startIndex = lastIndex + 1;
@@ -109,13 +125,18 @@ class _SecondViewState extends State<Postpage> {
       if (productName != null) {
         String? productDateValue = productDate[productName];
         int? productCountValue = productCount[productName];
-        if (productDateValue != null && productCountValue != null) {
+        int? productCountValue2 = productCount2[productName];
+        if (productDateValue != null &&
+            productCountValue != null &&
+            productCountValue2 != null) {
           pnameBox.add(productName);
           productDateBox.add(productDateValue);
           productCountBox.add(productCountValue);
+          productCountBox2.add(productCountValue2);
           tNameBox.add(productName);
           tDateBox.add(productDateValue);
           tCountBox.add(productCountValue);
+          tCountBox2.add(productCountValue2);
         }
       }
     }
@@ -128,6 +149,7 @@ class _SecondViewState extends State<Postpage> {
 
 // 리스트 추가
   void addlist() {
+    date = DateTime.now();
     TextEditingController textController = TextEditingController();
     _controller.add(textController);
     _Livingkey.add(Numberkey);
@@ -176,6 +198,7 @@ class _SecondViewState extends State<Postpage> {
         productname: pname[widgetkey] ?? "",
         widgetkey: widgetkey,
         pcount: productCount[pname[widgetkey]]!,
+        pcount2: productCount2[pname[widgetkey]]!,
         pdate: productDate[pname[widgetkey]]!,
         controller: controller,
       ));
@@ -186,9 +209,22 @@ class _SecondViewState extends State<Postpage> {
 
 // 제품명 초기화
   void initname(String name, int widgetkey) {
+    int initCount = productCount[pname[widgetkey]]!;
+    print("$initCount개");
+    String initDate = productDate[pname[widgetkey]]!;
+
     pname[widgetkey] = name;
+
+    setState(() {
+      productCount[name] = initCount;
+      productDate[name] = initDate;
+    });
+
     if (!productCount.containsKey(name)) {
       productCount[name] = 1;
+    }
+    if (!productCount2.containsKey(name)) {
+      productCount2[name] = 1;
     }
     if (!productDate.containsKey(name)) {
       productDate[name] =
@@ -210,7 +246,9 @@ class _SecondViewState extends State<Postpage> {
   void icount(String name) {
     setState(() {
       productCount[name] = (productCount[name] ?? 0) + 1;
+      productCount2[name] = (productCount2[name] ?? 0) + 1;
       print("$name 는 ${productCount[name]} 개");
+      print("$name 는 ${productCount2[name]} 개");
     });
   }
 
@@ -245,13 +283,79 @@ class _SecondViewState extends State<Postpage> {
     );
   }
 
+  void RecommendERRDialog(context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  width: MediaQuery.of(context).size.width * 0.03),
+              const Text("상품명이 입력되지 않아 \n추천할 수 없습니다.",
+                  style: TextStyle(fontSize: 17, color: Colors.blue)),
+              SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(
+                  Icons.close,
+                  color: Colors.blue,
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void DelayERRDialog(context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  width: MediaQuery.of(context).size.width * 0.03),
+              const Text("서버에 지연이 발생했습니다.\n다시 시도해주세요",
+                  style: TextStyle(fontSize: 17, color: Colors.blue)),
+              SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(
+                  Icons.close,
+                  color: Colors.blue,
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
 // 제품 수량 감소
   void dcount(String name) {
     setState(() {
-      if (productCount[name] != null && productCount[name]! > 1) {
+      if (productCount[name] != null &&
+          productCount[name] != null &&
+          productCount2[name]! > 1) {
         productCount[name] = (productCount[name] ?? 0) - 1;
+        productCount2[name] = (productCount2[name] ?? 0) - 1;
       }
       print("$name 는 ${productCount[name]} 개");
+      print("$name 는 ${productCount2[name]} 개");
     });
   }
 
@@ -454,16 +558,60 @@ class _SecondViewState extends State<Postpage> {
     );
   }
 
+  void RecommendDay(String productname, int widgetkey,
+      TextEditingController controller) async {
+    String prompt =
+        "$productname의 평균적인 유통기한을 단순히 숫자로 알려줘. 5일이면 5라고 답하고, 10일이면 10이라고 단순히 숫자만 답해줘";
+    String answer = "";
+    // 로딩창 생성
+    if (answer == "") {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(
+              child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF35AED4)),
+          ));
+        },
+      );
+    }
+    answer = await GPT3.generateText(prompt);
+    print(answer);
+    setState(() {
+      // 로딩창 제거
+      if (answer != "") {
+        Navigator.of(context).pop();
+      }
+    });
+
+    if (answer.replaceAll(RegExp('\\D'), "") != "") {
+      int Day = int.parse(answer.replaceAll(RegExp('\\D'), ""));
+      date = DateTime.now();
+      final AIrecommend = Day;
+      setState(() {
+        date = date.add(Duration(days: AIrecommend));
+      });
+      setDate(productname);
+      rebuilding(widgetkey, controller);
+    } else {
+      DelayERRDialog(context);
+    }
+  }
+
 // 제품 정보를 담은 위젯 생성
   Widget postContainer({
     String productname = "",
     int widgetkey = 0,
     int pcount = 1,
+    int pcount2 = 1,
     String pdate = "2024-01-01",
     required TextEditingController controller,
   }) {
     if (!productCount.containsKey(productname)) {
       productCount[productname] = 1;
+    }
+    if (!productCount2.containsKey(productname)) {
+      productCount2[productname] = 1;
     }
     pname[widgetkey] = productname;
 
@@ -481,6 +629,12 @@ class _SecondViewState extends State<Postpage> {
     }
     if (pcount != 0) {
       productCount[pname[widgetkey]!] = pcount;
+    }
+    if (pcount2 == 0) {
+      productCount2[pname[widgetkey]!] = 1;
+    }
+    if (pcount2 != 0) {
+      productCount2[pname[widgetkey]!] = pcount2;
     }
 
     return GestureDetector(
@@ -590,20 +744,29 @@ class _SecondViewState extends State<Postpage> {
                               const Text("추천기간"),
                               SizedBox(
                                 width:
-                                    (MediaQuery.of(context).size.width) * 0.3,
+                                    (MediaQuery.of(context).size.width) * 0.30,
                                 height:
                                     (MediaQuery.of(context).size.height) * 0.03,
                                 child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    print("productname = $productname");
+                                    if (productname == "") {
+                                      RecommendERRDialog(context);
+                                    } else {
+                                      RecommendDay(
+                                          productname, widgetkey, controller);
+                                    }
+                                  },
                                   child: const Text(
-                                    "추후 개발 예정",
+                                    "AI 추천",
                                     style: TextStyle(
                                       fontSize: 10,
                                     ),
                                   ),
                                 ),
                               ),
-                              const Icon(Icons.check_circle_outline, size: 15),
+                              const Icon(Icons.chrome_reader_mode_outlined,
+                                  size: 15),
                             ],
                           )
                         ],
