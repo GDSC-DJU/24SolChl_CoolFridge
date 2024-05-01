@@ -607,7 +607,7 @@ class _MyWidgetState extends State<_MainScreen> {
                               actions: <Widget>[
                                 TextButton(
                                   style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
+                                    backgroundColor: WidgetStateProperty.all(
                                       const Color(0xFF42A5F5),
                                     ), // 테두리 색 및 너비 지정
                                   ),
@@ -875,7 +875,7 @@ class _MyWidgetState extends State<_MainScreen> {
                       ),
                       ElevatedButton(
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
+                          backgroundColor: WidgetStateProperty.all(
                             const Color(0xFF42A5F5),
                           ),
                         ),
@@ -1013,7 +1013,7 @@ class _MyWidgetState extends State<_MainScreen> {
                 ),
                 ElevatedButton(
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
+                    backgroundColor: WidgetStateProperty.all(
                       const Color(0xFF42A5F5),
                     ),
                   ),
@@ -1787,7 +1787,7 @@ void max99(BuildContext context) {
             ),
             ElevatedButton(
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(
+                backgroundColor: WidgetStateProperty.all(
                   const Color(0xFF42A5F5),
                 ),
               ),
