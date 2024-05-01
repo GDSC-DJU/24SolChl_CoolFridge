@@ -42,14 +42,14 @@ You need to download the file [apk-release.apk](https://drive.google.com/file/d/
 
 
 ### Food registration method
-Receipt registration, Direct registration
+Receipt registration, Direct registration, Register Food Photo registration
 
 <img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/121305133/3ba38c2f-e852-4e32-9af3-03bd6e04aa2f" width="300" height="600" />
 <img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/121305133/430ad2fb-a074-41dc-ae65-c2168630845a" width="300" height="600" />
 
 
 ### Product management
-Edit Information, Choose Sorting Method, Delete Functionality, Food storage methods
+Edit Information, Choose Sorting Method, Delete Functionality, Food storage methods, Achievement percent widget
 
 <img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/121305133/ebfe224b-1373-4403-8c2c-c54f55eedb38" width="200" height="400" />
 <img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/121305133/e3ad18a0-68a6-466e-b127-6a4adf0cfe59" width="200" height="400" />
@@ -57,7 +57,7 @@ Edit Information, Choose Sorting Method, Delete Functionality, Food storage meth
 <img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/123969184/b30a9875-f282-484f-b8b5-0a854f754fdb" width="200" height="400" />
 
 ### Notification system
-Notifications on Mobile, Notification Page
+Notifications on Mobile, Notification Page, Food Record
 
 <img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/123969184/a20cfbcb-e71a-442e-9d44-2631e1dd5098" width="300" height="600" />
 <img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/121305133/4c5dec56-5698-4e9d-b27a-1e73b6b85857" width="300" height="600" />
