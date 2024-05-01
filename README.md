@@ -63,9 +63,9 @@ Edit Information, Choose Sorting Method, Delete Functionality, Food storage meth
 ### Notification system
 Notifications on Mobile, Notification Page, Food Record
 
-<img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/123969184/a20cfbcb-e71a-442e-9d44-2631e1dd5098" width="300" height="600" />
-<img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/121305133/4c5dec56-5698-4e9d-b27a-1e73b6b85857" width="300" height="600" />
-<img src="https://github.com/GDSC-DJU/24SolChl_CoolFridge/assets/123969184/8c6cdeb9-cd7e-4613-b5cd-62fdd0d13cb1" width="300" height="600" />
+<img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/123969184/a20cfbcb-e71a-442e-9d44-2631e1dd5098" width="200" height="400" />
+<img src="https://github.com/GDSC-DJU/24SolChl_Food/assets/121305133/4c5dec56-5698-4e9d-b27a-1e73b6b85857" width="200" height="400" />
+<img src="https://github.com/GDSC-DJU/24SolChl_CoolFridge/assets/123969184/8c6cdeb9-cd7e-4613-b5cd-62fdd0d13cb1" width="200" height="400" />
 
 
 ### Recipe function
